@@ -73,7 +73,7 @@ export const TitleColumn: React.FC<ColumnProps> = (props) => {
       }} className={styles.taskName}>
         {isShowTaskNumbers && <b>{indexStr} </b>}
 
-        {name}
+        <span className={!name && styles.emptyTaskName}> {name || "Empty"}</span>
       </div>
     </div>
   );
