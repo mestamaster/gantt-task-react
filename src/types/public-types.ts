@@ -251,7 +251,7 @@ export type OnProgressChange = (
 ) => void;
 
 export type OnEditTask = (
-  task: TaskOrEmpty,
+  taskOrEmpty: TaskOrEmpty,
   index: number,
   getMetadata: GetMetadata
 ) => void;
@@ -425,7 +425,7 @@ export interface EventOption {
   /**
    * Callback for getting new data of the edited task
    */
-  onEditTask?: (task: TaskOrEmpty) => Promise<TaskOrEmpty | null>;
+  onEditTask?: (taskOrEmpty: TaskOrEmpty) => Promise<TaskOrEmpty | null>;
   /**
    * Invokes on edit button click
    */
@@ -628,7 +628,7 @@ export interface TaskListTableProps {
   getTaskCurrentState: (task: Task) => Task;
   handleAddTask: (task: Task) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
-  handleEditTask: (task: TaskOrEmpty) => void;
+  handleEditTask: (taskOrEmpty: TaskOrEmpty) => void;
   handleMoveTaskBefore: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
   handleMoveTaskAfter: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
   handleMoveTasksInside: (parent: Task, childs: readonly TaskOrEmpty[]) => void;
@@ -811,7 +811,7 @@ export type ColumnData = {
   distances: Distances;
   handleAddTask: (task: Task) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
-  handleEditTask: (task: TaskOrEmpty) => void;
+  handleEditTask: (taskOrEmpty: TaskOrEmpty) => void;
   hasChildren: boolean;
   icons?: Partial<Icons>;
   indexStr: string;
