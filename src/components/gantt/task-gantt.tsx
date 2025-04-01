@@ -5,7 +5,17 @@ import { GridProps, Grid } from "../grid/grid";
 import { CalendarProps, Calendar } from "../calendar/calendar";
 import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
 import styles from "./gantt.module.css";
-import { useClickAway } from "@uidotdev/usehooks";
+import {
+  FloatingPortal,
+  useFloating,
+  flip,
+  shift,
+  offset,
+  autoUpdate,
+  useDismiss,
+  useRole,
+  useInteractions
+} from "@floating-ui/react";
 import {
   TaskContextualPaletteProps,
   Task,
@@ -13,72 +23,6 @@ import {
   DateExtremity,
   TaskDependencyContextualPaletteProps, ColorStyles
 } from "../../types/public-types";
-
-// Custom Popper Component
-const Popper = ({ 
-  open, 
-  anchorEl, 
-  children, 
-  placement = "top" 
-}: { 
-  open: boolean; 
-  anchorEl: Element | null; 
-  children: React.ReactNode; 
-  placement?: "top" | "bottom" | "left" | "right"; 
-}) => {
-  if (!open || !anchorEl) return null;
-
-  // Get the position of the anchor element
-  const rect = anchorEl.getBoundingClientRect();
-  
-  // Basic positioning logic based on placement
-  let style: React.CSSProperties = {
-    position: 'absolute',
-    zIndex: 1000,
-  };
-  
-  // Position based on placement
-  switch (placement) {
-    case "top":
-      style = {
-        ...style,
-        bottom: `calc(100vh - ${rect.top}px)`,
-        left: rect.left + rect.width / 2,
-        transform: 'translateX(-50%)',
-      };
-      break;
-    case "bottom":
-      style = {
-        ...style,
-        top: rect.bottom,
-        left: rect.left + rect.width / 2,
-        transform: 'translateX(-50%)',
-      };
-      break;
-    case "left":
-      style = {
-        ...style,
-        top: rect.top + rect.height / 2,
-        right: `calc(100vw - ${rect.left}px)`,
-        transform: 'translateY(-50%)',
-      };
-      break;
-    case "right":
-      style = {
-        ...style,
-        top: rect.top + rect.height / 2,
-        left: rect.right,
-        transform: 'translateY(-50%)',
-      };
-      break;
-  }
-  
-  return (
-    <div style={style}>
-      <div className={styles.popperPaper}>{children}</div>
-    </div>
-  );
-};
 
 export type TaskGanttProps = {
   barProps: TaskGanttContentProps;
@@ -170,6 +114,40 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
     setArrowAnchorEl(null);
   };
 
+  // Floating UI setup for arrow contextual palette
+  const {
+    x: arrowX, 
+    y: arrowY, 
+    strategy: arrowStrategy, 
+    refs: arrowRefs,
+    context: arrowContext
+  } = useFloating({
+    open: isArrowContextualPaletteOpened,
+    onOpenChange: (open) => {
+      if (!open) {
+        setArrowAnchorEl(null);
+        setSelectedDependency(null);
+      }
+    },
+    placement: "top",
+    middleware: [offset(10), flip(), shift()],
+    whileElementsMounted: autoUpdate
+  });
+
+  const arrowDismiss = useDismiss(arrowContext);
+  const arrowRole = useRole(arrowContext);
+  const { getFloatingProps: getArrowFloatingProps } = useInteractions([
+    arrowDismiss,
+    arrowRole
+  ]);
+
+  // Set the reference element whenever arrowAnchorEl changes
+  React.useEffect(() => {
+    if (arrowAnchorEl) {
+      arrowRefs.setReference(arrowAnchorEl);
+    }
+  }, [arrowAnchorEl, arrowRefs]);
+
   let arrowContextualPalette:
     | React.FunctionComponentElement<TaskDependencyContextualPaletteProps>
     | undefined = undefined;
@@ -188,20 +166,6 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
     arrowContextualPalette = <div></div>;
   }
 
-  const arrowRef = useClickAway<HTMLDivElement>((e: Event) => {
-    const svgElement = e.target as SVGElement;
-    if (svgElement) {
-      const keepPalette =
-        svgElement.ownerSVGElement?.classList.contains("ArrowClassName");
-      // In a better world the contextual palette should be defined in TaskItem component
-      // So in order to let the palette open when clicking on another task, this checks if the user clicked on another task
-      if (!keepPalette) {
-        setArrowAnchorEl(null);
-        setSelectedDependency(null);
-      }
-    }
-  });
-
   // Manage the contextual palette
   const [anchorEl, setAnchorEl] = React.useState<null | SVGElement>(null);
   const [selectedTask, setSelectedTask] = React.useState<Task>(null);
@@ -219,6 +183,40 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
     setAnchorEl(null);
   };
 
+  // Floating UI setup for task contextual palette
+  const {
+    x, 
+    y, 
+    strategy, 
+    refs,
+    context
+  } = useFloating({
+    open,
+    onOpenChange: (open) => {
+      if (!open) {
+        setAnchorEl(null);
+        setSelectedTask(null);
+      }
+    },
+    placement: "top",
+    middleware: [offset(10), flip(), shift()],
+    whileElementsMounted: autoUpdate
+  });
+
+  const dismiss = useDismiss(context);
+  const role = useRole(context);
+  const { getFloatingProps } = useInteractions([
+    dismiss,
+    role
+  ]);
+
+  // Set the reference element whenever anchorEl changes
+  React.useEffect(() => {
+    if (anchorEl) {
+      refs.setReference(anchorEl);
+    }
+  }, [anchorEl, refs]);
+
   let contextualPalette:
     | React.FunctionComponentElement<TaskContextualPaletteProps>
     | undefined = undefined;
@@ -231,19 +229,6 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
     contextualPalette = <div></div>;
   }
 
-  const ref = useClickAway<HTMLDivElement>((e: Event) => {
-    const svgElement = e.target as SVGElement;
-    if (svgElement) {
-      const keepPalette =
-        svgElement.ownerSVGElement?.classList.contains("TaskItemClassName");
-      // In a better world the contextual palette should be defined in TaskItem component
-      // So in order to let the palette open when clicking on another task, this checks if the user clicked on another task
-      if (!keepPalette) {
-        setAnchorEl(null);
-        setSelectedTask(null);
-      }
-    }
-  });
   return (
     <div
       className={styles.ganttTaskRoot}
@@ -278,29 +263,42 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
             />
           </svg>
         </div>
+        
         {barProps.ContextualPalette && open && (
-          <div ref={ref}>
-            <Popper
-              open={open}
-              anchorEl={anchorEl}
-              placement="top"
+          <FloatingPortal>
+            <div 
+              ref={refs.setFloating}
+              className={styles.popperPaper}
+              style={{
+                position: strategy,
+                top: y ?? 0,
+                left: x ?? 0,
+                zIndex: 1000,
+              }}
+              {...getFloatingProps()}
             >
               {contextualPalette}
-            </Popper>
-          </div>
-        )}
-        {barProps.TaskDependencyContextualPalette &&
-          isArrowContextualPaletteOpened && (
-            <div ref={arrowRef}>
-              <Popper
-                open={isArrowContextualPaletteOpened}
-                anchorEl={arrowAnchorEl}
-                placement="top"
-              >
-                {arrowContextualPalette}
-              </Popper>
             </div>
-          )}
+          </FloatingPortal>
+        )}
+        
+        {barProps.TaskDependencyContextualPalette && isArrowContextualPaletteOpened && (
+          <FloatingPortal>
+            <div 
+              ref={arrowRefs.setFloating}
+              className={styles.popperPaper}
+              style={{
+                position: arrowStrategy,
+                top: arrowY ?? 0,
+                left: arrowX ?? 0,
+                zIndex: 1000,
+              }}
+              {...getArrowFloatingProps()}
+            >
+              {arrowContextualPalette}
+            </div>
+          </FloatingPortal>
+        )}
       </div>
     </div>
   );
