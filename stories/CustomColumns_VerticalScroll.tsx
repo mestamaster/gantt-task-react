@@ -16,13 +16,7 @@ import {
 import { initTasks, onAddTask, onEditTask } from "./helper";
 
 import "../dist/style.css";
-import {
-  Checkbox,
-  FormControl,
-  ListItemText,
-  MenuItem,
-  Select,
-} from "@mui/material";
+import "./custom-columns.css";
 
 const ProgressColumn: React.FC<ColumnProps> = ({ data: { task } }) => {
   if (task.type === "project" || task.type === "task") {
@@ -174,24 +168,22 @@ export const CustomColumns_VerticalScroll: React.FC = props => {
 
   return (
     <>
-      <FormControl>
-        <Select
-          labelId="columns-checkbox-label"
+      <div className="column-selector">
+        <label htmlFor="columns-checkbox">Columns</label>
+        <select
           id="columns-checkbox"
           multiple
-          disableUnderline
           value={columnTypes}
           onChange={handleChangeColumns}
-          renderValue={() => "Columns"}
+          className="multi-select"
         >
           {allMetaColumns.map(column => (
-            <MenuItem key={column.type} value={column.type}>
-              <Checkbox checked={columnTypes.indexOf(column.type) > -1} />
-              <ListItemText primary={column.name} />
-            </MenuItem>
+            <option key={column.type} value={column.type}>
+              {column.name}
+            </option>
           ))}
-        </Select>
-      </FormControl>
+        </select>
+      </div>
       <div
         style={{
           display: "flex",

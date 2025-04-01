@@ -17,11 +17,60 @@ import {
 import { initTasks, onAddTask, onEditTask } from "./helper";
 
 import "../dist/style.css";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import styles from "./CustomPalette_Zoom.module.css";
+
+// SVG Icon components
+const CloseIcon = ({ color = "#000" }: { color?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+);
+
+const AddIcon = ({ color = "#000" }: { color?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+  </svg>
+);
+
+const DeleteForeverIcon = ({ color = "#000" }: { color?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    <line x1="10" y1="11" x2="10" y2="17"></line>
+    <line x1="14" y1="11" x2="14" y2="17"></line>
+  </svg>
+);
+
+// Custom button component
+const IconButton = ({ 
+  onClick, 
+  children, 
+  title,
+  size = "medium", 
+  "aria-label": ariaLabel,
+  "data-testid": testId
+}: { 
+  onClick: () => void, 
+  children: React.ReactNode, 
+  title?: string,
+  size?: "small" | "medium" | "large",
+  "aria-label"?: string,
+  "data-testid"?: string
+}) => {
+  return (
+    <button 
+      className={`${styles.iconButton} ${size === "small" ? styles.small : ""}`}
+      onClick={onClick}
+      title={title}
+      aria-label={ariaLabel}
+      data-testid={testId}
+    >
+      {children}
+    </button>
+  );
+};
 
 export const CustomPalette_Zoom: React.FC = props => {
   const [tasks, setTasks] = useState<readonly TaskOrEmpty[]>(initTasks());
@@ -143,7 +192,7 @@ export const CustomPalette_Zoom: React.FC = props => {
           onClick={() => handleTaskDelete(selectedTask)}
           data-testid="delete-task"
         >
-          <DeleteForeverIcon fontSize="small" />
+          <DeleteForeverIcon />
         </IconButton>
         <IconButton
           size="small"
@@ -152,7 +201,7 @@ export const CustomPalette_Zoom: React.FC = props => {
           onClick={() => handleTaskCreate(selectedTask)}
           data-testid="create-task"
         >
-          <AddIcon fontSize="small" />
+          <AddIcon />
         </IconButton>
         <IconButton
           size="small"
@@ -161,7 +210,7 @@ export const CustomPalette_Zoom: React.FC = props => {
           onClick={onClose}
           data-testid="close-toolbar"
         >
-          <CloseIcon fontSize="small" />
+          <CloseIcon />
         </IconButton>
       </div>
     );
@@ -175,12 +224,12 @@ export const CustomPalette_Zoom: React.FC = props => {
     onClose: () => any
   ) => {
     const newTasks = tasks.map(t => {
-      if (t => t.id == taskTo.id) {
+      if (t.id === taskTo.id) {
         const dependenciesToKeep = taskTo.dependencies?.filter(dependency => {
           const isDependencyToRemove =
-            dependency.sourceId == taskFrom.id &&
-            dependency.sourceTarget == extremityFrom &&
-            dependency.ownTarget == extremityTo;
+            dependency.sourceId === taskFrom.id &&
+            dependency.sourceTarget === extremityFrom &&
+            dependency.ownTarget === extremityTo;
           return !isDependencyToRemove;
         });
         return {
@@ -219,7 +268,7 @@ export const CustomPalette_Zoom: React.FC = props => {
           }
           data-testid="delete-task"
         >
-          <DeleteForeverIcon fontSize="small" />
+          <DeleteForeverIcon />
         </IconButton>
         <IconButton
           size="small"
@@ -228,7 +277,7 @@ export const CustomPalette_Zoom: React.FC = props => {
           onClick={onClose}
           data-testid="close-toolbar"
         >
-          <CloseIcon fontSize="small" />
+          <CloseIcon />
         </IconButton>
       </div>
     );
