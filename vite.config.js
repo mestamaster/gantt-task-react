@@ -4,16 +4,17 @@ import path from "node:path";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import { defineConfig } from "vite";
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
   const configuration = {
     plugins: [peerDepsExternal(), react(), image()],
+    root: command === 'serve' ? 'example' : undefined,
     build: {
       minify: false,
       lib: {
-        name: "gantt-task-react",
+        name: "pasgantti",
         entry: path.resolve(__dirname, "src/index.tsx"),
         formats: ["es", "umd"],
-        fileName: format => `gantt-task-react.${format}.js`,
+        fileName: format => `pasgantti.${format}.js`,
       },
     },
     test: {

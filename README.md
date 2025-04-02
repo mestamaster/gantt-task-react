@@ -1,14 +1,13 @@
-# gantt-task-react
+# Pasgantti
 
 ## Interactive Gantt Chart for React with TypeScript.
 
 A highly customizable and interactive Gantt chart component for React with TypeScript support. This repository
 integrates features and enhancements from the
 original [`MaTeMaTuK/gantt-task-react`](https://github.com/MaTeMaTuK/gantt-task-react) ,
-the [`ObeoNetwork/gantt-task-react`](https://github.com/ObeoNetwork/gantt-task-react) fork, and our current development,
-creating a comprehensive solution for managing Gantt charts.
+the [`ObeoNetwork/gantt-task-react`](https://github.com/ObeoNetwork/gantt-task-react) fork, and [`wamra/gantt-task-react`](https://github.com/wamra/gantt-task-react)
 
-![multi-hierarchy.png](multi-hierarchy.gif)
+![multi-hierarchy.png](assets/multi-hierarchy.gif)
 
 ## Key Features
 
@@ -22,6 +21,7 @@ creating a comprehensive solution for managing Gantt charts.
 - **Localization Support**: Offers localization for various languages and date formats.
 - **Event Handling**: Supports comprehensive event handling for interactive features.
 - **QuarterYear View Mode**: Supports viewing tasks in quarterly segments, providing a flexible timeline view.
+- **Minimize external UI libraries**: Reduce dependencies on specific UI libraries.
 
 ### Enhancement Summary
 
@@ -35,14 +35,14 @@ and feature expansions.
 Install the package using npm:
 
 ```bash
-npm install @wamra/gantt-task-react
+npm install @mestamaster/pasgantti
 ```
 
 ## How to use it
 
 ```javascript
-import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from '@wamra/gantt-task-react';
-import "@wamra/gantt-task-react/dist/style.css";
+import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from '@mestamaster/pasgantti';
+import "@mestamaster/pasgantti/dist/style.css";
 
 let tasks: Task[] = [
   {
