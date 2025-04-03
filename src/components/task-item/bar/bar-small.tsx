@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import stylesRelationHandle from "./bar-relation-handle.module.css";
-import { BarDisplay } from "./bar-display";
-import type { TaskItemProps } from "../task-item";
+import React, { useCallback } from 'react';
+import stylesRelationHandle from './bar-relation-handle.module.css';
+import { BarDisplay } from './bar-display';
+import type { TaskItemProps } from '../task-item';
 
-import styles from "./bar.module.css";
-import { BarDateHandle } from "./bar-date-handle";
-import { BarMoveAction } from "../../../types/public-types";
+import styles from './bar.module.css';
+import { BarDateHandle } from './bar-date-handle';
+import { BarMoveAction } from '../../../types/public-types';
 
 export const BarSmall: React.FC<
   TaskItemProps & {
@@ -29,14 +29,14 @@ export const BarSmall: React.FC<
 }) => {
   const startMoveFullTask = useCallback(
     (clientX: number) => {
-      onTaskEventStart("move", clientX);
+      onTaskEventStart('move', clientX);
     },
     [onTaskEventStart]
   );
 
   const startMoveEndOfTask = useCallback(
     (clientX: number) => {
-      onTaskEventStart("end", clientX);
+      onTaskEventStart('end', clientX);
     },
     [onTaskEventStart]
   );

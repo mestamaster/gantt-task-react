@@ -1,12 +1,12 @@
-import { useCallback, useRef, useState } from "react";
-import type { MouseEvent } from "react";
+import { useCallback, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
 
 import type {
   CheckTaskIdExistsAtLevel,
   RowIndexToTaskMap,
   TaskOrEmpty,
   TaskToRowIndexMap,
-} from "../../types/public-types";
+} from '../../types/public-types';
 
 const initialValue = {};
 
@@ -15,10 +15,8 @@ export const useSelection = (
   rowIndexToTaskMap: RowIndexToTaskMap,
   checkTaskIdExists: CheckTaskIdExistsAtLevel
 ) => {
-  const [cutIdsMirror, setCutIdsMirror] =
-    useState<Readonly<Record<string, true>>>(initialValue);
-  const [copyIdsMirror, setCopyIdsMirror] =
-    useState<Readonly<Record<string, true>>>(initialValue);
+  const [cutIdsMirror, setCutIdsMirror] = useState<Readonly<Record<string, true>>>(initialValue);
+  const [copyIdsMirror, setCopyIdsMirror] = useState<Readonly<Record<string, true>>>(initialValue);
   const [selectedIdsMirror, setSelectedIdsMirror] =
     useState<Readonly<Record<string, true>>>(initialValue);
   const lastSelectedIdRef = useRef<string | null>(null);
@@ -66,25 +64,25 @@ export const useSelection = (
       const indexesAtLevel = taskToRowIndexMap.get(1);
 
       if (!indexesAtLevel) {
-        throw new Error("Indexes are not found at level 1");
+        throw new Error('Indexes are not found at level 1');
       }
 
       const tasksAtLevel = rowIndexToTaskMap.get(1);
 
       if (!tasksAtLevel) {
-        throw new Error("Tasks are not found at level 1");
+        throw new Error('Tasks are not found at level 1');
       }
 
       const lastSelectedIndex = indexesAtLevel.get(lastSelectedId);
 
-      if (typeof lastSelectedIndex !== "number") {
+      if (typeof lastSelectedIndex !== 'number') {
         toggleTask(taskId);
         return;
       }
 
       const currentSelectedIndex = indexesAtLevel.get(taskId);
 
-      if (typeof currentSelectedIndex !== "number") {
+      if (typeof currentSelectedIndex !== 'number') {
         throw new Error(`Index is not found for task "${taskId}"`);
       }
 
@@ -166,14 +164,12 @@ export const useSelection = (
   }, [selectedIdsMirror]);
 
   const checkHasCopyTasks = useCallback(
-    () =>
-      Object.keys(copyIdsMirror).some(taskId => checkTaskIdExists(taskId, 1)),
+    () => Object.keys(copyIdsMirror).some(taskId => checkTaskIdExists(taskId, 1)),
     [checkTaskIdExists, copyIdsMirror]
   );
 
   const checkHasCutTasks = useCallback(
-    () =>
-      Object.keys(cutIdsMirror).some(taskId => checkTaskIdExists(taskId, 1)),
+    () => Object.keys(cutIdsMirror).some(taskId => checkTaskIdExists(taskId, 1)),
     [checkTaskIdExists, cutIdsMirror]
   );
 

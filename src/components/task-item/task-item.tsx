@@ -1,14 +1,7 @@
-import React, {
-  memo,
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
-import type { MouseEvent, MouseEventHandler } from "react";
+import React, { memo, useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import type { MouseEvent, MouseEventHandler } from 'react';
 
-import { GanttRelationEvent } from "../../types/gantt-task-actions";
+import { GanttRelationEvent } from '../../types/gantt-task-actions';
 import {
   ChildOutOfParentWarnings,
   FixPosition,
@@ -19,17 +12,17 @@ import {
   RelationKind,
   BarMoveAction,
   DateExtremity,
-} from "../../types/public-types";
-import { Bar } from "./bar/bar";
-import { BarSmall } from "./bar/bar-small";
-import { Milestone } from "./milestone/milestone";
-import { TaskWarning } from "./task-warning";
-import style from "./task-list.module.css";
-import { BarFixWidth, fixWidthContainerClass } from "../other/bar-fix-width";
-import { BarRelationHandle } from "./bar/bar-relation-handle";
+} from '../../types/public-types';
+import { Bar } from './bar/bar';
+import { BarSmall } from './bar/bar-small';
+import { Milestone } from './milestone/milestone';
+import { TaskWarning } from './task-warning';
+import style from './task-list.module.css';
+import { BarFixWidth, fixWidthContainerClass } from '../other/bar-fix-width';
+import { BarRelationHandle } from './bar/bar-relation-handle';
 
 export type TaskItemProps = {
-  children?: React.ReactNode
+  children?: React.ReactNode;
   getTaskGlobalIndexByRef: (task: Task) => number;
   hasChildren: boolean;
   hasDependencyWarning: boolean;
@@ -204,11 +197,11 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
   );
 
   const onLeftRelationTriggerMouseDown = useCallback(() => {
-    onRelationStart(rtl ? "endOfTask" : "startOfTask", task);
+    onRelationStart(rtl ? 'endOfTask' : 'startOfTask', task);
   }, [onRelationStart, rtl, task]);
 
   const onRightRelationTriggerMouseDown = useCallback(() => {
-    onRelationStart(rtl ? "startOfTask" : "endOfTask", task);
+    onRelationStart(rtl ? 'startOfTask' : 'endOfTask', task);
   }, [onRelationStart, rtl, task]);
 
   const textRef = useRef<SVGTextElement>(null);
@@ -216,37 +209,27 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
 
   const taskItem = useMemo(() => {
     const isFromStartRelationAuthorized =
-      authorizedRelations.includes("startToStart") ||
-      authorizedRelations.includes("startToEnd");
+      authorizedRelations.includes('startToStart') || authorizedRelations.includes('startToEnd');
     const isFromEndRelationAuthorized =
-      authorizedRelations.includes("endToEnd") ||
-      authorizedRelations.includes("endToStart");
+      authorizedRelations.includes('endToEnd') || authorizedRelations.includes('endToStart');
     const isToStartRelationAuthorized =
-      (ganttRelationEvent?.extremity === "startOfTask" &&
-        authorizedRelations.includes("startToStart")) ||
-      (ganttRelationEvent?.extremity === "endOfTask" &&
-        authorizedRelations.includes("endToStart"));
+      (ganttRelationEvent?.extremity === 'startOfTask' &&
+        authorizedRelations.includes('startToStart')) ||
+      (ganttRelationEvent?.extremity === 'endOfTask' && authorizedRelations.includes('endToStart'));
     const isToEndRelationAuthorized =
-      (ganttRelationEvent?.extremity === "startOfTask" &&
-        authorizedRelations.includes("startToEnd")) ||
-      (ganttRelationEvent?.extremity === "endOfTask" &&
-        authorizedRelations.includes("endToEnd"));
+      (ganttRelationEvent?.extremity === 'startOfTask' &&
+        authorizedRelations.includes('startToEnd')) ||
+      (ganttRelationEvent?.extremity === 'endOfTask' && authorizedRelations.includes('endToEnd'));
 
     let displayLeftRelationHandle: boolean = false;
     if (ganttRelationEvent && task !== ganttRelationEvent.task) {
-      displayLeftRelationHandle = rtl
-        ? isToEndRelationAuthorized
-        : isToStartRelationAuthorized;
+      displayLeftRelationHandle = rtl ? isToEndRelationAuthorized : isToStartRelationAuthorized;
     } else {
-      displayLeftRelationHandle = rtl
-        ? isFromEndRelationAuthorized
-        : isFromStartRelationAuthorized;
+      displayLeftRelationHandle = rtl ? isFromEndRelationAuthorized : isFromStartRelationAuthorized;
     }
     let displayRightRelationHandle: boolean = false;
     if (ganttRelationEvent && task !== ganttRelationEvent.task) {
-      displayRightRelationHandle = rtl
-        ? isToStartRelationAuthorized
-        : isToEndRelationAuthorized;
+      displayRightRelationHandle = rtl ? isToStartRelationAuthorized : isToEndRelationAuthorized;
     } else {
       displayRightRelationHandle = rtl
         ? isFromStartRelationAuthorized
@@ -272,9 +255,7 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
             dataTestid={`task-relation-handle-right-${task.name}`}
             isRelationDrawMode={!!ganttRelationEvent}
             x={
-              !isSmallBar
-                ? x2 + relationCircleOffset
-                : x1 + 2 * handleWidth + relationCircleOffset
+              !isSmallBar ? x2 + relationCircleOffset : x1 + 2 * handleWidth + relationCircleOffset
             }
             y={taskYOffset + taskHalfHeight}
             radius={relationCircleRadius}
@@ -284,45 +265,25 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
       </>
     );
 
-    if (task.type === "milestone") {
+    if (task.type === 'milestone') {
       return (
-        <Milestone
-          {...props}
-          colorStyles={styles}
-          onTaskEventStart={onTaskEventStart}
-        >
+        <Milestone {...props} colorStyles={styles} onTaskEventStart={onTaskEventStart}>
           {relationhandles}
         </Milestone>
       );
     } else if (isSmallBar) {
       return (
-        <BarSmall
-          {...props}
-          colorStyles={styles}
-          onTaskEventStart={onTaskEventStart}
-        >
+        <BarSmall {...props} colorStyles={styles} onTaskEventStart={onTaskEventStart}>
           {relationhandles}
         </BarSmall>
       );
     } else
       return (
-        <Bar
-          {...props}
-          onTaskEventStart={onTaskEventStart}
-          colorStyles={styles}
-        >
+        <Bar {...props} onTaskEventStart={onTaskEventStart} colorStyles={styles}>
           {relationhandles}
         </Bar>
       );
-  }, [
-    handleWidth,
-    isSelected,
-    outOfParentWarnings,
-    props,
-    styles,
-    task,
-    width,
-  ]);
+  }, [handleWidth, isSelected, outOfParentWarnings, props, styles, task, width]);
 
   useEffect(() => {
     if (textRef.current) {
@@ -360,13 +321,16 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
     setTooltipTask(null, null);
   }, [setTooltipTask]);
 
-  let barLabelFill = (isTextInside || task.type == "milestone") ? styles.barLabelColor : styles.barLabelWhenOutsideColor;
+  let barLabelFill =
+    isTextInside || task.type == 'milestone'
+      ? styles.barLabelColor
+      : styles.barLabelWhenOutsideColor;
   return (
     <g
       className={fixWidthContainerClass}
       onKeyDown={e => {
         switch (e.key) {
-          case "Delete": {
+          case 'Delete': {
             if (isDelete) {
               handleDeleteTasks([task]);
             }
@@ -387,11 +351,7 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
         fill={barLabelFill}
         x={x}
         y={taskYOffset + taskHeight * 0.5}
-        className={
-          isTextInside
-            ? style.barLabel
-            : style.barLabel && style.barLabelOutside
-        }
+        className={isTextInside ? style.barLabel : style.barLabel && style.barLabelOutside}
         ref={textRef}
       >
         {task.name}

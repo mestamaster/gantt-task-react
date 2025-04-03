@@ -1,11 +1,6 @@
-import {
-  BarMoveAction,
-  Task,
-  TaskCoordinates,
-  ViewMode,
-} from "../types/public-types";
-import { getDatesDiff } from "./get-dates-diff";
-import { getDateByOffset } from "./get-date-by-offset";
+import { BarMoveAction, Task, TaskCoordinates, ViewMode } from '../types/public-types';
+import { getDatesDiff } from './get-dates-diff';
+import { getDateByOffset } from './get-date-by-offset';
 
 export const taskXCoordinate = (
   xDate: Date,
@@ -19,8 +14,7 @@ export const taskXCoordinate = (
   const nextDate = getDateByOffset(startDate, index + 1, viewMode);
 
   const remainderMillis = xDate.getTime() - currentDate.getTime();
-  const percentOfInterval =
-    remainderMillis / (nextDate.getTime() - currentDate.getTime());
+  const percentOfInterval = remainderMillis / (nextDate.getTime() - currentDate.getTime());
   const x = index * columnWidth + percentOfInterval * columnWidth;
   return x;
 };
@@ -41,11 +35,7 @@ export const progressWithByParams = (
   return [progressWidth, progressX];
 };
 
-export const getProgressPoint = (
-  progressX: number,
-  taskY: number,
-  taskHeight: number
-) => {
+export const getProgressPoint = (progressX: number, taskY: number, taskHeight: number) => {
   const point = [
     progressX - 7,
     taskY + taskHeight,
@@ -54,20 +44,13 @@ export const getProgressPoint = (
     progressX,
     taskY + taskHeight - 11,
   ];
-  return point.join(",");
+  return point.join(',');
 };
 
-const dateByX = (
-  x: number,
-  taskX: number,
-  taskDate: Date,
-  xStep: number,
-  timeStep: number
-) => {
+const dateByX = (x: number, taskX: number, taskDate: Date, xStep: number, timeStep: number) => {
   let newDate = new Date(((x - taskX) / xStep) * timeStep + taskDate.getTime());
   newDate = new Date(
-    newDate.getTime() +
-      (newDate.getTimezoneOffset() - taskDate.getTimezoneOffset()) * 60000
+    newDate.getTime() + (newDate.getTimezoneOffset() - taskDate.getTimezoneOffset()) * 60000
   );
   return newDate;
 };
@@ -86,7 +69,7 @@ export const handleTaskBySVGMouseEvent = (
 ): { isChanged: boolean; changedTask: Task } => {
   let result: { isChanged: boolean; changedTask: Task };
   switch (selectedTask.type) {
-    case "milestone":
+    case 'milestone':
       result = handleTaskBySVGMouseEventForMilestone(
         action,
         selectedTask,
@@ -124,9 +107,8 @@ const handleTaskBySVGMouseEventForBar = (
 
   let isChanged = false;
   switch (action) {
-    case "progress":
-      isChanged =
-        initialCoordinates.progressWidth !== coordinates.progressWidth;
+    case 'progress':
+      isChanged = initialCoordinates.progressWidth !== coordinates.progressWidth;
 
       if (isChanged) {
         changedTask.progress = Math.round(
@@ -136,7 +118,7 @@ const handleTaskBySVGMouseEventForBar = (
 
       break;
 
-    case "start": {
+    case 'start': {
       isChanged = initialCoordinates.x1 !== coordinates.x1;
 
       if (isChanged) {
@@ -161,7 +143,7 @@ const handleTaskBySVGMouseEventForBar = (
       break;
     }
 
-    case "end": {
+    case 'end': {
       isChanged = initialCoordinates.x2 !== coordinates.x2;
 
       if (isChanged) {
@@ -186,7 +168,7 @@ const handleTaskBySVGMouseEventForBar = (
       break;
     }
 
-    case "move": {
+    case 'move': {
       isChanged = initialCoordinates.x1 !== coordinates.x1;
 
       if (isChanged) {
@@ -242,7 +224,7 @@ const handleTaskBySVGMouseEventForMilestone = (
 
   if (isChanged) {
     switch (action) {
-      case "move": {
+      case 'move': {
         changedTask.start = dateByX(
           coordinates.x1,
           initialCoordinates.x1,

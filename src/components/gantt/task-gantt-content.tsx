@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import type { MouseEvent, ReactNode } from "react";
+import React, { useMemo } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 
 import {
   BarMoveAction,
@@ -20,14 +20,14 @@ import {
   TaskOrEmpty,
   TaskToHasDependencyWarningMap,
   TaskDependencyContextualPaletteProps,
-} from "../../types/public-types";
-import { Arrow } from "../other/arrow";
-import { RelationLine } from "../other/relation-line";
-import { TaskItem } from "../task-item/task-item";
-import { GanttRelationEvent } from "../../types/gantt-task-actions";
-import { checkHasChildren } from "../../helpers/check-has-children";
-import { checkTaskHasDependencyWarning } from "../../helpers/check-task-has-dependency-warning";
-import type { OptimizedListParams } from "../../helpers/use-optimized-list";
+} from '../../types/public-types';
+import { Arrow } from '../other/arrow';
+import { RelationLine } from '../other/relation-line';
+import { TaskItem } from '../task-item/task-item';
+import { GanttRelationEvent } from '../../types/gantt-task-actions';
+import { checkHasChildren } from '../../helpers/check-has-children';
+import { checkTaskHasDependencyWarning } from '../../helpers/check-task-has-dependency-warning';
+import type { OptimizedListParams } from '../../helpers/use-optimized-list';
 
 export type TaskGanttContentProps = {
   authorizedRelations: RelationKind[];
@@ -141,10 +141,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
     // avoid duplicates
     // comparison level -> task from id -> task to id -> true
-    const addedDependencies: Record<
-      string,
-      Record<string, Record<string, true>>
-    > = {};
+    const addedDependencies: Record<string, Record<string, Record<string, true>>> = {};
 
     for (let index = start; index <= end; ++index) {
       const task = mapGlobalRowIndexToTask.get(index);
@@ -174,19 +171,15 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
         continue;
       }
 
-      if (task.type === "empty") {
+      if (task.type === 'empty') {
         continue;
       }
 
       const key = `${comparisonLevel}_${task.id}`;
 
-      const criticalPathOnLevel = criticalPaths
-        ? criticalPaths.get(comparisonLevel)
-        : undefined;
+      const criticalPathOnLevel = criticalPaths ? criticalPaths.get(comparisonLevel) : undefined;
 
-      const isCritical = criticalPathOnLevel
-        ? criticalPathOnLevel.tasks.has(task.id)
-        : false;
+      const isCritical = criticalPathOnLevel ? criticalPathOnLevel.tasks.has(task.id) : false;
 
       const {
         containerX,
@@ -215,10 +208,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             hasChildren={checkHasChildren(task, childTasksMap)}
             hasDependencyWarning={
               taskToHasDependencyWarningMap
-                ? checkTaskHasDependencyWarning(
-                    task,
-                    taskToHasDependencyWarningMap
-                  )
+                ? checkTaskHasDependencyWarning(task, taskToHasDependencyWarningMap)
                 : false
             }
             progressWidth={progressWidth}
@@ -297,15 +287,12 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
 
               addedDependenciesAtTask[source.id] = true;
 
-              const isCritical = criticalPathForTask
-                ? criticalPathForTask.has(source.id)
-                : false;
+              const isCritical = criticalPathForTask ? criticalPathForTask.has(source.id) : false;
 
               const { x1: fromX1, x2: fromX2 } = getTaskCoordinates(source);
 
               const containerX = Math.min(fromX1, taskX1) - 300;
-              const containerWidth =
-                Math.max(fromX2, taskX2) - containerX + 300;
+              const containerWidth = Math.max(fromX2, taskX2) - containerX + 300;
 
               arrowsRes.push(
                 <svg
@@ -367,11 +354,9 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
               dependent,
               dependentTarget,
             }) => {
-              const addedDependenciesAtDependent =
-                addedDependenciesAtLevel[dependent.id] || {};
+              const addedDependenciesAtDependent = addedDependenciesAtLevel[dependent.id] || {};
               if (!addedDependenciesAtLevel[dependent.id]) {
-                addedDependenciesAtLevel[dependent.id] =
-                  addedDependenciesAtDependent;
+                addedDependenciesAtLevel[dependent.id] = addedDependenciesAtDependent;
               }
 
               if (addedDependenciesAtDependent[taskId]) {
@@ -384,9 +369,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
                 ? criticalPathOnLevel.dependencies.get(dependent.id)
                 : undefined;
 
-              const isCritical = criticalPathForTask
-                ? criticalPathForTask.has(task.id)
-                : false;
+              const isCritical = criticalPathForTask ? criticalPathForTask.has(task.id) : false;
 
               const { x1: toX1, x2: toX2 } = getTaskCoordinates(dependent);
 
@@ -452,11 +435,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     <g className="content">
       {renderedSelectedTasks}
 
-      <g
-        className="arrows"
-        fill={colorStyles.arrowColor}
-        stroke={colorStyles.arrowColor}
-      >
+      <g className="arrows" fill={colorStyles.arrowColor} stroke={colorStyles.arrowColor}>
         {renderedArrows}
       </g>
 

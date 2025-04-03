@@ -1,4 +1,5 @@
-.barRelationHandleWrapper:hover .barRelationHandle, .barRelationHandle.barRelationHandle_drawMode {
+.barRelationHandleWrapper:hover .barRelationHandle,
+.barRelationHandle.barRelationHandle_drawMode {
   opacity: 1;
 }
 

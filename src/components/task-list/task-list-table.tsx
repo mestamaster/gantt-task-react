@@ -1,11 +1,11 @@
-import React, { memo, useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import React, { memo, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
 
-import { checkHasChildren } from "../../helpers/check-has-children";
-import { Task, TaskListTableProps, TaskOrEmpty } from "../../types/public-types";
-import { TaskListTableRow } from "./task-list-table-row";
+import { checkHasChildren } from '../../helpers/check-has-children';
+import { Task, TaskListTableProps, TaskOrEmpty } from '../../types/public-types';
+import { TaskListTableRow } from './task-list-table-row';
 
-import styles from "./task-list-table.module.css";
+import styles from './task-list-table.module.css';
 
 const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
   canMoveTasks,
@@ -38,13 +38,11 @@ const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
   selectedIdsMirror,
   tasks,
 }) => {
-
   const renderedTasks = useMemo(
     /**
      * TO DO: maybe consider tasks on other levels?
      */
-    () =>
-      tasks.filter(task => !task.comparisonLevel || task.comparisonLevel === 1),
+    () => tasks.filter(task => !task.comparisonLevel || task.comparisonLevel === 1),
     [tasks]
   );
 

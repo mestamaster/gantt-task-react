@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
-import styles from "./project.module.css";
-import { ColorStyles } from "../../../types/public-types";
+import styles from './project.module.css';
+import { ColorStyles } from '../../../types/public-types';
 
 type ProjectDisplayProps = {
   barCornerRadius: number;
@@ -77,7 +77,7 @@ export const ProjectDisplay: React.FC<ProjectDisplayProps> = ({
     taskYOffset + taskHeight,
     x1 + 15,
     taskYOffset + taskHeight / 2 - 1,
-  ].join(",");
+  ].join(',');
   const projectRightTriangle = [
     x2,
     taskYOffset + taskHeight / 2 - 1,
@@ -85,7 +85,7 @@ export const ProjectDisplay: React.FC<ProjectDisplayProps> = ({
     taskYOffset + taskHeight,
     x2 - 15,
     taskYOffset + taskHeight / 2 - 1,
-  ].join(",");
+  ].join(',');
 
   return (
     <g
@@ -132,16 +132,8 @@ export const ProjectDisplay: React.FC<ProjectDisplayProps> = ({
         ry={barCornerRadius}
         className={styles.projectTop}
       />
-      <polygon
-        className={styles.projectTop}
-        points={projectLeftTriangle}
-        fill={barColor}
-      />
-      <polygon
-        className={styles.projectTop}
-        points={projectRightTriangle}
-        fill={barColor}
-      />
+      <polygon className={styles.projectTop} points={projectLeftTriangle} fill={barColor} />
+      <polygon className={styles.projectTop} points={projectRightTriangle} fill={barColor} />
     </g>
   );
 };

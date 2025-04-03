@@ -1,7 +1,7 @@
-import React, { ReactNode, useMemo } from "react";
-import { GridBody, GridBodyProps } from "./grid-body";
-import { ViewMode } from "../../types/public-types";
-import { differenceInDays } from "date-fns";
+import React, { ReactNode, useMemo } from 'react';
+import { GridBody, GridBodyProps } from './grid-body';
+import { ViewMode } from '../../types/public-types';
+import { differenceInDays } from 'date-fns';
 
 export type GridProps = GridBodyProps;
 export const Grid: React.FC<GridProps> = props => {
@@ -37,7 +37,7 @@ export const Grid: React.FC<GridProps> = props => {
       return rest === -1 || rest === -2;
     }
 
-    return checkIsHoliday(date, "startOfTask");
+    return checkIsHoliday(date, 'startOfTask');
   };
 
   const renderedHolidays = useMemo(() => {

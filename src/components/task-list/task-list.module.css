@@ -1,5 +1,5 @@
 .ganttTableRoot {
-  display:flex;
+  display: flex;
   position: relative;
   border-left: #e6e4e4 1px solid;
   overflow: hidden;
@@ -52,7 +52,7 @@
 }
 
 .taskListResizer::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 4px;

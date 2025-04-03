@@ -10,8 +10,8 @@ import {
   Task,
   TaskMapByLevel,
   TaskOrEmpty,
-} from "../types/public-types";
-import { collectParents } from "./collect-parents";
+} from '../types/public-types';
+import { collectParents } from './collect-parents';
 
 const getLatestTasks = (
   task: Task,
@@ -25,7 +25,7 @@ const getLatestTasks = (
   const { id: taskId } = task;
 
   if (checkedTasks.has(taskId)) {
-    console.error("Warning: circle of dependencies");
+    console.error('Warning: circle of dependencies');
     return [];
   }
 
@@ -42,7 +42,7 @@ const getLatestTasks = (
   }
 
   return childs.reduce<Task[]>((res, child) => {
-    if (child.type === "empty") {
+    if (child.type === 'empty') {
       return res;
     }
 
@@ -81,14 +81,11 @@ const collectCriticalPath = (
   }
 
   taskChilds.forEach(childTask => {
-    if (childTask.type === "empty") {
+    if (childTask.type === 'empty') {
       return;
     }
 
-    const taskTs =
-      target === "startOfTask"
-        ? childTask.start.getTime()
-        : childTask.end.getTime();
+    const taskTs = target === 'startOfTask' ? childTask.start.getTime() : childTask.end.getTime();
 
     if (taskTs >= criticalTs) {
       collectCriticalPath(
@@ -126,8 +123,7 @@ const collectCriticalPathForTask = (
   const startTs = start.getTime();
   const endTs = end.getTime();
 
-  const criticalPathDependenciesForTask =
-    criticalPathDependencies.get(taskId) || new Set<string>();
+  const criticalPathDependenciesForTask = criticalPathDependencies.get(taskId) || new Set<string>();
 
   const marginsForTask = dependencyMarginsOnLevel.get(taskId);
 
@@ -137,8 +133,8 @@ const collectCriticalPathForTask = (
     dependencies.forEach(({ ownTarget, source, sourceTarget }) => {
       const margin = marginsForTask.get(source.id);
 
-      if (typeof margin !== "number") {
-        throw new Error("Margin for dependency is not defined");
+      if (typeof margin !== 'number') {
+        throw new Error('Margin for dependency is not defined');
       }
 
       if (margin > 0) {
@@ -157,7 +153,7 @@ const collectCriticalPathForTask = (
         criticalPathDependencies,
         source,
         sourceTarget,
-        ownTarget === "startOfTask" ? startTs : endTs,
+        ownTarget === 'startOfTask' ? startTs : endTs,
         tasksMap,
         childsOnLevel,
         dependenciesOnLevel,
@@ -184,7 +180,7 @@ const collectCriticalPathForTask = (
     const isCheckEnd = parentTask.end.getTime() <= endTs;
 
     parentDependencies.forEach(({ ownTarget, sourceTarget, source }) => {
-      const isCheck = ownTarget === "startOfTask" ? isCheckStart : isCheckEnd;
+      const isCheck = ownTarget === 'startOfTask' ? isCheckStart : isCheckEnd;
 
       if (!isCheck) {
         return;
@@ -198,9 +194,7 @@ const collectCriticalPathForTask = (
       criticalPathDependencies.set(parentId, criticalPathDependenciesForParent);
 
       const targetTs =
-        ownTarget === "startOfTask"
-          ? parentTask.start.getTime()
-          : parentTask.end.getTime();
+        ownTarget === 'startOfTask' ? parentTask.start.getTime() : parentTask.end.getTime();
 
       collectCriticalPath(
         criticalPathTasks,
@@ -233,22 +227,16 @@ export const getCriticalPath = (
     const childsOnLevel = childTasksMap.get(comparisonLevel);
     if (childsOnLevel) {
       const dependenciesOnLevel = dependencyMap.get(comparisonLevel);
-      const dependencyMarginsOnLevel =
-        dependencyMarginsMap.get(comparisonLevel);
+      const dependencyMarginsOnLevel = dependencyMarginsMap.get(comparisonLevel);
 
       rootTasks.forEach(task => {
-        if (task.type === "empty") {
+        if (task.type === 'empty') {
           return;
         }
 
         const endTs = task.end.getTime();
 
-        const latestTasks = getLatestTasks(
-          task,
-          childsOnLevel,
-          endTs,
-          new Set<string>()
-        );
+        const latestTasks = getLatestTasks(task, childsOnLevel, endTs, new Set<string>());
 
         if (!dependenciesOnLevel || !dependencyMarginsOnLevel) {
           latestTasks.forEach(({ id: taskId }) => {

@@ -1,6 +1,6 @@
-import React, { memo } from "react";
+import React, { memo } from 'react';
 
-import styles from "./bar-relation-handle.module.css";
+import styles from './bar-relation-handle.module.css';
 
 type BarRelationHandleProps = {
   dataTestid: string;
@@ -26,7 +26,7 @@ const BarRelationHandleInner: React.FC<BarRelationHandleProps> = ({
       cy={y}
       r={radius}
       className={`${styles.barRelationHandle} ${
-        isRelationDrawMode ? styles.barRelationHandle_drawMode : ""
+        isRelationDrawMode ? styles.barRelationHandle_drawMode : ''
       }`}
       onMouseDown={startDrawRelation}
       onTouchStart={startDrawRelation}

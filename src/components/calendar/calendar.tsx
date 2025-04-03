@@ -1,19 +1,20 @@
-import React, {useCallback} from "react";
-import type { ReactNode } from "react";
+import React, { useCallback } from 'react';
+import type { ReactNode } from 'react';
 
 import {
   DateSetup,
   ViewMode,
   RenderTopHeader,
   RenderBottomHeader,
-  Distances, ColorStyles
-} from "../../types/public-types";
-import { TopPartOfCalendar } from "./top-part-of-calendar";
-import { getDaysInMonth } from "../../helpers/date-helper";
-import { defaultRenderBottomHeader } from "./default-render-bottom-header";
-import { defaultRenderTopHeader } from "./default-render-top-header";
+  Distances,
+  ColorStyles,
+} from '../../types/public-types';
+import { TopPartOfCalendar } from './top-part-of-calendar';
+import { getDaysInMonth } from '../../helpers/date-helper';
+import { defaultRenderBottomHeader } from './default-render-bottom-header';
+import { defaultRenderTopHeader } from './default-render-top-header';
 
-import styles from "./calendar.module.css";
+import styles from './calendar.module.css';
 
 export type CalendarProps = {
   additionalLeftSpace: number;
@@ -48,17 +49,11 @@ export const Calendar: React.FC<CalendarProps> = ({
   renderTopHeader = defaultRenderTopHeader,
   rtl,
   startColumnIndex,
-  colors
+  colors,
 }) => {
   const renderBottomHeaderByDate = useCallback(
     (date: Date, index: number) =>
-      renderBottomHeader(
-        date,
-        dateSetup.viewMode,
-        dateSetup,
-        index,
-        isUnknownDates
-      ),
+      renderBottomHeader(date, dateSetup.viewMode, dateSetup, index, isUnknownDates),
     [renderBottomHeader, dateSetup, isUnknownDates]
   );
 
@@ -89,8 +84,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       );
       if (
         !isUnknownDates &&
-        (i === startColumnIndex ||
-          date.getFullYear() !== getDate(i - 1).getFullYear())
+        (i === startColumnIndex || date.getFullYear() !== getDate(i - 1).getFullYear())
       ) {
         const topValue = date.getFullYear().toString();
 
@@ -118,7 +112,7 @@ export const Calendar: React.FC<CalendarProps> = ({
 
     for (let i = startColumnIndex; i <= endColumnIndex; i++) {
       const date = getDate(i);
-      const quarter = "Q" + Math.ceil((date.getMonth() + 1) / 3);
+      const quarter = 'Q' + Math.ceil((date.getMonth() + 1) / 3);
 
       // Bottom values for each quarter
       bottomValues.push(
@@ -136,8 +130,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       // Top values for the year
       if (
         !isUnknownDates &&
-        (i === startColumnIndex ||
-          date.getFullYear() !== getDate(i - 1).getFullYear())
+        (i === startColumnIndex || date.getFullYear() !== getDate(i - 1).getFullYear())
       ) {
         const topValue = date.getFullYear().toString();
         const startQuarter = Math.floor(i / 3) * 3;
@@ -150,8 +143,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             y1Line={0}
             y2Line={topDefaultHeight}
             xText={
-              additionalLeftSpace +
-              columnWidth * (startQuarter + 1.5) // Center the text
+              additionalLeftSpace + columnWidth * (startQuarter + 1.5) // Center the text
             }
             yText={topDefaultHeight * 0.9}
             colors={colors}
@@ -178,7 +170,6 @@ export const Calendar: React.FC<CalendarProps> = ({
           x={additionalLeftSpace + columnWidth * i + columnWidth * 0.5}
           className={styles.calendarBottomText}
           style={{ fill: colors.barLabelColor }}
-
         >
           {bottomValue}
         </text>
@@ -225,11 +216,8 @@ export const Calendar: React.FC<CalendarProps> = ({
       const month = date.getMonth();
       const fullYear = date.getFullYear();
 
-      let topValue: ReactNode = "";
-      if (
-        !isUnknownDates &&
-        (i === startColumnIndex || month !== getDate(i - 1).getMonth())
-      ) {
+      let topValue: ReactNode = '';
+      if (!isUnknownDates && (i === startColumnIndex || month !== getDate(i - 1).getMonth())) {
         // top
         topValue = renderTopHeaderByDate(date);
       }
@@ -253,16 +241,10 @@ export const Calendar: React.FC<CalendarProps> = ({
           <TopPartOfCalendar
             key={`${month}_${fullYear}`}
             value={topValue}
-            x1Line={
-              additionalLeftSpace + columnWidth * i + weeksCount * columnWidth
-            }
+            x1Line={additionalLeftSpace + columnWidth * i + weeksCount * columnWidth}
             y1Line={0}
             y2Line={topDefaultHeight}
-            xText={
-              additionalLeftSpace +
-              columnWidth * i +
-              columnWidth * weeksCount * 0.5
-            }
+            xText={additionalLeftSpace + columnWidth * i + columnWidth * weeksCount * 0.5}
             yText={topDefaultHeight * 0.9}
             colors={colors}
           />
@@ -322,8 +304,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             y2Line={topDefaultHeight}
             xText={
               additionalLeftSpace +
-              columnWidth *
-                (startIndexOrZero + (endIndex - startIndexOrZero) / 2)
+              columnWidth * (startIndexOrZero + (endIndex - startIndexOrZero) / 2)
             }
             yText={topDefaultHeight * 0.9}
             colors={colors}
@@ -370,9 +351,7 @@ export const Calendar: React.FC<CalendarProps> = ({
             x1Line={additionalLeftSpace + columnWidth * i}
             y1Line={0}
             y2Line={topDefaultHeight}
-            xText={
-              additionalLeftSpace + columnWidth * i + ticks * columnWidth * 0.5
-            }
+            xText={additionalLeftSpace + columnWidth * i + ticks * columnWidth * 0.5}
             yText={topDefaultHeight * 0.9}
             colors={colors}
           />

@@ -22,9 +22,9 @@
   justify-content: center;
   width: 100%;
   transition: background-color 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .newTaskButton:hover {
   background-color: rgba(0, 0, 0, 0.05);
-} 
+}

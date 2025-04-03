@@ -1,7 +1,4 @@
-import React, {
-  memo,
-  useMemo,
-} from 'react';
+import React, { memo, useMemo } from 'react';
 
 import { TaskOutOfParentWarnings } from '../../types/public-types';
 
@@ -26,25 +23,19 @@ const TaskWarningInner: React.FC<TaskWarningProps> = ({
   x1,
   x2,
 }) => {
-  const isError = useMemo(
-    () => {
-      if (hasDependencyWarning) {
-        return true;
-      }
+  const isError = useMemo(() => {
+    if (hasDependencyWarning) {
+      return true;
+    }
 
-      if (outOfParentWarnings) {
-        const {
-          start,
-          end,
-        } = outOfParentWarnings;
-  
-        return Boolean(start?.isOutside || end?.isOutside);
-      }
+    if (outOfParentWarnings) {
+      const { start, end } = outOfParentWarnings;
 
-      return false;
-    },
-    [outOfParentWarnings, hasDependencyWarning],
-  );
+      return Boolean(start?.isOutside || end?.isOutside);
+    }
+
+    return false;
+  }, [outOfParentWarnings, hasDependencyWarning]);
 
   const centerX = useMemo(() => {
     if (rtl) {
@@ -52,12 +43,7 @@ const TaskWarningInner: React.FC<TaskWarningProps> = ({
     }
 
     return x2 + taskWarningOffset;
-  }, [
-    rtl,
-    taskWarningOffset,
-    x1,
-    x2,
-  ]);
+  }, [rtl, taskWarningOffset, x1, x2]);
 
   return (
     <g>
@@ -65,7 +51,7 @@ const TaskWarningInner: React.FC<TaskWarningProps> = ({
         cx={centerX}
         cy={taskYOffset + taskHalfHeight}
         r={12}
-        fill={isError ? "#ff0000" : "#e1ca24"}
+        fill={isError ? '#ff0000' : '#e1ca24'}
         strokeWidth={5}
       />
 
@@ -77,13 +63,7 @@ const TaskWarningInner: React.FC<TaskWarningProps> = ({
         height={4}
       />
 
-      <rect
-        fill="#ffffff"
-        x={centerX - 2}
-        y={taskYOffset + taskHalfHeight}
-        width={4}
-        height={8}
-      />
+      <rect fill="#ffffff" x={centerX - 2} y={taskYOffset + taskHalfHeight} width={4} height={8} />
     </g>
   );
 };

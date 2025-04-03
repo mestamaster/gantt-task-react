@@ -1,8 +1,4 @@
-import {
-  ChildByLevelMap,
-  RootMapByLevel,
-  TaskOrEmpty,
-} from "../types/public-types";
+import { ChildByLevelMap, RootMapByLevel, TaskOrEmpty } from '../types/public-types';
 
 const collectChildren = (
   arrayRes: TaskOrEmpty[],
@@ -18,7 +14,7 @@ const collectChildren = (
     mirrorRes[task.id] = true;
   }
 
-  if (task.type === "empty" || task.hideChildren) {
+  if (task.type === 'empty' || task.hideChildren) {
     return;
   }
 

@@ -1,14 +1,10 @@
-import { useCallback } from "react";
-import type { ReactElement } from "react";
+import { useCallback } from 'react';
+import type { ReactElement } from 'react';
 
-import type {
-  ColorStyles,
-  ContextMenuOptionType,
-  Distances,
-} from "../../types/public-types";
+import type { ColorStyles, ContextMenuOptionType, Distances } from '../../types/public-types';
 
-import styles from "./menu-option.module.css";
-import React from "react";
+import styles from './menu-option.module.css';
+import React from 'react';
 
 type MenuOptionProps = {
   colors: ColorStyles;
@@ -20,11 +16,7 @@ type MenuOptionProps = {
 export function MenuOption({
   colors: { contextMenuTextColor },
 
-  distances: {
-    contextMenuIconWidth,
-    contextMenuOptionHeight,
-    contextMenuSidePadding,
-  },
+  distances: { contextMenuIconWidth, contextMenuOptionHeight, contextMenuSidePadding },
   handleAction,
 
   option,

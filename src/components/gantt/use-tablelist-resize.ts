@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { Column, Distances, OnResizeColumn } from "../../types/public-types";
-import { AddColumn } from "../task-list/columns/add-column";
-import { TitleColumn } from "../task-list/columns/title-column";
-import { DateStartColumn } from "../task-list/columns/date-start-column";
-import { DateEndColumn } from "../task-list/columns/date-end-column";
-import { DependenciesColumn } from "../task-list/columns/dependencies-column";
-import { DeleteColumn } from "../task-list/columns/delete-column";
-import { EditColumn } from "../task-list/columns/edit-column";
+import { Column, Distances, OnResizeColumn } from '../../types/public-types';
+import { AddColumn } from '../task-list/columns/add-column';
+import { TitleColumn } from '../task-list/columns/title-column';
+import { DateStartColumn } from '../task-list/columns/date-start-column';
+import { DateEndColumn } from '../task-list/columns/date-end-column';
+import { DependenciesColumn } from '../task-list/columns/dependencies-column';
+import { DeleteColumn } from '../task-list/columns/delete-column';
+import { EditColumn } from '../task-list/columns/edit-column';
 
 type TableResizeEvent = {
   initialClientX: number;
@@ -37,58 +37,53 @@ export const useTableListResize = (
       return [...columnsProp];
     }
 
-    const {
-      titleCellWidth,
-      dateCellWidth,
-      dependenciesCellWidth,
-      actionColumnWidth,
-    } = distances;
+    const { titleCellWidth, dateCellWidth, dependenciesCellWidth, actionColumnWidth } = distances;
 
     return [
       {
-        id: "TitleColumn",
+        id: 'TitleColumn',
         Cell: TitleColumn,
         width: titleCellWidth,
-        title: "Name",
+        title: 'Name',
       },
 
       {
-        id: "DateStartColumn",
+        id: 'DateStartColumn',
         Cell: DateStartColumn,
         width: dateCellWidth,
-        title: "From",
+        title: 'From',
       },
 
       {
-        id: "DateEndColumn",
+        id: 'DateEndColumn',
         Cell: DateEndColumn,
         width: dateCellWidth,
-        title: "To",
+        title: 'To',
       },
 
       {
-        id: "DependenciesColumn",
+        id: 'DependenciesColumn',
         Cell: DependenciesColumn,
         width: dependenciesCellWidth,
-        title: "Dependencies",
+        title: 'Dependencies',
       },
 
       {
-        id: "DeleteColumn",
+        id: 'DeleteColumn',
         Cell: DeleteColumn,
         width: actionColumnWidth,
         canResize: false,
       },
 
       {
-        id: "EditColumn",
+        id: 'EditColumn',
         Cell: EditColumn,
         width: actionColumnWidth,
         canResize: false,
       },
 
       {
-        id: "AddColumn",
+        id: 'AddColumn',
         Cell: AddColumn,
         width: actionColumnWidth,
         canResize: false,
@@ -118,10 +113,8 @@ export const useTableListResize = (
     }
   }, [columnsProp]);
 
-  const [tableResizeEvent, setTableResizeEvent] =
-    useState<TableResizeEvent | null>(null);
-  const [columnResizeEvent, setColumnResizeEvent] =
-    useState<ColumnResizeEvent | null>(null);
+  const [tableResizeEvent, setTableResizeEvent] = useState<TableResizeEvent | null>(null);
+  const [columnResizeEvent, setColumnResizeEvent] = useState<ColumnResizeEvent | null>(null);
 
   const [tableWidthState, setTableWidth] = useState(() =>
     columnsState.reduce((res, { width }) => res + width, 0)
@@ -179,16 +172,16 @@ export const useTableListResize = (
       setTableResizeEvent(null);
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("touchmove", handleTouchMove);
-    document.addEventListener("mouseup", handleUp);
-    document.addEventListener("touchend", handleUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('touchmove', handleTouchMove);
+    document.addEventListener('mouseup', handleUp);
+    document.addEventListener('touchend', handleUp);
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("mouseup", handleUp);
-      document.removeEventListener("touchend", handleUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('mouseup', handleUp);
+      document.removeEventListener('touchend', handleUp);
     };
   }, [isResizeTableInProgress, tableWidthState, tableResizeEvent]);
 
@@ -199,10 +192,7 @@ export const useTableListResize = (
 
     const handleMove = (clientX: number) => {
       const moveDelta = clientX - columnResizeEvent.startX;
-      const newColumnwidth = Math.max(
-        10,
-        columnResizeEvent.initialColumnWidth + moveDelta
-      );
+      const newColumnwidth = Math.max(10, columnResizeEvent.initialColumnWidth + moveDelta);
       let previousColumnWidth = null;
       setColumns((prevColumns: readonly Column[]) => {
         const newColumns = prevColumns.map((column, index) => {
@@ -217,10 +207,7 @@ export const useTableListResize = (
 
       if (previousColumnWidth !== newColumnwidth) {
         setTableWidth(() =>
-          Math.min(
-            Math.max(columnResizeEvent.initialTableWidth + moveDelta, 50),
-            taskListWidth
-          )
+          Math.min(Math.max(columnResizeEvent.initialTableWidth + moveDelta, 50), taskListWidth)
         );
       }
     };
@@ -242,31 +229,24 @@ export const useTableListResize = (
         onResizeColumn(
           columnsState,
           columnResizeEvent.columnIndex,
-          columnsState[columnResizeEvent.columnIndex].width -
-            columnResizeEvent.initialColumnWidth
+          columnsState[columnResizeEvent.columnIndex].width - columnResizeEvent.initialColumnWidth
         );
       }
       setColumnResizeEvent(null);
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("touchmove", handleTouchMove);
-    document.addEventListener("mouseup", handleUp);
-    document.addEventListener("touchend", handleUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('touchmove', handleTouchMove);
+    document.addEventListener('mouseup', handleUp);
+    document.addEventListener('touchend', handleUp);
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("mouseup", handleUp);
-      document.removeEventListener("touchend", handleUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('mouseup', handleUp);
+      document.removeEventListener('touchend', handleUp);
     };
   }, [isResizeColumnInProgress, columnResizeEvent, columnsState]);
 
-  return [
-    columnsState,
-    taskListWidth,
-    tableWidthState,
-    onTableResizeStart,
-    onColumnResizeStart,
-  ];
+  return [columnsState, taskListWidth, tableWidthState, onTableResizeStart, onColumnResizeStart];
 };

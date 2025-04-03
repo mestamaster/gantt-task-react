@@ -1,9 +1,4 @@
-import type {
-  ChangeAction,
-  DependentMap,
-  Task,
-  TaskOrEmpty,
-} from "../types/public-types";
+import type { ChangeAction, DependentMap, Task, TaskOrEmpty } from '../types/public-types';
 
 export const fillDependentTasksForTask = (
   resSet: Set<Task>,
@@ -29,44 +24,39 @@ export const fillDependentTasksForTask = (
   });
 };
 
-export const getDependentTasks = (
-  changeAction: ChangeAction,
-  dependentMap: DependentMap
-) => {
+export const getDependentTasks = (changeAction: ChangeAction, dependentMap: DependentMap) => {
   const resSet = new Set<Task>();
 
   switch (changeAction.type) {
-    case "add-childs":
+    case 'add-childs':
       fillDependentTasksForTask(resSet, changeAction.parent, dependentMap);
       break;
 
-    case "change":
-    case "change_start_and_end":
+    case 'change':
+    case 'change_start_and_end':
       fillDependentTasksForTask(resSet, changeAction.task, dependentMap);
       break;
 
-    case "delete":
+    case 'delete':
       changeAction.tasks.forEach(task => {
         fillDependentTasksForTask(resSet, task, dependentMap);
       });
       break;
 
-    case "move-before":
+    case 'move-before':
       fillDependentTasksForTask(resSet, changeAction.target, dependentMap);
       break;
 
-    case "move-after":
+    case 'move-after':
       fillDependentTasksForTask(resSet, changeAction.target, dependentMap);
       break;
 
-    case "move-inside":
+    case 'move-inside':
       fillDependentTasksForTask(resSet, changeAction.parent, dependentMap);
       break;
 
     default:
-      throw new Error(
-        `Unknown change action: ${(changeAction as ChangeAction).type}`
-      );
+      throw new Error(`Unknown change action: ${(changeAction as ChangeAction).type}`);
   }
 
   return [...resSet];

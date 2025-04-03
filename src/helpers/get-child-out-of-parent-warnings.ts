@@ -4,26 +4,21 @@ import {
   ChildOutOfParentWarnings,
   ChildByLevelMap,
   Task,
-} from "../types/public-types";
-import { compareDates } from "./compare-dates";
+} from '../types/public-types';
+import { compareDates } from './compare-dates';
 
 export const getChildOutOfParentWarnings = (
   tasks: readonly TaskOrEmpty[],
-  childTasksMap: ChildByLevelMap,
+  childTasksMap: ChildByLevelMap
 ): ChildOutOfParentWarnings => {
   const res = new Map<number, Map<string, TaskOutOfParentWarnings>>();
 
-  tasks.forEach((task) => {
+  tasks.forEach(task => {
     if (task.type === 'empty') {
       return;
     }
 
-    const {
-      id,
-      comparisonLevel = 1,
-      start: taskStart,
-      end: taskEnd,
-    } = task;
+    const { id, comparisonLevel = 1, start: taskStart, end: taskEnd } = task;
 
     const childsByLevel = childTasksMap.get(comparisonLevel);
 
@@ -37,22 +32,16 @@ export const getChildOutOfParentWarnings = (
       return;
     }
 
-    const notEmptyChilds = childs.filter(({ type }) => type !== "empty") as Task[];
+    const notEmptyChilds = childs.filter(({ type }) => type !== 'empty') as Task[];
 
     if (notEmptyChilds.length === 0) {
       return;
     }
 
-    let {
-      start,
-      end,
-    } = notEmptyChilds[0];
+    let { start, end } = notEmptyChilds[0];
 
     for (let i = 1; i < notEmptyChilds.length; ++i) {
-      const {
-        start: childStart,
-        end: childEnd,
-      } = notEmptyChilds[i];
+      const { start: childStart, end: childEnd } = notEmptyChilds[i];
 
       if (start.getTime() > childStart.getTime()) {
         start = childStart;

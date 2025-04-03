@@ -1,10 +1,10 @@
-import React, { memo, SyntheticEvent, useMemo } from "react";
-import type { CSSProperties, RefObject } from "react";
+import React, { memo, SyntheticEvent, useMemo } from 'react';
+import type { CSSProperties, RefObject } from 'react';
 
-import { GridProps, Grid } from "../grid/grid";
-import { CalendarProps, Calendar } from "../calendar/calendar";
-import { TaskGanttContentProps, TaskGanttContent } from "./task-gantt-content";
-import styles from "./gantt.module.css";
+import { GridProps, Grid } from '../grid/grid';
+import { CalendarProps, Calendar } from '../calendar/calendar';
+import { TaskGanttContentProps, TaskGanttContent } from './task-gantt-content';
+import styles from './gantt.module.css';
 import {
   FloatingPortal,
   useFloating,
@@ -14,15 +14,16 @@ import {
   autoUpdate,
   useDismiss,
   useRole,
-  useInteractions
-} from "@floating-ui/react";
+  useInteractions,
+} from '@floating-ui/react';
 import {
   TaskContextualPaletteProps,
   Task,
   Distances,
   DateExtremity,
-  TaskDependencyContextualPaletteProps, ColorStyles
-} from "../../types/public-types";
+  TaskDependencyContextualPaletteProps,
+  ColorStyles,
+} from '../../types/public-types';
 
 export type TaskGanttProps = {
   barProps: TaskGanttContentProps;
@@ -36,13 +37,11 @@ export type TaskGanttProps = {
   ganttTaskContentRef: RefObject<HTMLDivElement>;
   onVerticalScrollbarScrollX: (event: SyntheticEvent<HTMLDivElement>) => void;
   ganttTaskRootRef: RefObject<HTMLDivElement>;
-  onScrollGanttContentVertically: (
-    event: SyntheticEvent<HTMLDivElement>
-  ) => void;
-  colors: Partial<ColorStyles>
+  onScrollGanttContentVertically: (event: SyntheticEvent<HTMLDivElement>) => void;
+  colors: Partial<ColorStyles>;
 };
 
-const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
+const TaskGanttInner: React.FC<TaskGanttProps> = props => {
   const {
     barProps,
     barProps: { additionalLeftSpace },
@@ -57,15 +56,14 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
     onVerticalScrollbarScrollX,
     ganttTaskRootRef,
     onScrollGanttContentVertically: onScrollVertically,
-    colors
+    colors,
   } = props;
   const containerStyle: CSSProperties = {
     // In order to see the vertical scrollbar of the gantt content,
     // we resize dynamically the width of the gantt content
     height: Math.max(ganttFullHeight, minimumRowDisplayed * rowHeight),
     width: ganttTaskRootRef?.current
-      ? ganttTaskRootRef.current.clientWidth +
-        ganttTaskRootRef.current.scrollLeft
+      ? ganttTaskRootRef.current.clientWidth + ganttTaskRootRef.current.scrollLeft
       : fullSvgWidth,
   };
 
@@ -78,20 +76,12 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
       backgroundImage: [
         `linear-gradient(to right, #ebeff2 1px, transparent 2px)`,
         `linear-gradient(to bottom, transparent ${fullRowHeight}px, #f5f5f5 ${fullRowHeight}px)`,
-      ].join(", "),
+      ].join(', '),
     }),
-    [
-      additionalLeftSpace,
-      columnWidth,
-      fullRowHeight,
-      fullSvgWidth,
-      ganttFullHeight,
-    ]
+    [additionalLeftSpace, columnWidth, fullRowHeight, fullSvgWidth, ganttFullHeight]
   );
 
-  const [arrowAnchorEl, setArrowAnchorEl] = React.useState<null | SVGElement>(
-    null
-  );
+  const [arrowAnchorEl, setArrowAnchorEl] = React.useState<null | SVGElement>(null);
   const [selectedDependency, setSelectedDependency] = React.useState<{
     taskFrom: Task;
     extremityFrom: DateExtremity;
@@ -116,30 +106,27 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
 
   // Floating UI setup for arrow contextual palette
   const {
-    x: arrowX, 
-    y: arrowY, 
-    strategy: arrowStrategy, 
+    x: arrowX,
+    y: arrowY,
+    strategy: arrowStrategy,
     refs: arrowRefs,
-    context: arrowContext
+    context: arrowContext,
   } = useFloating({
     open: isArrowContextualPaletteOpened,
-    onOpenChange: (open) => {
+    onOpenChange: open => {
       if (!open) {
         setArrowAnchorEl(null);
         setSelectedDependency(null);
       }
     },
-    placement: "top",
+    placement: 'top',
     middleware: [offset(10), flip(), shift()],
-    whileElementsMounted: autoUpdate
+    whileElementsMounted: autoUpdate,
   });
 
   const arrowDismiss = useDismiss(arrowContext);
   const arrowRole = useRole(arrowContext);
-  const { getFloatingProps: getArrowFloatingProps } = useInteractions([
-    arrowDismiss,
-    arrowRole
-  ]);
+  const { getFloatingProps: getArrowFloatingProps } = useInteractions([arrowDismiss, arrowRole]);
 
   // Set the reference element whenever arrowAnchorEl changes
   React.useEffect(() => {
@@ -152,16 +139,13 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
     | React.FunctionComponentElement<TaskDependencyContextualPaletteProps>
     | undefined = undefined;
   if (barProps.TaskDependencyContextualPalette && selectedDependency) {
-    arrowContextualPalette = React.createElement(
-      barProps.TaskDependencyContextualPalette,
-      {
-        taskFrom: selectedDependency.taskFrom,
-        extremityFrom: selectedDependency.extremityFrom,
-        taskTo: selectedDependency.taskTo,
-        extremityTo: selectedDependency.extremityTo,
-        onClosePalette: onCloseArrowContextualPalette,
-      }
-    );
+    arrowContextualPalette = React.createElement(barProps.TaskDependencyContextualPalette, {
+      taskFrom: selectedDependency.taskFrom,
+      extremityFrom: selectedDependency.extremityFrom,
+      taskTo: selectedDependency.taskTo,
+      extremityTo: selectedDependency.extremityTo,
+      onClosePalette: onCloseArrowContextualPalette,
+    });
   } else {
     arrowContextualPalette = <div></div>;
   }
@@ -170,10 +154,7 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
   const [anchorEl, setAnchorEl] = React.useState<null | SVGElement>(null);
   const [selectedTask, setSelectedTask] = React.useState<Task>(null);
   const open = Boolean(anchorEl);
-  const onClickTask: (
-    task: Task,
-    event: React.MouseEvent<SVGElement>
-  ) => void = (task, event) => {
+  const onClickTask: (task: Task, event: React.MouseEvent<SVGElement>) => void = (task, event) => {
     setAnchorEl(event.currentTarget);
     setSelectedTask(task);
     barProps.onClick(task, event);
@@ -184,31 +165,22 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
   };
 
   // Floating UI setup for task contextual palette
-  const {
-    x, 
-    y, 
-    strategy, 
-    refs,
-    context
-  } = useFloating({
+  const { x, y, strategy, refs, context } = useFloating({
     open,
-    onOpenChange: (open) => {
+    onOpenChange: open => {
       if (!open) {
         setAnchorEl(null);
         setSelectedTask(null);
       }
     },
-    placement: "top",
+    placement: 'top',
     middleware: [offset(10), flip(), shift()],
-    whileElementsMounted: autoUpdate
+    whileElementsMounted: autoUpdate,
   });
 
   const dismiss = useDismiss(context);
   const role = useRole(context);
-  const { getFloatingProps } = useInteractions([
-    dismiss,
-    role
-  ]);
+  const { getFloatingProps } = useInteractions([dismiss, role]);
 
   // Set the reference element whenever anchorEl changes
   React.useEffect(() => {
@@ -217,9 +189,8 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
     }
   }, [anchorEl, refs]);
 
-  let contextualPalette:
-    | React.FunctionComponentElement<TaskContextualPaletteProps>
-    | undefined = undefined;
+  let contextualPalette: React.FunctionComponentElement<TaskContextualPaletteProps> | undefined =
+    undefined;
   if (barProps.ContextualPalette && selectedTask) {
     contextualPalette = React.createElement(barProps.ContextualPalette, {
       selectedTask,
@@ -252,21 +223,17 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
             fontFamily={barProps.fontFamily}
             ref={ganttSVGRef}
             style={{
-              background: colors.oddTaskBackgroundColor
+              background: colors.oddTaskBackgroundColor,
             }}
           >
             <Grid {...gridProps} />
-            <TaskGanttContent
-              {...barProps}
-              onClick={onClickTask}
-              onArrowClick={onClickArrow}
-            />
+            <TaskGanttContent {...barProps} onClick={onClickTask} onArrowClick={onClickArrow} />
           </svg>
         </div>
-        
+
         {barProps.ContextualPalette && open && (
           <FloatingPortal>
-            <div 
+            <div
               ref={refs.setFloating}
               className={styles.popperPaper}
               style={{
@@ -281,10 +248,10 @@ const TaskGanttInner: React.FC<TaskGanttProps> = (props) => {
             </div>
           </FloatingPortal>
         )}
-        
+
         {barProps.TaskDependencyContextualPalette && isArrowContextualPaletteOpened && (
           <FloatingPortal>
-            <div 
+            <div
               ref={arrowRefs.setFloating}
               className={styles.popperPaper}
               style={{

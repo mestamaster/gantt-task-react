@@ -1,15 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { autoUpdate, flip, offset, shift } from "@floating-ui/dom";
-import {
-  useFloating,
-  useFocus,
-  useDismiss,
-  useRole,
-  useInteractions,
-} from "@floating-ui/react";
+import { autoUpdate, flip, offset, shift } from '@floating-ui/dom';
+import { useFloating, useFocus, useDismiss, useRole, useInteractions } from '@floating-ui/react';
 
-import type { ChangeInProgress, Task } from "../types/public-types";
+import type { ChangeInProgress, Task } from '../types/public-types';
 
 export const useTaskTooltip = (changeInProgress: ChangeInProgress | null) => {
   const [hoverTooltipTask, setHoverTooltipTask] = useState<Task | null>(null);
@@ -45,13 +39,9 @@ export const useTaskTooltip = (changeInProgress: ChangeInProgress | null) => {
 
   const focus = useFocus(context);
   const dismiss = useDismiss(context);
-  const role = useRole(context, { role: "tooltip" });
+  const role = useRole(context, { role: 'tooltip' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    focus,
-    dismiss,
-    role,
-  ]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([focus, dismiss, role]);
 
   useEffect(() => {
     if (!tooltipTask) {

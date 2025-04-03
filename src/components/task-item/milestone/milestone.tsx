@@ -1,11 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
-import stylesRelationHandle from "../bar/bar-relation-handle.module.css";
+import stylesRelationHandle from '../bar/bar-relation-handle.module.css';
 
-import type { TaskItemProps } from "../task-item";
+import type { TaskItemProps } from '../task-item';
 
-import styles from "./milestone.module.css";
-import { BarMoveAction } from "../../../types/public-types";
+import styles from './milestone.module.css';
+import { BarMoveAction } from '../../../types/public-types';
 
 export const Milestone: React.FC<
   TaskItemProps & {
@@ -61,13 +61,13 @@ export const Milestone: React.FC<
         transform={transform}
         className={styles.milestoneBackground}
         onMouseDown={e => {
-          onTaskEventStart("move", e.clientX);
+          onTaskEventStart('move', e.clientX);
         }}
         onTouchStart={e => {
           const firstTouch = e.touches[0];
 
           if (firstTouch) {
-            onTaskEventStart("move", firstTouch.clientX);
+            onTaskEventStart('move', firstTouch.clientX);
           }
         }}
       />

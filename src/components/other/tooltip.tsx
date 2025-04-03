@@ -1,14 +1,10 @@
-import React, {
-  ComponentType,
-} from "react";
+import React, { ComponentType } from 'react';
 
-import type { Strategy } from "@floating-ui/dom";
+import type { Strategy } from '@floating-ui/dom';
 
-import type {
-  Task,
-} from "../../types/public-types";
+import type { Task } from '../../types/public-types';
 
-import styles from "./tooltip.module.css";
+import styles from './tooltip.module.css';
 
 export type TooltipProps = {
   tooltipX: number | null;
@@ -64,13 +60,8 @@ export const StandardTooltipContent: React.FC<{
   };
 
   return (
-    <div
-      className={styles.tooltipDefaultContainer}
-      style={style}
-    >
-      <b style={{ fontSize: fontSize + 6 }}>{`${
-        task.name
-      }: ${task.start.getDate()}-${
+    <div className={styles.tooltipDefaultContainer} style={style}>
+      <b style={{ fontSize: fontSize + 6 }}>{`${task.name}: ${task.start.getDate()}-${
         task.start.getMonth() + 1
       }-${task.start.getFullYear()} - ${task.end.getDate()}-${
         task.end.getMonth() + 1

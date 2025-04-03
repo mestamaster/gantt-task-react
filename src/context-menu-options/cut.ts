@@ -1,14 +1,7 @@
-import type {
-  ContextMenuOptionType,
-} from "../types/public-types";
+import type { ContextMenuOptionType } from '../types/public-types';
 
 export const cutOption: ContextMenuOptionType = {
-  action: ({
-    cutSelectedTasks,
-    cutTask,
-    getSelectedTasks,
-    task,
-  }) => {
+  action: ({ cutSelectedTasks, cutTask, getSelectedTasks, task }) => {
     const selectedTasks = getSelectedTasks();
 
     if (selectedTasks.length > 0) {

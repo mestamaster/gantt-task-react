@@ -1,18 +1,10 @@
-import React, { memo, useCallback, useMemo } from "react";
+import React, { memo, useCallback, useMemo } from 'react';
 
-import {
-  ColorStyles,
-  Distances,
-  DateExtremity,
-  Task,
-} from "../../types/public-types";
-import { generateTrianglePoints } from "../../helpers/generate-triangle-points";
-import {
-  FixDependencyPosition,
-  fixPositionContainerClass,
-} from "./fix-dependency-position";
+import { ColorStyles, Distances, DateExtremity, Task } from '../../types/public-types';
+import { generateTrianglePoints } from '../../helpers/generate-triangle-points';
+import { FixDependencyPosition, fixPositionContainerClass } from './fix-dependency-position';
 
-import styles from "./arrow.module.css";
+import styles from './arrow.module.css';
 
 type ArrowProps = {
   colorStyles: ColorStyles;
@@ -47,12 +39,7 @@ type ArrowProps = {
 const ArrowInner: React.FC<ArrowProps> = ({
   colorStyles: { arrowColor, arrowWarningColor, arrowCriticalColor },
 
-  distances: {
-    arrowIndent,
-    dependencyFixWidth,
-    dependencyFixHeight,
-    dependencyFixIndent,
-  },
+  distances: { arrowIndent, dependencyFixWidth, dependencyFixHeight, dependencyFixIndent },
 
   taskFrom,
   extremityFrom,
@@ -74,14 +61,8 @@ const ArrowInner: React.FC<ArrowProps> = ({
   onArrowClick = undefined,
   handleFixDependency,
 }) => {
-  const indexFrom = useMemo(
-    () => Math.floor(fromY / fullRowHeight),
-    [fromY, fullRowHeight]
-  );
-  const indexTo = useMemo(
-    () => Math.floor(toY / fullRowHeight),
-    [toY, fullRowHeight]
-  );
+  const indexFrom = useMemo(() => Math.floor(fromY / fullRowHeight), [fromY, fullRowHeight]);
+  const indexTo = useMemo(() => Math.floor(toY / fullRowHeight), [toY, fullRowHeight]);
 
   const onDoubleClick = useCallback(() => {
     if (onArrowDoubleClick) {
@@ -105,12 +86,12 @@ const ArrowInner: React.FC<ArrowProps> = ({
         fromX1,
         fromX2,
         fromY,
-        (extremityFrom === "startOfTask") !== rtl,
+        (extremityFrom === 'startOfTask') !== rtl,
         indexTo,
         toX1,
         toX2,
         toY,
-        (extremityTo === "startOfTask") !== rtl,
+        (extremityTo === 'startOfTask') !== rtl,
         fullRowHeight,
         taskHeight,
         arrowIndent
@@ -134,7 +115,7 @@ const ArrowInner: React.FC<ArrowProps> = ({
   );
 
   const taskFromFixerPosition = useMemo(() => {
-    const isLeft = (extremityFrom === "startOfTask") !== rtl;
+    const isLeft = (extremityFrom === 'startOfTask') !== rtl;
 
     if (isLeft) {
       return fromX1 - dependencyFixIndent;
@@ -144,7 +125,7 @@ const ArrowInner: React.FC<ArrowProps> = ({
   }, [fromX1, fromX2, extremityFrom, rtl, dependencyFixIndent]);
 
   const taskToFixerPosition = useMemo(() => {
-    const isLeft = (extremityTo === "startOfTask") !== rtl;
+    const isLeft = (extremityTo === 'startOfTask') !== rtl;
 
     if (isLeft) {
       return toX1 - dependencyFixIndent;
@@ -154,7 +135,7 @@ const ArrowInner: React.FC<ArrowProps> = ({
   }, [toX1, toX2, extremityTo, rtl, dependencyFixIndent]);
 
   const fixDependencyTaskFrom = useCallback(() => {
-    if (typeof marginBetweenTasks !== "number") {
+    if (typeof marginBetweenTasks !== 'number') {
       return;
     }
 
@@ -162,7 +143,7 @@ const ArrowInner: React.FC<ArrowProps> = ({
   }, [taskFrom, handleFixDependency, marginBetweenTasks]);
 
   const fixDependencyTaskTo = useCallback(() => {
-    if (typeof marginBetweenTasks !== "number") {
+    if (typeof marginBetweenTasks !== 'number') {
       return;
     }
 
@@ -171,9 +152,7 @@ const ArrowInner: React.FC<ArrowProps> = ({
 
   const hasWarning = useMemo(
     () =>
-      isShowDependencyWarnings &&
-      typeof marginBetweenTasks === "number" &&
-      marginBetweenTasks < 0,
+      isShowDependencyWarnings && typeof marginBetweenTasks === 'number' && marginBetweenTasks < 0,
     [marginBetweenTasks, isShowDependencyWarnings]
   );
 
@@ -187,13 +166,7 @@ const ArrowInner: React.FC<ArrowProps> = ({
     }
 
     return arrowColor;
-  }, [
-    hasWarning,
-    isCritical,
-    arrowColor,
-    arrowCriticalColor,
-    arrowWarningColor,
-  ]);
+  }, [hasWarning, isCritical, arrowColor, arrowCriticalColor, arrowWarningColor]);
 
   return (
     <g className={fixPositionContainerClass} fill={color} stroke={color}>
@@ -261,18 +234,12 @@ const drownPathAndTriangle = (
     ? (indexForm + 1) * fullRowHeight
     : indexForm * fullRowHeight;
 
-  const taskFromEndPositionX = isTaskFromLeftSide
-    ? fromX1 - arrowIndent
-    : fromX2 + arrowIndent;
+  const taskFromEndPositionX = isTaskFromLeftSide ? fromX1 - arrowIndent : fromX2 + arrowIndent;
 
-  const taskToEndPositionX = isTaskToLeftSide
-    ? toX1 - arrowIndent
-    : toX2 + arrowIndent;
+  const taskToEndPositionX = isTaskToLeftSide ? toX1 - arrowIndent : toX2 + arrowIndent;
   const taskToEndPositionY = toY + taskHeight / 2;
 
-  const path = `M ${isTaskFromLeftSide ? fromX1 : fromX2} ${
-    fromY + taskHeight / 2
-  }
+  const path = `M ${isTaskFromLeftSide ? fromX1 : fromX2} ${fromY + taskHeight / 2}
   H ${taskFromEndPositionX}
   V ${horizontalDockingY}
   H ${taskToEndPositionX}

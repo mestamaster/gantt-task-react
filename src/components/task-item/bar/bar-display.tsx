@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
-import { ColorStyles } from "../../../types/public-types";
+import { ColorStyles } from '../../../types/public-types';
 
-import style from "./bar.module.css";
+import style from './bar.module.css';
 
 type BarDisplayProps = {
   barCornerRadius: number;

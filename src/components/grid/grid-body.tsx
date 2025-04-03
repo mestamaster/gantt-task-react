@@ -1,7 +1,7 @@
-import React, { memo, useMemo } from "react";
-import { getDatesDiff } from "../../helpers/get-dates-diff";
+import React, { memo, useMemo } from 'react';
+import { getDatesDiff } from '../../helpers/get-dates-diff';
 
-import type { DateExtremity, ViewMode } from "../../types/public-types";
+import type { DateExtremity, ViewMode } from '../../types/public-types';
 
 export type GridBodyProps = {
   additionalLeftSpace: number;
