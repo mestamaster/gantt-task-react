@@ -1,5 +1,5 @@
 import type { ComponentType, MouseEvent, RefObject, SyntheticEvent } from "react";
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 
 import {
   ChildByLevelMap,
@@ -10,11 +10,13 @@ import {
   Distances,
   Icons,
   MapTaskToNestedIndex,
+  OnChangeTasks,
   OnResizeColumn,
   Task,
   TaskListHeaderProps,
   TaskListTableProps,
-  TaskOrEmpty
+  TaskOrEmpty,
+  EmptyTask
 } from "../../types/public-types";
 
 import { useOptimizedList } from "../../helpers/use-optimized-list";
@@ -22,6 +24,7 @@ import { useOptimizedList } from "../../helpers/use-optimized-list";
 import styles from "./task-list.module.css";
 import { useTableListResize } from "../gantt/use-tablelist-resize";
 import { TaskListHeaderActionsProps } from "./TaskListHeaderActions";
+import { NewTaskButton } from "./new-task-button";
 
 // const SCROLL_DELAY = 25;
 
@@ -68,6 +71,7 @@ export type TaskListProps = {
   onScrollTableListContentVertically: (
     event: SyntheticEvent<HTMLDivElement>
   ) => void;
+  onChangeTasks?: OnChangeTasks;
 } & TaskListHeaderActionsProps;
 
 const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = (
@@ -110,7 +114,8 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = (
     onScrollTableListContentVertically,
     onCollapseAll,
     onExpandFirstLevel,
-    onExpandAll
+    onExpandAll,
+    onChangeTasks,
   }) => {
   // Manage the column and list table resizing
   const [
@@ -127,6 +132,26 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = (
     fullRowHeight
   );
 
+  const handleAddNewRootTask = useCallback(() => {
+    if (!onChangeTasks) return;
+    
+    // Create a root-level empty task
+    const newRootTask: EmptyTask = {
+      id: String(Date.now()),
+      type: "empty",
+      name: "New Task",
+      comparisonLevel: 1,
+      // No parent property - makes it a root task
+    };
+    
+    // Add the new task to the tasks array
+    const updatedTasks = [...tasks, newRootTask];
+    
+    // Update tasks with the onChangeTasks callback
+    onChangeTasks(updatedTasks, {
+      type: "add_tasks"
+    });
+  }, [tasks, onChangeTasks]);
 
   return (
     <div className={styles.ganttTableRoot} ref={taskListRef}>
@@ -162,10 +187,10 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = (
               ),
               backgroundSize: `100% ${fullRowHeight * 2}px`,
               backgroundImage: `linear-gradient(to bottom, transparent ${fullRowHeight}px, #f5f5f5 ${fullRowHeight}px)`,
-              overflow: "hidden"
+              overflow: "hidden",
+              position: "relative"
             }}
           >
-
             <TaskListTable
               canMoveTasks={canMoveTasks}
               childTasksMap={childTasksMap}
@@ -198,6 +223,12 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = (
               selectedIdsMirror={selectedIdsMirror}
               taskListWidth={taskListWidth}
               tasks={tasks}
+            />
+          </div>
+          <div className={styles.newTaskButtonContainer}>
+            <NewTaskButton 
+              colors={colors}
+              onAddNewTask={handleAddNewRootTask}
             />
           </div>
         </div>

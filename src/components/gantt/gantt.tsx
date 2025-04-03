@@ -1920,7 +1920,8 @@ export const Gantt: React.FC<GanttProps> = ({
     onScrollTableListContentVertically: onScrollVertically,
     onCollapseAll,
     onExpandFirstLevel,
-    onExpandAll
+    onExpandAll,
+    onChangeTasks
   };
 
   const displayTable = !columnsProp || columnsProp.length > 0;

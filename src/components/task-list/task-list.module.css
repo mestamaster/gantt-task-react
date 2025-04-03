@@ -74,3 +74,13 @@
 .hidden {
   display: none;
 }
+
+.newTaskButtonContainer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(to bottom, transparent, white 20%);
+  z-index: 100;
+}
