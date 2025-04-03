@@ -268,7 +268,7 @@ export type OnMoveTaskInside = (
   suggestions: readonly OnDateChangeSuggestionType[]
 ) => void;
 
-export type OnAddTask = (parentTask: Task, getMetadata: GetMetadata) => void;
+export type OnAddTask = (parentTask: TaskOrEmpty | null, getMetadata: GetMetadata) => void;
 
 export type FixPosition = (
   task: Task,
@@ -390,9 +390,9 @@ export interface EventOption {
    */
   onProgressChange?: OnProgressChange;
   /**
-   * Callback for getting data of the added task
+   * Callback for getting data of the added task. parentTask is the parent task of the added task.
    */
-  onAddTask?: (task: Task) => Promise<TaskOrEmpty | null>;
+  onAddTask?: (parentTask: TaskOrEmpty | null) => Promise<TaskOrEmpty | null>;
   /**
    * Invokes on edit button click
    */
@@ -825,7 +825,7 @@ export type OnResizeColumn = (
 export type ChangeAction =
   | {
       type: 'add-childs';
-      parent: Task;
+      parent: TaskOrEmpty;
       // comparison level -> task id
       addedIdsMap: Map<number, Set<string>>;
       addedChildsByLevelMap: ChildByLevelMap;

@@ -1,5 +1,5 @@
 import type { ComponentType, MouseEvent, RefObject, SyntheticEvent } from 'react';
-import React, { memo, useCallback } from 'react';
+import React, { memo } from 'react';
 
 import {
   ChildByLevelMap,
@@ -10,13 +10,11 @@ import {
   Distances,
   Icons,
   MapTaskToNestedIndex,
-  OnChangeTasks,
   OnResizeColumn,
   Task,
   TaskListHeaderProps,
   TaskListTableProps,
   TaskOrEmpty,
-  EmptyTask,
 } from '../../types/public-types';
 
 import { useOptimizedList } from '../../helpers/use-optimized-list';
@@ -43,7 +41,7 @@ export type TaskListProps = {
   fullRowHeight: number;
   ganttFullHeight: number;
   getTaskCurrentState: (task: Task) => Task;
-  handleAddTask: (task: Task) => void;
+  handleAddTask: (parentTask: Task | null) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
   handleEditTask: (taskOrEmpty: TaskOrEmpty) => void;
   handleMoveTaskBefore: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
@@ -65,7 +63,6 @@ export type TaskListProps = {
   TaskListTable: ComponentType<TaskListTableProps>;
   onResizeColumn?: OnResizeColumn;
   onScrollTableListContentVertically: (event: SyntheticEvent<HTMLDivElement>) => void;
-  onChangeTasks?: OnChangeTasks;
 } & TaskListHeaderActionsProps;
 
 const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
@@ -108,34 +105,12 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
   onCollapseAll,
   onExpandFirstLevel,
   onExpandAll,
-  onChangeTasks,
 }) => {
   // Manage the column and list table resizing
   const [columns, taskListWidth, tableWidth, onTableResizeStart, onColumnResizeStart] =
     useTableListResize(columnsProp, distances, onResizeColumn);
 
   const renderedIndexes = useOptimizedList(taskListContentRef, 'scrollTop', fullRowHeight);
-
-  const handleAddNewRootTask = useCallback(() => {
-    if (!onChangeTasks) return;
-
-    // Create a root-level empty task
-    const newRootTask: EmptyTask = {
-      id: String(Date.now()),
-      type: 'empty',
-      name: 'New Task',
-      comparisonLevel: 1,
-      // No parent property - makes it a root task
-    };
-
-    // Add the new task to the tasks array
-    const updatedTasks = [...tasks, newRootTask];
-
-    // Update tasks with the onChangeTasks callback
-    onChangeTasks(updatedTasks, {
-      type: 'add_tasks',
-    });
-  }, [tasks, onChangeTasks]);
 
   return (
     <div className={styles.ganttTableRoot} ref={taskListRef}>
@@ -210,7 +185,7 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
             />
           </div>
           <div className={styles.newTaskButtonContainer}>
-            <NewTaskButton colors={colors} onAddNewTask={handleAddNewRootTask} />
+            <NewTaskButton colors={colors} onAddNewTask={() => handleAddTask(null)} />
           </div>
         </div>
       </div>

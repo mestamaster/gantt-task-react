@@ -889,12 +889,12 @@ export const Gantt: React.FC<GanttProps> = ({
   );
 
   const handleAddTask = useCallback(
-    (task: Task) => {
+    (parentTask: Task | null) => {
       if (onAddTaskClick) {
-        onAddTaskClick(task, (newTask: TaskOrEmpty) =>
+        onAddTaskClick(parentTask, (newTask: TaskOrEmpty) =>
           getMetadata({
             type: 'add-childs',
-            parent: task,
+            parent: parentTask,
             descendants: [newTask],
             addedIdsMap: new Map([[newTask.comparisonLevel || 1, new Set([newTask.id])]]),
             addedChildsByLevelMap: new Map([[newTask.comparisonLevel || 1, new Map()]]),
@@ -902,12 +902,17 @@ export const Gantt: React.FC<GanttProps> = ({
           })
         );
       } else if (onAddTask && onChangeTasks) {
-        onAddTask(task).then(nextTask => {
+        onAddTask(parentTask).then(nextTask => {
           if (!nextTask) {
             return;
           }
-
-          handleAddChilds(task, [nextTask]);
+          if (parentTask) {
+            handleAddChilds(parentTask, [nextTask]);
+          } else {
+            onChangeTasks([...tasks, nextTask], {
+              type: 'add_tasks',
+            });
+          }
         });
       }
     },

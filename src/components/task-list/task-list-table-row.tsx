@@ -25,7 +25,7 @@ type TaskListTableRowProps = {
   distances: Distances;
   fullRowHeight: number;
   getTaskCurrentState: (task: Task) => Task;
-  handleAddTask: (task: Task) => void;
+  handleAddTask: (task: TaskOrEmpty | null) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
   handleEditTask: (task: TaskOrEmpty) => void;
   handleMoveTaskBefore: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
