@@ -4,7 +4,7 @@ import addDays from 'date-fns/addDays';
 
 import { Gantt, OnChangeTasks, Task, TaskOrEmpty, TitleColumn } from '../src';
 
-import { onAddTask, onEditTask } from './helper';
+import { onAddTask, onEditTask } from '../stories/helper';
 
 import '../dist/style.css';
 
@@ -16,8 +16,8 @@ const initTasks = () => {
   const projectStartDate = new Date();
   const projectEndDate = addDays(projectStartDate, NUMBER_OF_SUBTASKS);
 
-  const projectId = "project";
-  const projectName = "Project";
+  const projectId = 'project';
+  const projectName = 'Project';
 
   const project: Task = {
     start: projectStartDate,
@@ -25,7 +25,7 @@ const initTasks = () => {
     name: projectName,
     id: projectId,
     progress: 25,
-    type: "project",
+    type: 'project',
   };
 
   res.push(project);
@@ -40,7 +40,7 @@ const initTasks = () => {
       name: taskName,
       id: taskId,
       progress: 45,
-      type: "task",
+      type: 'task',
       parent: projectId,
     };
 
@@ -57,7 +57,7 @@ const initTasks = () => {
       name: taskName,
       id: taskId,
       progress: 45,
-      type: "task",
+      type: 'task',
       parent: projectId,
       dependencies: undefined,
     };
@@ -68,8 +68,8 @@ const initTasks = () => {
   res.push({
     type: 'empty',
     name: 'An empty task',
-    id: `${projectId}/task_${NUMBER_OF_SUBTASKS + 1}`
-  })
+    id: `${projectId}/task_${NUMBER_OF_SUBTASKS + 1}`,
+  });
 
   return res;
 };
@@ -79,7 +79,7 @@ export const Simple: React.FC = props => {
 
   const onChangeTasks = useCallback<OnChangeTasks>((nextTasks, action) => {
     switch (action.type) {
-      case "delete_relation":
+      case 'delete_relation':
         if (
           window.confirm(
             `Do yo want to remove relation between ${action.payload.taskFrom.name} and ${action.payload.taskTo.name}?`
@@ -89,8 +89,8 @@ export const Simple: React.FC = props => {
         }
         break;
 
-      case "delete_task":
-        if (window.confirm("Are you sure?")) {
+      case 'delete_task':
+        if (window.confirm('Are you sure?')) {
           setTasks(nextTasks);
         }
         break;
@@ -102,19 +102,21 @@ export const Simple: React.FC = props => {
   }, []);
 
   const handleDblClick = useCallback((task: Task) => {
-    alert("On Double Click event Id:" + task.id);
+    alert('On Double Click event Id:' + task.id);
   }, []);
 
   const handleClick = useCallback((task: TaskOrEmpty) => {
-    console.log("On Click event Id:" + task.id);
+    console.log('On Click event Id:' + task.id);
   }, []);
 
-  const columns = [{
-    Cell: TitleColumn,
-    width: 200,
-    title: "Task",
-    id: 'Task'
-  }]
+  const columns = [
+    {
+      Cell: TitleColumn,
+      width: 200,
+      title: 'Task',
+      id: 'Task',
+    },
+  ];
 
   return (
     <Gantt
