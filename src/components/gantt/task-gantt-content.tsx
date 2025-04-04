@@ -8,7 +8,6 @@ import {
   CriticalPaths,
   DependencyMap,
   DependentMap,
-  Distances,
   FixPosition,
   GlobalRowIndexToTaskMap,
   RelationKind,
@@ -39,7 +38,6 @@ export type TaskGanttContentProps = {
   criticalPaths: CriticalPaths | null;
   dependencyMap: DependencyMap;
   dependentMap: DependentMap;
-  distances: Distances;
   fixEndPosition?: FixPosition;
   fixStartPosition?: FixPosition;
   fullRowHeight: number;
@@ -91,7 +89,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
   criticalPaths,
   dependencyMap,
   dependentMap,
-  distances,
   fixEndPosition = undefined,
   fixStartPosition = undefined,
   fullRowHeight,
@@ -123,6 +120,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
     colors,
     fonts: { fontFamily, fontSize },
   } = useGanttStyleContext();
+
   const [renderedTasks, renderedArrows, renderedSelectedTasks] = useMemo(() => {
     if (!renderedRowIndexes) {
       return [null, null, null];
@@ -218,7 +216,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
             x1={innerX1}
             x2={innerX2}
             childOutOfParentWarnings={childOutOfParentWarnings}
-            distances={distances}
             taskHeight={taskHeight}
             taskHalfHeight={taskHalfHeight}
             isProgressChangeable={!task.isDisabled}
@@ -301,7 +298,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
                   key={`Arrow from ${source.id} to ${taskId} on ${comparisonLevel}`}
                 >
                   <Arrow
-                    distances={distances}
                     taskFrom={source}
                     extremityFrom={sourceTarget}
                     fromX1={fromX1 - containerX}
@@ -381,7 +377,6 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
                   key={`Arrow from ${taskId} to ${dependent.id} on ${comparisonLevel}`}
                 >
                   <Arrow
-                    distances={distances}
                     taskFrom={task}
                     extremityFrom={ownTarget}
                     fromX1={taskX1 - containerX}

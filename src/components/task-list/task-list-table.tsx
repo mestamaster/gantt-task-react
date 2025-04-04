@@ -15,7 +15,6 @@ const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
   cutIdsMirror,
   dateSetup,
   dependencyMap,
-  distances,
   fullRowHeight,
   getTaskCurrentState,
   handleAddTask,
@@ -89,7 +88,6 @@ const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
           dateSetup={dateSetup}
           dependencyMap={dependencyMap}
           depth={depth}
-          distances={distances}
           fullRowHeight={fullRowHeight}
           getTaskCurrentState={getTaskCurrentState}
           handleAddTask={handleAddTask}

@@ -10,15 +10,13 @@ import styles from './bar.module.css';
 import stylesRelationHandle from './bar-relation-handle.module.css';
 import { ProjectDisplay } from '../project/project-display';
 import { BarMoveAction } from '../../../types/public-types';
-
+import { useGanttDimensions } from '../../../contexts/use-gantt-dimensions';
 export const Bar: React.FC<
   TaskItemProps & {
     onTaskEventStart: (action: BarMoveAction, clientX: number) => void;
   }
 > = ({
   children: relationhandles,
-
-  distances: { barCornerRadius, handleWidth },
   hasChildren,
   isCritical,
   isDateChangeable,
@@ -36,6 +34,7 @@ export const Bar: React.FC<
   x1,
   x2,
 }) => {
+  const { barCornerRadius, handleWidth } = useGanttDimensions();
   const startMoveFullTask = useCallback(
     (clientX: number) => {
       onTaskEventStart('move', clientX);

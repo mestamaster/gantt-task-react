@@ -19,17 +19,16 @@ import {
 import {
   TaskContextualPaletteProps,
   Task,
-  Distances,
   DateExtremity,
   TaskDependencyContextualPaletteProps,
 } from '../../types/public-types';
 import { useGanttStyleContext } from '../../contexts/use-style-context';
+import { useGanttDimensions } from '../../contexts/use-gantt-dimensions';
 
 export type TaskGanttProps = {
   barProps: TaskGanttContentProps;
   calendarProps: CalendarProps;
   gridProps: GridProps;
-  distances: Distances;
   fullRowHeight: number;
   fullSvgWidth: number;
   ganttFullHeight: number;
@@ -50,12 +49,13 @@ const TaskGanttInner: React.FC<TaskGanttProps> = props => {
     ganttFullHeight,
     ganttSVGRef,
     gridProps,
-    distances: { columnWidth, rowHeight, minimumRowDisplayed },
     ganttTaskContentRef,
     onVerticalScrollbarScrollX,
     ganttTaskRootRef,
     onScrollGanttContentVertically: onScrollVertically,
   } = props;
+
+  const { columnWidth, rowHeight, minimumRowDisplayed } = useGanttDimensions();
 
   const {
     colors,

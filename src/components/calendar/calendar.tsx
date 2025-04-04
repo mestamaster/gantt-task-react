@@ -1,25 +1,19 @@
 import React, { useCallback } from 'react';
 import type { ReactNode } from 'react';
 
-import {
-  DateSetup,
-  ViewMode,
-  RenderTopHeader,
-  RenderBottomHeader,
-  Distances,
-} from '../../types/public-types';
+import { DateSetup, ViewMode, RenderTopHeader, RenderBottomHeader } from '../../types/public-types';
 import { TopPartOfCalendar } from './top-part-of-calendar';
 import { getDaysInMonth } from '../../helpers/date-helper';
 import { defaultRenderBottomHeader } from './default-render-bottom-header';
 import { defaultRenderTopHeader } from './default-render-top-header';
 import { useGanttStyleContext } from '../../contexts/use-style-context';
+import { useGanttDimensions } from '../../contexts/use-gantt-dimensions';
 
 import styles from './calendar.module.css';
 
 export type CalendarProps = {
   additionalLeftSpace: number;
   dateSetup: DateSetup;
-  distances: Distances;
   endColumnIndex: number;
   fullSvgWidth: number;
   getDate: (index: number) => Date;
@@ -33,7 +27,6 @@ export type CalendarProps = {
 export const Calendar: React.FC<CalendarProps> = ({
   additionalLeftSpace,
   dateSetup,
-  distances: { columnWidth, headerHeight },
   endColumnIndex,
   getDate,
   isUnknownDates,
@@ -47,6 +40,8 @@ export const Calendar: React.FC<CalendarProps> = ({
     colors,
     fonts: { fontFamily, fontSize },
   } = useGanttStyleContext();
+
+  const { columnWidth, headerHeight } = useGanttDimensions();
 
   const renderBottomHeaderByDate = useCallback(
     (date: Date, index: number) =>

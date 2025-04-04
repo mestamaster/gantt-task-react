@@ -6,7 +6,6 @@ import {
   Column,
   DateSetup,
   DependencyMap,
-  Distances,
   Icons,
   MapTaskToNestedIndex,
   OnResizeColumn,
@@ -23,7 +22,7 @@ import styles from './task-list.module.css';
 import { useTableListResize } from '../gantt/use-tablelist-resize';
 import { TaskListHeaderActionsProps } from './TaskListHeaderActions';
 import { NewTaskButton } from './new-task-button';
-
+import { useGanttDimensions } from '../../contexts/use-gantt-dimensions';
 // const SCROLL_DELAY = 25;
 
 export type TaskListProps = {
@@ -34,7 +33,6 @@ export type TaskListProps = {
   cutIdsMirror: Readonly<Record<string, true>>;
   dateSetup: DateSetup;
   dependencyMap: DependencyMap;
-  distances: Distances;
   fullRowHeight: number;
   ganttFullHeight: number;
   getTaskCurrentState: (task: Task) => Task;
@@ -71,7 +69,6 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
   cutIdsMirror,
   dateSetup,
   dependencyMap,
-  distances,
   fullRowHeight,
   ganttFullHeight,
   getTaskCurrentState,
@@ -104,7 +101,7 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
 }) => {
   // Silencing unused variable warning
   void onChangeTasks;
-
+  const distances = useGanttDimensions();
   // Manage the column and list table resizing
   const [columns, taskListWidth, tableWidth, onTableResizeStart, onColumnResizeStart] =
     useTableListResize(columnsProp, distances, onResizeColumn);

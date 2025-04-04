@@ -12,7 +12,6 @@ import type {
   CheckIsAvailableMetaType,
   ContextMenuOptionType,
   ContextMenuType,
-  Distances,
   TaskOrEmpty,
 } from '../../types/public-types';
 
@@ -24,7 +23,6 @@ type ContextMenuProps = {
   checkHasCopyTasks: () => boolean;
   checkHasCutTasks: () => boolean;
   contextMenu: ContextMenuType;
-  distances: Distances;
   handleAction: (task: TaskOrEmpty, action: (meta: ActionMetaType) => void) => void;
   handleCloseContextMenu: () => void;
   options: ContextMenuOptionType[];
@@ -34,7 +32,6 @@ export function ContextMenu({
   checkHasCopyTasks,
   checkHasCutTasks,
   contextMenu: { task, x, y },
-  distances,
   handleAction,
   handleCloseContextMenu,
   options,
@@ -135,12 +132,7 @@ export function ContextMenu({
           {...getFloatingProps()}
         >
           {optionsForRender.map((option, index) => (
-            <MenuOption
-              distances={distances}
-              handleAction={handleOptionAction}
-              option={option}
-              key={index}
-            />
+            <MenuOption handleAction={handleOptionAction} option={option} key={index} />
           ))}
         </div>
       )}

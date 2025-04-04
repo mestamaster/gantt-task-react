@@ -11,7 +11,6 @@ import {
   DateFormats,
   DateSetup,
   Dependency,
-  Distances,
   FixPosition,
   GanttDateRoundingTimeUnit,
   GanttProps,
@@ -79,6 +78,7 @@ import { useHolidays } from './use-holidays';
 
 import styles from './gantt.module.css';
 import { StyleProvider, defaultColors } from '../../contexts/use-style-context';
+import { GanttDimensionsProvider, defaultDimensions } from '../../contexts/use-gantt-dimensions';
 
 const defaultDateFormats: DateFormats = {
   dateColumnFormat: 'E, d MMMM yyyy',
@@ -87,32 +87,6 @@ const defaultDateFormats: DateFormats = {
   hourBottomHeaderFormat: 'HH',
   monthBottomHeaderFormat: 'LLL',
   monthTopHeaderFormat: 'LLLL',
-};
-
-const defaultDistances: Distances = {
-  actionColumnWidth: 40,
-  arrowIndent: 20,
-  barCornerRadius: 3,
-  barFill: 60,
-  columnWidth: 60,
-  contextMenuIconWidth: 20,
-  contextMenuOptionHeight: 25,
-  contextMenuSidePadding: 10,
-  dateCellWidth: 220,
-  dependenciesCellWidth: 120,
-  dependencyFixHeight: 20,
-  dependencyFixIndent: 50,
-  dependencyFixWidth: 20,
-  expandIconWidth: 20,
-  handleWidth: 8,
-  headerHeight: 50,
-  minimumRowDisplayed: 4,
-  nestedTaskNameOffset: 20,
-  relationCircleOffset: 10,
-  relationCircleRadius: 5,
-  rowHeight: 50,
-  taskWarningOffset: 35,
-  titleCellWidth: 220,
 };
 
 const MINIMUM_DISPLAYED_TIME_UNIT = 30;
@@ -189,6 +163,12 @@ export const Gantt: React.FC<GanttProps> = ({
   const finalColors = useMemo(
     () => ({ ...defaultColors, ...colorsProp }),
     [defaultColors, colorsProp]
+  );
+
+  // Todo rename "distances" to "dimensions"
+  const distances = useMemo(
+    () => ({ ...defaultDimensions, ...distancesProp }),
+    [defaultDimensions, distancesProp]
   );
 
   const [ganttTaskContentRef, taskListContentRef, setScrollYProgrammatically, onScrollVertically] =
@@ -283,14 +263,6 @@ export const Gantt: React.FC<GanttProps> = ({
 
     return getChildOutOfParentWarnings(tasks, childTasksMap);
   }, [tasks, childTasksMap, isShowChildOutOfParentWarnings]);
-
-  const distances = useMemo<Distances>(
-    () => ({
-      ...defaultDistances,
-      ...distancesProp,
-    }),
-    [distancesProp]
-  );
 
   const fullRowHeight = useMemo(
     () => distances.rowHeight * comparisonLevels,
@@ -1586,7 +1558,6 @@ export const Gantt: React.FC<GanttProps> = ({
     () => ({
       additionalLeftSpace,
       dateSetup,
-      distances,
       endColumnIndex,
       fullSvgWidth,
       getDate,
@@ -1599,7 +1570,6 @@ export const Gantt: React.FC<GanttProps> = ({
     [
       additionalLeftSpace,
       dateSetup,
-      distances,
       endColumnIndex,
       fullSvgWidth,
       getDate,
@@ -1720,7 +1690,6 @@ export const Gantt: React.FC<GanttProps> = ({
     cutIdsMirror,
     dateSetup,
     dependencyMap,
-    distances,
     fullRowHeight,
     ganttFullHeight,
     getTaskCurrentState,
@@ -1754,60 +1723,59 @@ export const Gantt: React.FC<GanttProps> = ({
 
   return (
     <StyleProvider colors={finalColors} fonts={{ fontFamily, fontSize }}>
-      <div
-        className={styles.wrapper}
-        onKeyDown={handleKeyDown}
-        tabIndex={0}
-        ref={wrapperRef}
-        data-testid={`gantt-main`}
-        style={{
-          gridTemplateColumns: `${displayTable ? 'max-content' : ''} auto`,
-          background: finalColors.evenTaskBackgroundColor,
-          color: finalColors.barLabelColor,
-        }}
-      >
-        {/* {columns.length > 0 && <TaskList {...tableProps} />} */}
-        {displayTable && <TaskList {...tableProps} />}
+      <GanttDimensionsProvider dimensions={distances}>
+        <div
+          className={styles.wrapper}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          ref={wrapperRef}
+          data-testid={`gantt-main`}
+          style={{
+            gridTemplateColumns: `${displayTable ? 'max-content' : ''} auto`,
+            background: finalColors.evenTaskBackgroundColor,
+            color: finalColors.barLabelColor,
+          }}
+        >
+          {displayTable && <TaskList {...tableProps} />}
 
-        <TaskGantt
-          barProps={barProps}
-          calendarProps={calendarProps}
-          distances={distances}
-          fullRowHeight={fullRowHeight}
-          fullSvgWidth={fullSvgWidth}
-          ganttFullHeight={ganttFullHeight}
-          ganttSVGRef={ganttSVGRef}
-          gridProps={gridProps}
-          ganttTaskContentRef={ganttTaskContentRef}
-          onVerticalScrollbarScrollX={onVerticalScrollbarScrollX}
-          ganttTaskRootRef={ganttTaskRootRef}
-          onScrollGanttContentVertically={onScrollVertically}
-        />
-
-        {tooltipTaskFromMap && (
-          <Tooltip
-            tooltipX={tooltipX}
-            tooltipY={tooltipY}
-            tooltipStrategy={tooltipStrategy}
-            setFloatingRef={setFloatingRef}
-            getFloatingProps={getFloatingProps}
-            task={tooltipTaskFromMap}
-            TooltipContent={TooltipContent}
+          <TaskGantt
+            barProps={barProps}
+            calendarProps={calendarProps}
+            fullRowHeight={fullRowHeight}
+            fullSvgWidth={fullSvgWidth}
+            ganttFullHeight={ganttFullHeight}
+            ganttSVGRef={ganttSVGRef}
+            gridProps={gridProps}
+            ganttTaskContentRef={ganttTaskContentRef}
+            onVerticalScrollbarScrollX={onVerticalScrollbarScrollX}
+            ganttTaskRootRef={ganttTaskRootRef}
+            onScrollGanttContentVertically={onScrollVertically}
           />
-        )}
 
-        {enableTableListContextMenu && (
-          <ContextMenu
-            checkHasCopyTasks={checkHasCopyTasks}
-            checkHasCutTasks={checkHasCutTasks}
-            contextMenu={contextMenu}
-            distances={distances}
-            handleAction={handleAction}
-            handleCloseContextMenu={handleCloseContextMenu}
-            options={contextMenuOptions}
-          />
-        )}
-      </div>
+          {tooltipTaskFromMap && (
+            <Tooltip
+              tooltipX={tooltipX}
+              tooltipY={tooltipY}
+              tooltipStrategy={tooltipStrategy}
+              setFloatingRef={setFloatingRef}
+              getFloatingProps={getFloatingProps}
+              task={tooltipTaskFromMap}
+              TooltipContent={TooltipContent}
+            />
+          )}
+
+          {enableTableListContextMenu && (
+            <ContextMenu
+              checkHasCopyTasks={checkHasCopyTasks}
+              checkHasCutTasks={checkHasCutTasks}
+              contextMenu={contextMenu}
+              handleAction={handleAction}
+              handleCloseContextMenu={handleCloseContextMenu}
+              options={contextMenuOptions}
+            />
+          )}
+        </div>
+      </GanttDimensionsProvider>
     </StyleProvider>
   );
 };

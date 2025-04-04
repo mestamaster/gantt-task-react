@@ -6,6 +6,7 @@ import type { TaskItemProps } from '../task-item';
 
 import styles from './milestone.module.css';
 import { BarMoveAction } from '../../../types/public-types';
+import { useGanttDimensions } from '../../../contexts/use-gantt-dimensions';
 
 export const Milestone: React.FC<
   TaskItemProps & {
@@ -15,7 +16,6 @@ export const Milestone: React.FC<
   children: relationhandles,
   task,
   taskYOffset,
-  distances: { barCornerRadius },
   taskHeight,
   onTaskEventStart,
   isSelected,
@@ -24,6 +24,7 @@ export const Milestone: React.FC<
   x1,
 }) => {
   const rotatedHeight = taskHeight / 1.414;
+  const { barCornerRadius } = useGanttDimensions();
 
   const transform = `rotate(45 ${x1 + rotatedHeight * 0.356} 
     ${taskYOffset + rotatedHeight * 0.85})`;

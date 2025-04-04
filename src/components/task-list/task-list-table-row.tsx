@@ -6,7 +6,6 @@ import {
   ColumnData,
   DateSetup,
   DependencyMap,
-  Distances,
   Icons,
   Task,
   TaskOrEmpty,
@@ -14,13 +13,13 @@ import {
 
 import styles from './task-list-table-row.module.css';
 import { useGanttStyleContext } from '../../contexts/use-style-context';
+import { useGanttDimensions } from '../../contexts/use-gantt-dimensions';
 type TaskListTableRowProps = {
   canMoveTasks: boolean;
   columns: readonly Column[];
   dateSetup: DateSetup;
   dependencyMap: DependencyMap;
   depth: number;
-  distances: Distances;
   fullRowHeight: number;
   getTaskCurrentState: (task: Task) => Task;
   handleAddTask: (task: TaskOrEmpty | null) => void;
@@ -55,7 +54,6 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> = ({
   dateSetup,
   dependencyMap,
   depth,
-  distances,
   fullRowHeight,
   getTaskCurrentState,
   handleAddTask,
@@ -85,6 +83,7 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> = ({
 }) => {
   const { id, comparisonLevel = 1 } = task;
   const { colors } = useGanttStyleContext();
+  const distances = useGanttDimensions();
   const onRootMouseDown = useCallback(
     (event: MouseEvent) => {
       if (event.button !== 0) {

@@ -5,6 +5,7 @@ import type { TaskItemProps } from '../task-item';
 import styles from './bar.module.css';
 import { BarDateHandle } from './bar-date-handle';
 import { BarMoveAction } from '../../../types/public-types';
+import { useGanttDimensions } from '../../../contexts/use-gantt-dimensions';
 
 export const BarSmall: React.FC<
   TaskItemProps & {
@@ -12,7 +13,6 @@ export const BarSmall: React.FC<
   }
 > = ({
   children: relationhandles,
-  distances: { barCornerRadius, handleWidth },
   hasChildren,
   isSelected,
   isCritical,
@@ -38,6 +38,7 @@ export const BarSmall: React.FC<
     },
     [onTaskEventStart]
   );
+  const { barCornerRadius, handleWidth } = useGanttDimensions();
 
   return (
     <g

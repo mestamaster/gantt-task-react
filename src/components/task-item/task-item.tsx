@@ -8,7 +8,6 @@ import {
   Task,
   ColorStyles,
   TaskOrEmpty,
-  Distances,
   RelationKind,
   BarMoveAction,
   DateExtremity,
@@ -21,7 +20,7 @@ import style from './task-list.module.css';
 import { BarFixWidth, fixWidthContainerClass } from '../other/bar-fix-width';
 import { BarRelationHandle } from './bar/bar-relation-handle';
 import { useGanttStyleContext } from '../../contexts/use-style-context';
-
+import { useGanttDimensions } from '../../contexts/use-gantt-dimensions';
 export type TaskItemProps = {
   children?: React.ReactNode;
   getTaskGlobalIndexByRef: (task: Task) => number;
@@ -36,7 +35,6 @@ export type TaskItemProps = {
   x1: number;
   x2: number;
   childOutOfParentWarnings: ChildOutOfParentWarnings | null;
-  distances: Distances;
   taskHeight: number;
   taskHalfHeight: number;
   isProgressChangeable: boolean;
@@ -67,13 +65,6 @@ export type TaskItemProps = {
 const TaskItemInner: React.FC<TaskItemProps> = props => {
   const {
     childOutOfParentWarnings,
-    distances: {
-      arrowIndent,
-      handleWidth,
-      taskWarningOffset,
-      relationCircleOffset,
-      relationCircleRadius,
-    },
     fixEndPosition = undefined,
     fixStartPosition = undefined,
     getTaskGlobalIndexByRef,
@@ -104,6 +95,14 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
   const taskRootRef = useRef<SVGGElement>(null);
 
   const { colors } = useGanttStyleContext();
+
+  const {
+    arrowIndent,
+    handleWidth,
+    taskWarningOffset,
+    relationCircleOffset,
+    relationCircleRadius,
+  } = useGanttDimensions();
 
   const outOfParentWarnings = useMemo(() => {
     if (!childOutOfParentWarnings) {

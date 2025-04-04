@@ -1,13 +1,13 @@
 import React, { memo, useCallback, useMemo } from 'react';
 
-import { Distances, DateExtremity, Task } from '../../types/public-types';
+import { DateExtremity, Task } from '../../types/public-types';
 import { generateTrianglePoints } from '../../helpers/generate-triangle-points';
 import { FixDependencyPosition, fixPositionContainerClass } from './fix-dependency-position';
 
 import styles from './arrow.module.css';
 import { useGanttStyleContext } from '../../contexts/use-style-context';
+import { useGanttDimensions } from '../../contexts/use-gantt-dimensions';
 type ArrowProps = {
-  distances: Distances;
   taskFrom: Task;
   extremityFrom: DateExtremity;
   fromX1: number;
@@ -36,8 +36,6 @@ type ArrowProps = {
 };
 
 const ArrowInner: React.FC<ArrowProps> = ({
-  distances: { arrowIndent, dependencyFixWidth, dependencyFixHeight, dependencyFixIndent },
-
   taskFrom,
   extremityFrom,
   fromX1,
@@ -59,6 +57,8 @@ const ArrowInner: React.FC<ArrowProps> = ({
   handleFixDependency,
 }) => {
   const { colors } = useGanttStyleContext();
+  const { arrowIndent, dependencyFixWidth, dependencyFixHeight, dependencyFixIndent } =
+    useGanttDimensions();
 
   const indexFrom = useMemo(() => Math.floor(fromY / fullRowHeight), [fromY, fullRowHeight]);
   const indexTo = useMemo(() => Math.floor(toY / fullRowHeight), [toY, fullRowHeight]);
