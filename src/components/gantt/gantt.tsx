@@ -53,8 +53,6 @@ import { useTaskDrag } from './use-task-drag';
 import { useTaskTooltip } from '../../helpers/use-task-tooltip';
 
 import { useOptimizedList } from '../../helpers/use-optimized-list';
-import { useVerticalScrollbars } from './use-vertical-scrollbars';
-import { useHorizontalScrollbars } from './use-horizontal-scrollbars';
 
 import { getDateByOffset } from '../../helpers/get-date-by-offset';
 import { getDatesDiff } from '../../helpers/get-dates-diff';
@@ -79,6 +77,7 @@ import { useHolidays } from './use-holidays';
 import styles from './gantt.module.css';
 import { StyleProvider, defaultColors } from '../../contexts/use-style-context';
 import { GanttDimensionsProvider, defaultDimensions } from '../../contexts/use-gantt-dimensions';
+import { useScrollHandlers } from '../../hooks/use-scroll-handlers';
 
 const defaultDateFormats: DateFormats = {
   dateColumnFormat: 'E, d MMMM yyyy',
@@ -165,23 +164,22 @@ export const Gantt: React.FC<GanttProps> = ({
     [defaultColors, colorsProp]
   );
 
-  // Todo rename "distances" to "dimensions"
   const distances = useMemo(
     () => ({ ...defaultDimensions, ...distancesProp }),
     [defaultDimensions, distancesProp]
   );
-
-  const [ganttTaskContentRef, taskListContentRef, setScrollYProgrammatically, onScrollVertically] =
-    useVerticalScrollbars();
-
-  const [
+  const {
     ganttTaskRootRef,
     scrollX,
     setScrollXProgrammatically,
     onVerticalScrollbarScrollX,
     scrollToLeftStep,
     scrollToRightStep,
-  ] = useHorizontalScrollbars();
+    ganttTaskContentRef,
+    taskListContentRef,
+    onScrollVertically,
+    handleKeyDown,
+  } = useScrollHandlers();
 
   const roundDate = useCallback(
     (date: Date, action: BarMoveAction, dateExtremity: DateExtremity) =>
@@ -548,47 +546,6 @@ export const Gantt: React.FC<GanttProps> = ({
       }
     };
   }, [wrapperRef, onWheel]);
-
-  /**
-   * Handles arrow keys events and transform it to new scroll
-   */
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    const { columnWidth, rowHeight } = distances;
-    event.preventDefault();
-    let newScrollY = ganttTaskContentRef.current.scrollTop;
-    let newScrollX = scrollX;
-    let isX = true;
-    switch (event.key) {
-      case 'Down': // IE/Edge specific value
-      case 'ArrowDown':
-        newScrollY += rowHeight;
-        isX = false;
-        break;
-      case 'Up': // IE/Edge specific value
-      case 'ArrowUp':
-        newScrollY -= rowHeight;
-        isX = false;
-        break;
-      case 'Left':
-      case 'ArrowLeft':
-        newScrollX -= columnWidth;
-        break;
-      case 'Right': // IE/Edge specific value
-      case 'ArrowRight':
-        newScrollX += columnWidth;
-        break;
-    }
-    if (isX) {
-      if (newScrollX < 0) {
-        newScrollX = 0;
-      } else if (newScrollX > svgWidth) {
-        newScrollX = svgWidth;
-      }
-      setScrollXProgrammatically(newScrollX);
-    } else {
-      setScrollYProgrammatically(newScrollY);
-    }
-  };
 
   const handleExpanderClick = useCallback(
     (clickedTask: Task) => {
@@ -1726,7 +1683,13 @@ export const Gantt: React.FC<GanttProps> = ({
       <GanttDimensionsProvider dimensions={distances}>
         <div
           className={styles.wrapper}
-          onKeyDown={handleKeyDown}
+          onKeyDown={event =>
+            handleKeyDown(event, {
+              columnWidth: distances.columnWidth,
+              rowHeight: distances.rowHeight,
+              svgWidth,
+            })
+          }
           tabIndex={0}
           ref={wrapperRef}
           data-testid={`gantt-main`}
