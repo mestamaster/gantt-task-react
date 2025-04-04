@@ -2,7 +2,6 @@ import type { CSSProperties, MouseEvent } from 'react';
 import React, { memo, useCallback, useMemo, useState } from 'react';
 
 import {
-  ColorStyles,
   Column,
   ColumnData,
   DateSetup,
@@ -14,10 +13,9 @@ import {
 } from '../../types/public-types';
 
 import styles from './task-list-table-row.module.css';
-
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 type TaskListTableRowProps = {
   canMoveTasks: boolean;
-  colors: ColorStyles;
   columns: readonly Column[];
   dateSetup: DateSetup;
   dependencyMap: DependencyMap;
@@ -53,7 +51,6 @@ type TaskListTableRowProps = {
 
 const TaskListTableRowInner: React.FC<TaskListTableRowProps> = ({
   canMoveTasks,
-  colors,
   columns,
   dateSetup,
   dependencyMap,
@@ -87,7 +84,7 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> = ({
   setDraggedTask,
 }) => {
   const { id, comparisonLevel = 1 } = task;
-
+  const { colors } = useGanttStyleContext();
   const onRootMouseDown = useCallback(
     (event: MouseEvent) => {
       if (event.button !== 0) {

@@ -7,12 +7,12 @@ import {
   RenderTopHeader,
   RenderBottomHeader,
   Distances,
-  ColorStyles,
 } from '../../types/public-types';
 import { TopPartOfCalendar } from './top-part-of-calendar';
 import { getDaysInMonth } from '../../helpers/date-helper';
 import { defaultRenderBottomHeader } from './default-render-bottom-header';
 import { defaultRenderTopHeader } from './default-render-top-header';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 import styles from './calendar.module.css';
 
@@ -21,8 +21,6 @@ export type CalendarProps = {
   dateSetup: DateSetup;
   distances: Distances;
   endColumnIndex: number;
-  fontFamily: string;
-  fontSize: string;
   fullSvgWidth: number;
   getDate: (index: number) => Date;
   isUnknownDates: boolean;
@@ -30,27 +28,26 @@ export type CalendarProps = {
   renderTopHeader?: RenderTopHeader;
   rtl: boolean;
   startColumnIndex: number;
-  colors: Partial<ColorStyles>;
 };
 
 export const Calendar: React.FC<CalendarProps> = ({
   additionalLeftSpace,
   dateSetup,
-
   distances: { columnWidth, headerHeight },
-
   endColumnIndex,
   getDate,
   isUnknownDates,
-  fontFamily,
-  fontSize,
   fullSvgWidth,
   renderBottomHeader = defaultRenderBottomHeader,
   renderTopHeader = defaultRenderTopHeader,
   rtl,
   startColumnIndex,
-  colors,
 }) => {
+  const {
+    colors,
+    fonts: { fontFamily, fontSize },
+  } = useGanttStyleContext();
+
   const renderBottomHeaderByDate = useCallback(
     (date: Date, index: number) =>
       renderBottomHeader(date, dateSetup.viewMode, dateSetup, index, isUnknownDates),
@@ -97,7 +94,6 @@ export const Calendar: React.FC<CalendarProps> = ({
             y2Line={headerHeight}
             xText={0}
             yText={0}
-            colors={colors}
           />
         );
       }
@@ -146,7 +142,6 @@ export const Calendar: React.FC<CalendarProps> = ({
               additionalLeftSpace + columnWidth * (startQuarter + 1.5) // Center the text
             }
             yText={topDefaultHeight * 0.9}
-            colors={colors}
           />
         );
       }
@@ -197,7 +192,6 @@ export const Calendar: React.FC<CalendarProps> = ({
             y2Line={topDefaultHeight}
             xText={additionalLeftSpace + xText}
             yText={topDefaultHeight * 0.9}
-            colors={colors}
           />
         );
       }
@@ -246,7 +240,6 @@ export const Calendar: React.FC<CalendarProps> = ({
             y2Line={topDefaultHeight}
             xText={additionalLeftSpace + columnWidth * i + columnWidth * weeksCount * 0.5}
             yText={topDefaultHeight * 0.9}
-            colors={colors}
           />
         );
 
@@ -307,7 +300,6 @@ export const Calendar: React.FC<CalendarProps> = ({
               columnWidth * (startIndexOrZero + (endIndex - startIndexOrZero) / 2)
             }
             yText={topDefaultHeight * 0.9}
-            colors={colors}
           />
         );
       }
@@ -353,7 +345,6 @@ export const Calendar: React.FC<CalendarProps> = ({
             y2Line={topDefaultHeight}
             xText={additionalLeftSpace + columnWidth * i + ticks * columnWidth * 0.5}
             yText={topDefaultHeight * 0.9}
-            colors={colors}
           />
         );
       }
@@ -407,7 +398,6 @@ export const Calendar: React.FC<CalendarProps> = ({
             y2Line={topDefaultHeight}
             xText={additionalLeftSpace + columnWidth * (i + topPosition)}
             yText={topDefaultHeight * 0.9}
-            colors={colors}
           />
         );
       }

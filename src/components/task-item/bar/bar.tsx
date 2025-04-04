@@ -17,7 +17,6 @@ export const Bar: React.FC<
   }
 > = ({
   children: relationhandles,
-  colorStyles,
 
   distances: { barCornerRadius, handleWidth },
   hasChildren,
@@ -86,7 +85,6 @@ export const Bar: React.FC<
         progressX={progressX}
         progressWidth={progressWidth}
         barCornerRadius={barCornerRadius}
-        colorStyles={colorStyles}
         isSelected={isSelected}
         isCritical={isCritical}
         hasChildren={hasChildren}
@@ -104,7 +102,6 @@ export const Bar: React.FC<
         progressX={progressX}
         progressWidth={progressWidth}
         barCornerRadius={barCornerRadius}
-        styles={colorStyles}
         isSelected={isSelected}
         isCritical={isCritical}
         hasChildren={hasChildren}

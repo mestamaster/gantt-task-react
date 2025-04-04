@@ -6,18 +6,16 @@ import { Task, TaskListTableProps, TaskOrEmpty } from '../../types/public-types'
 import { TaskListTableRow } from './task-list-table-row';
 
 import styles from './task-list-table.module.css';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
   canMoveTasks,
   childTasksMap,
-  colors,
   columns,
   cutIdsMirror,
   dateSetup,
   dependencyMap,
   distances,
-  fontFamily,
-  fontSize,
   fullRowHeight,
   getTaskCurrentState,
   handleAddTask,
@@ -38,6 +36,10 @@ const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
   selectedIdsMirror,
   tasks,
 }) => {
+  const {
+    fonts: { fontFamily, fontSize },
+  } = useGanttStyleContext();
+
   const renderedTasks = useMemo(
     /**
      * TO DO: maybe consider tasks on other levels?
@@ -83,7 +85,6 @@ const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
       renderedList.push(
         <TaskListTableRow
           canMoveTasks={canMoveTasks}
-          colors={colors}
           columns={columns}
           dateSetup={dateSetup}
           dependencyMap={dependencyMap}
@@ -131,7 +132,6 @@ const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
       </>
     );
   }, [
-    colors,
     columns,
     cutIdsMirror,
     fullRowHeight,

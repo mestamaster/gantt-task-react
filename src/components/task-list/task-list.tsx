@@ -3,7 +3,6 @@ import React, { memo } from 'react';
 
 import {
   ChildByLevelMap,
-  ColorStyles,
   Column,
   DateSetup,
   DependencyMap,
@@ -31,14 +30,11 @@ export type TaskListProps = {
   canMoveTasks: boolean;
   canResizeColumns: boolean;
   childTasksMap: ChildByLevelMap;
-  colors: ColorStyles;
   columnsProp: readonly Column[];
   cutIdsMirror: Readonly<Record<string, true>>;
   dateSetup: DateSetup;
   dependencyMap: DependencyMap;
   distances: Distances;
-  fontFamily: string;
-  fontSize: string;
   fullRowHeight: number;
   ganttFullHeight: number;
   getTaskCurrentState: (task: Task) => Task;
@@ -71,14 +67,11 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
   canMoveTasks,
   canResizeColumns,
   childTasksMap,
-  colors,
   columnsProp,
   cutIdsMirror,
   dateSetup,
   dependencyMap,
   distances,
-  fontFamily,
-  fontSize,
   fullRowHeight,
   ganttFullHeight,
   getTaskCurrentState,
@@ -135,15 +128,12 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
       >
         <TaskListHeader
           headerHeight={distances.headerHeight}
-          fontFamily={fontFamily}
-          fontSize={fontSize}
           columns={columns}
           onColumnResizeStart={onColumnResizeStart}
           canResizeColumns={canResizeColumns}
           onCollapseAll={onCollapseAll}
           onExpandFirstLevel={onExpandFirstLevel}
           onExpandAll={onExpandAll}
-          colors={colors}
         />
 
         <div
@@ -166,14 +156,11 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
             <TaskListTable
               canMoveTasks={canMoveTasks}
               childTasksMap={childTasksMap}
-              colors={colors}
               columns={columns}
               cutIdsMirror={cutIdsMirror}
               dateSetup={dateSetup}
               dependencyMap={dependencyMap}
               distances={distances}
-              fontFamily={fontFamily}
-              fontSize={fontSize}
               fullRowHeight={fullRowHeight}
               ganttFullHeight={ganttFullHeight}
               getTaskCurrentState={getTaskCurrentState}
@@ -198,7 +185,7 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
             />
           </div>
           <div className={styles.newTaskButtonContainer}>
-            <NewTaskButton colors={colors} onAddNewTask={() => handleAddTask(null)} />
+            <NewTaskButton onAddNewTask={() => handleAddTask(null)} />
           </div>
         </div>
       </div>

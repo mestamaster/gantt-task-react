@@ -22,8 +22,8 @@ import {
   Distances,
   DateExtremity,
   TaskDependencyContextualPaletteProps,
-  ColorStyles,
 } from '../../types/public-types';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 export type TaskGanttProps = {
   barProps: TaskGanttContentProps;
@@ -38,7 +38,6 @@ export type TaskGanttProps = {
   onVerticalScrollbarScrollX: (event: SyntheticEvent<HTMLDivElement>) => void;
   ganttTaskRootRef: RefObject<HTMLDivElement>;
   onScrollGanttContentVertically: (event: SyntheticEvent<HTMLDivElement>) => void;
-  colors: Partial<ColorStyles>;
 };
 
 const TaskGanttInner: React.FC<TaskGanttProps> = props => {
@@ -56,8 +55,12 @@ const TaskGanttInner: React.FC<TaskGanttProps> = props => {
     onVerticalScrollbarScrollX,
     ganttTaskRootRef,
     onScrollGanttContentVertically: onScrollVertically,
-    colors,
   } = props;
+
+  const {
+    colors,
+    fonts: { fontFamily },
+  } = useGanttStyleContext();
   const containerStyle: CSSProperties = {
     // In order to see the vertical scrollbar of the gantt content,
     // we resize dynamically the width of the gantt content
@@ -207,7 +210,7 @@ const TaskGanttInner: React.FC<TaskGanttProps> = props => {
       onScroll={onVerticalScrollbarScrollX}
       dir="ltr"
     >
-      <Calendar {...calendarProps} colors={colors} />
+      <Calendar {...calendarProps} />
 
       <div
         ref={ganttTaskContentRef}
@@ -220,7 +223,7 @@ const TaskGanttInner: React.FC<TaskGanttProps> = props => {
             xmlns="http://www.w3.org/2000/svg"
             width={fullSvgWidth}
             height={ganttFullHeight}
-            fontFamily={barProps.fontFamily}
+            fontFamily={fontFamily}
             ref={ganttSVGRef}
             style={{
               background: colors.oddTaskBackgroundColor,

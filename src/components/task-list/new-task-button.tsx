@@ -1,13 +1,12 @@
 import React from 'react';
 import styles from './new-task-button.module.css';
-import { ColorStyles } from '../../types/public-types';
-
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 interface NewTaskButtonProps {
-  colors: ColorStyles;
   onAddNewTask: () => void;
 }
 
-export const NewTaskButton: React.FC<NewTaskButtonProps> = ({ colors, onAddNewTask }) => {
+export const NewTaskButton: React.FC<NewTaskButtonProps> = ({ onAddNewTask }) => {
+  const { colors } = useGanttStyleContext();
   return (
     <div className={styles.newTaskButtonWrapper}>
       <button

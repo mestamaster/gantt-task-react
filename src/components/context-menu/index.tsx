@@ -10,7 +10,6 @@ import { useFloating, useFocus, useDismiss, useRole, useInteractions } from '@fl
 import type {
   ActionMetaType,
   CheckIsAvailableMetaType,
-  ColorStyles,
   ContextMenuOptionType,
   ContextMenuType,
   Distances,
@@ -19,12 +18,12 @@ import type {
 
 import { MenuOption } from './menu-option';
 import React from 'react';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 type ContextMenuProps = {
   checkHasCopyTasks: () => boolean;
   checkHasCutTasks: () => boolean;
   contextMenu: ContextMenuType;
-  colors: ColorStyles;
   distances: Distances;
   handleAction: (task: TaskOrEmpty, action: (meta: ActionMetaType) => void) => void;
   handleCloseContextMenu: () => void;
@@ -34,17 +33,14 @@ type ContextMenuProps = {
 export function ContextMenu({
   checkHasCopyTasks,
   checkHasCutTasks,
-
-  colors,
-  colors: { contextMenuBgColor, contextMenuBoxShadow },
-
   contextMenu: { task, x, y },
-
   distances,
   handleAction,
   handleCloseContextMenu,
   options,
 }: ContextMenuProps): ReactElement {
+  const { colors } = useGanttStyleContext();
+
   const optionsForRender = useMemo(() => {
     if (!task) {
       return [];
@@ -113,10 +109,6 @@ export function ContextMenu({
     [setFloating]
   );
 
-  // useOutsideClick(floatingRef as MutableRefObject<HTMLDivElement>, () => {
-  //   handleCloseContextMenu();
-  // });
-
   return (
     <>
       <div
@@ -137,14 +129,13 @@ export function ContextMenu({
             top: menuY ?? 0,
             left: menuX ?? 0,
             width: 'max-content',
-            backgroundColor: contextMenuBgColor,
-            boxShadow: contextMenuBoxShadow,
+            backgroundColor: colors.contextMenuBgColor,
+            boxShadow: colors.contextMenuBoxShadow,
           }}
           {...getFloatingProps()}
         >
           {optionsForRender.map((option, index) => (
             <MenuOption
-              colors={colors}
               distances={distances}
               handleAction={handleOptionAction}
               option={option}

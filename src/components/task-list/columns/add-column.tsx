@@ -3,11 +3,15 @@ import React, { useCallback } from 'react';
 import { ColumnProps } from '../../../types/public-types';
 
 import styles from './add-column.module.css';
+import { useGanttStyleContext } from '../../../contexts/use-style-context';
 
 export const AddColumn: React.FC<ColumnProps> = props => {
   const {
-    data: { handleAddTask, icons, colors, task },
+    data: { handleAddTask, icons, task },
   } = props;
+
+  const { colors } = useGanttStyleContext();
+
   const onClick = useCallback(() => {
     if (task.type === 'empty') {
       return;

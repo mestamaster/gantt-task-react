@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import stylesRelationHandle from './bar-relation-handle.module.css';
 import { BarDisplay } from './bar-display';
 import type { TaskItemProps } from '../task-item';
-
 import styles from './bar.module.css';
 import { BarDateHandle } from './bar-date-handle';
 import { BarMoveAction } from '../../../types/public-types';
@@ -13,7 +12,6 @@ export const BarSmall: React.FC<
   }
 > = ({
   children: relationhandles,
-  colorStyles,
   distances: { barCornerRadius, handleWidth },
   hasChildren,
   isSelected,
@@ -56,7 +54,6 @@ export const BarSmall: React.FC<
         progressWidth={progressWidth}
         progressX={progressX}
         startMoveFullTask={startMoveFullTask}
-        styles={colorStyles}
         width={handleWidth * 2}
         x={x1}
         y={taskYOffset}

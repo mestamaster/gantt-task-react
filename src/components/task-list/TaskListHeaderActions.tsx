@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './TaskListHeaderActions.module.css';
-import { ColorStyles } from '../../types/public-types';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 // SVG Icon components
 const UnfoldLessIcon = ({ color }: { color: string }) => (
@@ -72,15 +72,14 @@ export type TaskListHeaderActionsProps = {
   onCollapseAll: () => void;
   onExpandFirstLevel: () => void;
   onExpandAll: () => void;
-  colors: Partial<ColorStyles>;
 };
 
 export const TaskListHeaderActions: React.FC<TaskListHeaderActionsProps> = ({
   onCollapseAll,
   onExpandFirstLevel,
   onExpandAll,
-  colors,
 }) => {
+  const { colors } = useGanttStyleContext();
   const iconColor = colors.barLabelColor || '#000000';
 
   return (

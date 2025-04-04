@@ -4,22 +4,23 @@ import { TaskListHeaderProps } from '../../types/public-types';
 
 import styles from './task-list-header.module.css';
 import { TaskListHeaderActions, TaskListHeaderActionsProps } from './TaskListHeaderActions';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 const TaskListHeaderDefaultInner: React.FC<
   TaskListHeaderProps & TaskListHeaderActionsProps
 > = props => {
   const {
     headerHeight,
-    fontFamily,
-    fontSize,
     columns,
     canResizeColumns,
     onColumnResizeStart,
     onCollapseAll,
     onExpandFirstLevel,
     onExpandAll,
-    colors,
   } = props;
+  const {
+    fonts: { fontFamily, fontSize },
+  } = useGanttStyleContext();
   return (
     <div
       className={styles.ganttTable_Header}
@@ -58,7 +59,6 @@ const TaskListHeaderDefaultInner: React.FC<
                     onCollapseAll={onCollapseAll}
                     onExpandFirstLevel={onExpandFirstLevel}
                     onExpandAll={onExpandAll}
-                    colors={colors}
                   />
                 )}
               </div>

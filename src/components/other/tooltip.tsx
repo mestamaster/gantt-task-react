@@ -3,6 +3,7 @@ import React, { ComponentType } from 'react';
 import type { Strategy } from '@floating-ui/dom';
 
 import type { Task } from '../../types/public-types';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 import styles from './tooltip.module.css';
 
@@ -13,12 +14,8 @@ export type TooltipProps = {
   setFloatingRef: (node: HTMLElement | null) => void;
   getFloatingProps: () => Record<string, unknown>;
   task: Task;
-  fontSize: string;
-  fontFamily: string;
   TooltipContent: ComponentType<{
     task: Task;
-    fontSize: string;
-    fontFamily: string;
   }>;
 };
 
@@ -29,8 +26,6 @@ export const Tooltip: React.FC<TooltipProps> = ({
   setFloatingRef,
   getFloatingProps,
   task,
-  fontSize,
-  fontFamily,
   TooltipContent,
 }) => {
   return (
@@ -44,16 +39,18 @@ export const Tooltip: React.FC<TooltipProps> = ({
       }}
       {...getFloatingProps()}
     >
-      <TooltipContent task={task} fontSize={fontSize} fontFamily={fontFamily} />
+      <TooltipContent task={task} />
     </div>
   );
 };
 
 export const StandardTooltipContent: React.FC<{
   task: Task;
-  fontSize: string;
-  fontFamily: string;
-}> = ({ task, fontSize, fontFamily }) => {
+}> = ({ task }) => {
+  const {
+    fonts: { fontSize, fontFamily },
+  } = useGanttStyleContext();
+
   const style = {
     fontSize,
     fontFamily,

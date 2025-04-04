@@ -20,6 +20,7 @@ import { TaskWarning } from './task-warning';
 import style from './task-list.module.css';
 import { BarFixWidth, fixWidthContainerClass } from '../other/bar-fix-width';
 import { BarRelationHandle } from './bar/bar-relation-handle';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 export type TaskItemProps = {
   children?: React.ReactNode;
@@ -66,8 +67,6 @@ export type TaskItemProps = {
 const TaskItemInner: React.FC<TaskItemProps> = props => {
   const {
     childOutOfParentWarnings,
-    colorStyles: stylesProp,
-
     distances: {
       arrowIndent,
       handleWidth,
@@ -93,10 +92,7 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
     rtl,
     selectTaskOnMouseDown,
     setTooltipTask,
-
     task,
-    task: { styles: taskStyles },
-
     taskHalfHeight,
     taskHeight,
     taskYOffset,
@@ -107,16 +103,7 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
 
   const taskRootRef = useRef<SVGGElement>(null);
 
-  const styles = useMemo(() => {
-    if (taskStyles) {
-      return {
-        ...stylesProp,
-        ...taskStyles,
-      };
-    }
-
-    return stylesProp;
-  }, [taskStyles, stylesProp]);
+  const { colors } = useGanttStyleContext();
 
   const outOfParentWarnings = useMemo(() => {
     if (!childOutOfParentWarnings) {
@@ -267,23 +254,23 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
 
     if (task.type === 'milestone') {
       return (
-        <Milestone {...props} colorStyles={styles} onTaskEventStart={onTaskEventStart}>
+        <Milestone {...props} onTaskEventStart={onTaskEventStart}>
           {relationhandles}
         </Milestone>
       );
     } else if (isSmallBar) {
       return (
-        <BarSmall {...props} colorStyles={styles} onTaskEventStart={onTaskEventStart}>
+        <BarSmall {...props} onTaskEventStart={onTaskEventStart}>
           {relationhandles}
         </BarSmall>
       );
     } else
       return (
-        <Bar {...props} onTaskEventStart={onTaskEventStart} colorStyles={styles}>
+        <Bar {...props} onTaskEventStart={onTaskEventStart}>
           {relationhandles}
         </Bar>
       );
-  }, [handleWidth, isSelected, outOfParentWarnings, props, styles, task, width]);
+  }, [handleWidth, isSelected, outOfParentWarnings, props, colors, task, width]);
 
   useEffect(() => {
     if (textRef.current) {
@@ -323,8 +310,8 @@ const TaskItemInner: React.FC<TaskItemProps> = props => {
 
   let barLabelFill =
     isTextInside || task.type == 'milestone'
-      ? styles.barLabelColor
-      : styles.barLabelWhenOutsideColor;
+      ? colors.barLabelColor
+      : colors.barLabelWhenOutsideColor;
   return (
     <g
       className={fixWidthContainerClass}

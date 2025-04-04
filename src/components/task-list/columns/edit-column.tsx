@@ -1,13 +1,16 @@
 import React, { useCallback } from 'react';
 
 import { ColumnProps } from '../../../types/public-types';
-
+import { useGanttStyleContext } from '../../../contexts/use-style-context';
 import styles from './edit-column.module.css';
 
 export const EditColumn: React.FC<ColumnProps> = props => {
   const {
-    data: { handleEditTask, icons, colors, task },
+    data: { handleEditTask, icons, task },
   } = props;
+
+  const { colors } = useGanttStyleContext();
+
   const onClick = useCallback(() => {
     handleEditTask(task);
   }, [task, handleEditTask]);

@@ -510,8 +510,6 @@ export interface StylingOption {
   fontSize?: string;
   TooltipContent?: ComponentType<{
     task: Task;
-    fontSize: string;
-    fontFamily: string;
   }>;
   TaskListHeader?: ComponentType<TaskListHeaderProps>;
   TaskListTable?: ComponentType<TaskListTableProps>;
@@ -603,14 +601,11 @@ export interface GanttProps extends EventOption, DisplayOption, StylingOption {
 export interface TaskListTableProps {
   canMoveTasks: boolean;
   childTasksMap: ChildByLevelMap;
-  colors: ColorStyles;
   columns: readonly Column[];
   cutIdsMirror: Readonly<Record<string, true>>;
   dateSetup: DateSetup;
   dependencyMap: DependencyMap;
   distances: Distances;
-  fontFamily: string;
-  fontSize: string;
   fullRowHeight: number;
   ganttFullHeight: number;
   getTaskCurrentState: (task: Task) => Task;
@@ -637,11 +632,8 @@ export interface TaskListTableProps {
 export interface TaskListHeaderProps extends TaskListHeaderActionsProps {
   headerHeight: number;
   columns: readonly Column[];
-  fontFamily: string;
-  fontSize: string;
   canResizeColumns: boolean;
   onColumnResizeStart: (columnIndex: number, clientX: number) => void;
-  colors: ColorStyles;
 }
 
 // comparison level -> task id -> index in array of tasks
@@ -802,7 +794,6 @@ export type ColumnData = {
   isShowTaskNumbers: boolean;
   onExpanderClick: (task: Task) => void;
   task: TaskOrEmpty;
-  colors: Partial<ColorStyles>;
 };
 
 export type ColumnProps = {

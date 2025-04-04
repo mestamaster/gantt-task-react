@@ -1,9 +1,7 @@
 import React, { useMemo } from 'react';
 
-import { ColorStyles } from '../../../types/public-types';
-
 import style from './bar.module.css';
-
+import { useGanttStyleContext } from '../../../contexts/use-style-context';
 type BarDisplayProps = {
   barCornerRadius: number;
   isCritical: boolean;
@@ -14,7 +12,6 @@ type BarDisplayProps = {
   /* progress start point */
   progressX: number;
   startMoveFullTask: (clientX: number) => void;
-  styles: ColorStyles;
   taskName: string;
   width: number;
   x: number;
@@ -31,74 +28,74 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   progressWidth,
   progressX,
   startMoveFullTask,
-  styles,
   width,
   x,
   y,
 }) => {
+  const { colors } = useGanttStyleContext();
   const processColor = useMemo(() => {
     if (isCritical) {
       if (hasChildren) {
         if (isSelected) {
-          return styles.groupProgressSelectedCriticalColor;
+          return colors.groupProgressSelectedCriticalColor;
         }
 
-        return styles.groupProgressCriticalColor;
+        return colors.groupProgressCriticalColor;
       }
 
       if (isSelected) {
-        return styles.barProgressSelectedCriticalColor;
+        return colors.barProgressSelectedCriticalColor;
       }
 
-      return styles.barProgressCriticalColor;
+      return colors.barProgressCriticalColor;
     }
 
     if (hasChildren) {
       if (isSelected) {
-        return styles.groupProgressSelectedColor;
+        return colors.groupProgressSelectedColor;
       }
 
-      return styles.groupProgressColor;
+      return colors.groupProgressColor;
     }
 
     if (isSelected) {
-      return styles.barProgressSelectedColor;
+      return colors.barProgressSelectedColor;
     }
 
-    return styles.barProgressColor;
-  }, [isSelected, isCritical, hasChildren, styles]);
+    return colors.barProgressColor;
+  }, [isSelected, isCritical, hasChildren, colors]);
 
   const barColor = useMemo(() => {
     if (isCritical) {
       if (hasChildren) {
         if (isSelected) {
-          return styles.groupBackgroundSelectedCriticalColor;
+          return colors.groupBackgroundSelectedCriticalColor;
         }
 
-        return styles.groupBackgroundCriticalColor;
+        return colors.groupBackgroundCriticalColor;
       }
 
       if (isSelected) {
-        return styles.barBackgroundSelectedCriticalColor;
+        return colors.barBackgroundSelectedCriticalColor;
       }
 
-      return styles.barBackgroundCriticalColor;
+      return colors.barBackgroundCriticalColor;
     }
 
     if (hasChildren) {
       if (isSelected) {
-        return styles.groupBackgroundSelectedColor;
+        return colors.groupBackgroundSelectedColor;
       }
 
-      return styles.groupBackgroundColor;
+      return colors.groupBackgroundColor;
     }
 
     if (isSelected) {
-      return styles.barBackgroundSelectedColor;
+      return colors.barBackgroundSelectedColor;
     }
 
-    return styles.barBackgroundColor;
-  }, [isSelected, isCritical, hasChildren, styles]);
+    return colors.barBackgroundColor;
+  }, [isSelected, isCritical, hasChildren, colors]);
 
   return (
     <g

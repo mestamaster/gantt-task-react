@@ -6,7 +6,6 @@ import {
   BarMoveAction,
   ChangeAction,
   CheckTaskIdExistsAtLevel,
-  ColorStyles,
   ContextMenuOptionType,
   DateExtremity,
   DateFormats,
@@ -79,51 +78,7 @@ import { deleteOption } from '../../context-menu-options/delete';
 import { useHolidays } from './use-holidays';
 
 import styles from './gantt.module.css';
-
-const defaultColors: ColorStyles = {
-  arrowColor: 'grey',
-  arrowCriticalColor: '#ff0000',
-  arrowWarningColor: '#ffbc00',
-  barLabelColor: '#000',
-  barLabelWhenOutsideColor: '#555',
-  barProgressColor: '#a3a3ff',
-  barProgressCriticalColor: '#ff1919',
-  barProgressSelectedColor: '#8282f5',
-  barProgressSelectedCriticalColor: '#ff0000',
-  barBackgroundColor: '#b8c2cc',
-  barBackgroundCriticalColor: '#ff6363',
-  barBackgroundSelectedColor: '#aeb8c2',
-  barBackgroundSelectedCriticalColor: '#ff8e8e',
-  groupProgressColor: '#2dbb2e',
-  groupProgressCriticalColor: '#2dbb2e',
-  groupProgressSelectedColor: '#28a329',
-  groupProgressSelectedCriticalColor: '#28a329',
-  groupBackgroundColor: '#006bc1',
-  groupBackgroundCriticalColor: '#006bc1',
-  groupBackgroundSelectedColor: '#407fbf',
-  groupBackgroundSelectedCriticalColor: '#407fbf',
-  projectProgressColor: '#7db59a',
-  projectProgressCriticalColor: '#7db59a',
-  projectProgressSelectedColor: '#59a985',
-  projectProgressSelectedCriticalColor: '#59a985',
-  projectBackgroundColor: '#fac465',
-  projectBackgroundCriticalColor: '#fac465',
-  projectBackgroundSelectedColor: '#f7bb53',
-  projectBackgroundSelectedCriticalColor: '#f7bb53',
-  milestoneBackgroundColor: '#f1c453',
-  milestoneBackgroundCriticalColor: '#ff8e8e',
-  milestoneBackgroundSelectedColor: '#f29e4c',
-  milestoneBackgroundSelectedCriticalColor: '#ff0000',
-  evenTaskBackgroundColor: '#f5f5f5',
-  oddTaskBackgroundColor: '#fff',
-  holidayBackgroundColor: 'rgba(233, 233, 233, 0.3)',
-  selectedTaskBackgroundColor: 'rgba(252, 248, 227, 0.5)',
-  taskDragColor: '#7474ff',
-  todayColor: 'rgba(252, 248, 227, 0.5)',
-  contextMenuBoxShadow: 'rgb(0 0 0 / 25%) 1px 1px 5px 1px',
-  contextMenuBgColor: '#fff',
-  contextMenuTextColor: 'inherit',
-};
+import { StyleProvider, defaultColors } from '../../contexts/use-style-context';
 
 const defaultDateFormats: DateFormats = {
   dateColumnFormat: 'E, d MMMM yyyy',
@@ -172,7 +127,7 @@ export const Gantt: React.FC<GanttProps> = ({
   canMoveTasks = true,
   canResizeColumns = true,
   checkIsHoliday: checkIsHolidayProp = defaultCheckIsHoliday,
-  colors = defaultColors,
+  colors: colorsProp = undefined,
   columns: columnsProp = undefined,
   comparisonLevels = 1,
   contextMenuOptions: contextMenuOptionsProp = undefined,
@@ -230,6 +185,11 @@ export const Gantt: React.FC<GanttProps> = ({
   const taskListRef = useRef<HTMLDivElement>(null);
 
   const { contextMenu, handleCloseContextMenu, handleOpenContextMenu } = useContextMenu(wrapperRef);
+
+  const finalColors = useMemo(
+    () => ({ ...defaultColors, ...colorsProp }),
+    [defaultColors, colorsProp]
+  );
 
   const [ganttTaskContentRef, taskListContentRef, setScrollYProgrammatically, onScrollVertically] =
     useVerticalScrollbars();
@@ -341,14 +301,6 @@ export const Gantt: React.FC<GanttProps> = ({
     ganttTaskContentRef,
     'scrollTop',
     distances.rowHeight
-  );
-
-  const colorStyles = useMemo<ColorStyles>(
-    () => ({
-      ...defaultColors,
-      ...colors,
-    }),
-    [colors]
   );
 
   const taskHeight = useMemo(() => (distances.rowHeight * distances.barFill) / 100, [distances]);
@@ -1622,8 +1574,6 @@ export const Gantt: React.FC<GanttProps> = ({
     isUnknownDates,
     rtl,
     startDate,
-    todayColor: colorStyles.todayColor,
-    holidayBackgroundColor: colorStyles.holidayBackgroundColor,
     viewMode,
     startColumnIndex,
     endColumnIndex,
@@ -1638,8 +1588,6 @@ export const Gantt: React.FC<GanttProps> = ({
       dateSetup,
       distances,
       endColumnIndex,
-      fontFamily,
-      fontSize,
       fullSvgWidth,
       getDate,
       isUnknownDates,
@@ -1647,15 +1595,12 @@ export const Gantt: React.FC<GanttProps> = ({
       renderTopHeader,
       rtl,
       startColumnIndex,
-      colors,
     }),
     [
       additionalLeftSpace,
       dateSetup,
       distances,
       endColumnIndex,
-      fontFamily,
-      fontSize,
       fullSvgWidth,
       getDate,
       isUnknownDates,
@@ -1663,7 +1608,6 @@ export const Gantt: React.FC<GanttProps> = ({
       renderTopHeader,
       rtl,
       startColumnIndex,
-      colors,
     ]
   );
 
@@ -1680,7 +1624,6 @@ export const Gantt: React.FC<GanttProps> = ({
       additionalRightSpace,
       childOutOfParentWarnings,
       childTasksMap,
-      colorStyles,
       comparisonLevels,
       criticalPaths,
       dependencyMap,
@@ -1688,8 +1631,6 @@ export const Gantt: React.FC<GanttProps> = ({
       distances,
       fixEndPosition,
       fixStartPosition,
-      fontFamily,
-      fontSize,
       fullRowHeight,
       ganttRelationEvent,
       getTaskCoordinates,
@@ -1727,7 +1668,6 @@ export const Gantt: React.FC<GanttProps> = ({
       checkIsHoliday,
       childOutOfParentWarnings,
       childTasksMap,
-      colorStyles,
       comparisonLevels,
       criticalPaths,
       dependencyMap,
@@ -1736,8 +1676,6 @@ export const Gantt: React.FC<GanttProps> = ({
       endColumnIndex,
       fixEndPosition,
       fixStartPosition,
-      fontFamily,
-      fontSize,
       fullRowHeight,
       ganttRelationEvent,
       getDate,
@@ -1778,14 +1716,11 @@ export const Gantt: React.FC<GanttProps> = ({
     canMoveTasks,
     canResizeColumns,
     childTasksMap,
-    colors: colorStyles,
     columnsProp,
     cutIdsMirror,
     dateSetup,
     dependencyMap,
     distances,
-    fontFamily,
-    fontSize,
     fullRowHeight,
     ganttFullHeight,
     getTaskCurrentState,
@@ -1816,64 +1751,63 @@ export const Gantt: React.FC<GanttProps> = ({
   };
 
   const displayTable = !columnsProp || columnsProp.length > 0;
+
   return (
-    <div
-      className={styles.wrapper}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-      ref={wrapperRef}
-      data-testid={`gantt-main`}
-      style={{
-        gridTemplateColumns: `${displayTable ? 'max-content' : ''} auto`,
-        background: colors.evenTaskBackgroundColor,
-        color: colors.barLabelColor,
-      }}
-    >
-      {/* {columns.length > 0 && <TaskList {...tableProps} />} */}
-      {displayTable && <TaskList {...tableProps} />}
+    <StyleProvider colors={finalColors} fonts={{ fontFamily, fontSize }}>
+      <div
+        className={styles.wrapper}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
+        ref={wrapperRef}
+        data-testid={`gantt-main`}
+        style={{
+          gridTemplateColumns: `${displayTable ? 'max-content' : ''} auto`,
+          background: finalColors.evenTaskBackgroundColor,
+          color: finalColors.barLabelColor,
+        }}
+      >
+        {/* {columns.length > 0 && <TaskList {...tableProps} />} */}
+        {displayTable && <TaskList {...tableProps} />}
 
-      <TaskGantt
-        barProps={barProps}
-        calendarProps={calendarProps}
-        distances={distances}
-        fullRowHeight={fullRowHeight}
-        fullSvgWidth={fullSvgWidth}
-        ganttFullHeight={ganttFullHeight}
-        ganttSVGRef={ganttSVGRef}
-        gridProps={gridProps}
-        ganttTaskContentRef={ganttTaskContentRef}
-        onVerticalScrollbarScrollX={onVerticalScrollbarScrollX}
-        ganttTaskRootRef={ganttTaskRootRef}
-        onScrollGanttContentVertically={onScrollVertically}
-        colors={colors}
-      />
-
-      {tooltipTaskFromMap && (
-        <Tooltip
-          tooltipX={tooltipX}
-          tooltipY={tooltipY}
-          tooltipStrategy={tooltipStrategy}
-          setFloatingRef={setFloatingRef}
-          getFloatingProps={getFloatingProps}
-          fontFamily={fontFamily}
-          fontSize={fontSize}
-          task={tooltipTaskFromMap}
-          TooltipContent={TooltipContent}
-        />
-      )}
-
-      {enableTableListContextMenu && (
-        <ContextMenu
-          checkHasCopyTasks={checkHasCopyTasks}
-          checkHasCutTasks={checkHasCutTasks}
-          colors={colorStyles}
-          contextMenu={contextMenu}
+        <TaskGantt
+          barProps={barProps}
+          calendarProps={calendarProps}
           distances={distances}
-          handleAction={handleAction}
-          handleCloseContextMenu={handleCloseContextMenu}
-          options={contextMenuOptions}
+          fullRowHeight={fullRowHeight}
+          fullSvgWidth={fullSvgWidth}
+          ganttFullHeight={ganttFullHeight}
+          ganttSVGRef={ganttSVGRef}
+          gridProps={gridProps}
+          ganttTaskContentRef={ganttTaskContentRef}
+          onVerticalScrollbarScrollX={onVerticalScrollbarScrollX}
+          ganttTaskRootRef={ganttTaskRootRef}
+          onScrollGanttContentVertically={onScrollVertically}
         />
-      )}
-    </div>
+
+        {tooltipTaskFromMap && (
+          <Tooltip
+            tooltipX={tooltipX}
+            tooltipY={tooltipY}
+            tooltipStrategy={tooltipStrategy}
+            setFloatingRef={setFloatingRef}
+            getFloatingProps={getFloatingProps}
+            task={tooltipTaskFromMap}
+            TooltipContent={TooltipContent}
+          />
+        )}
+
+        {enableTableListContextMenu && (
+          <ContextMenu
+            checkHasCopyTasks={checkHasCopyTasks}
+            checkHasCutTasks={checkHasCutTasks}
+            contextMenu={contextMenu}
+            distances={distances}
+            handleAction={handleAction}
+            handleCloseContextMenu={handleCloseContextMenu}
+            options={contextMenuOptions}
+          />
+        )}
+      </div>
+    </StyleProvider>
   );
 };

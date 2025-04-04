@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 
 import { ColumnProps, Icons, TaskOrEmpty } from '../../../types/public-types';
-
+import { useGanttStyleContext } from '../../../contexts/use-style-context';
 import styles from './title-column.module.css';
 
 const getExpanderSymbol = (
@@ -24,7 +24,6 @@ const getExpanderSymbol = (
 export const TitleColumn: React.FC<ColumnProps> = props => {
   const {
     data: {
-      colors,
       distances: { expandIconWidth, nestedTaskNameOffset },
       icons,
       isShowTaskNumbers,
@@ -36,6 +35,9 @@ export const TitleColumn: React.FC<ColumnProps> = props => {
       onExpanderClick,
     },
   } = props;
+
+  const { colors } = useGanttStyleContext();
+
   const { name } = task;
 
   const expanderSymbol = getExpanderSymbol(task, hasChildren, isClosed, icons);

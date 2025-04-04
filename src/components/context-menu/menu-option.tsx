@@ -1,27 +1,26 @@
 import { useCallback } from 'react';
 import type { ReactElement } from 'react';
 
-import type { ColorStyles, ContextMenuOptionType, Distances } from '../../types/public-types';
+import type { ContextMenuOptionType, Distances } from '../../types/public-types';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 import styles from './menu-option.module.css';
 import React from 'react';
 
 type MenuOptionProps = {
-  colors: ColorStyles;
   distances: Distances;
   handleAction: (option: ContextMenuOptionType) => void;
   option: ContextMenuOptionType;
 };
 
 export function MenuOption({
-  colors: { contextMenuTextColor },
-
   distances: { contextMenuIconWidth, contextMenuOptionHeight, contextMenuSidePadding },
   handleAction,
-
   option,
   option: { icon, label },
 }: MenuOptionProps): ReactElement {
+  const { colors } = useGanttStyleContext();
+
   const onClick = useCallback(() => {
     handleAction(option);
   }, [handleAction, option]);
@@ -33,7 +32,7 @@ export function MenuOption({
         height: contextMenuOptionHeight,
         paddingLeft: contextMenuSidePadding,
         paddingRight: contextMenuSidePadding,
-        color: contextMenuTextColor,
+        color: colors.contextMenuTextColor,
       }}
       onClick={onClick}
     >

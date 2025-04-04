@@ -1,13 +1,12 @@
 import React, { memo, useCallback, useMemo } from 'react';
 
-import { ColorStyles, Distances, DateExtremity, Task } from '../../types/public-types';
+import { Distances, DateExtremity, Task } from '../../types/public-types';
 import { generateTrianglePoints } from '../../helpers/generate-triangle-points';
 import { FixDependencyPosition, fixPositionContainerClass } from './fix-dependency-position';
 
 import styles from './arrow.module.css';
-
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 type ArrowProps = {
-  colorStyles: ColorStyles;
   distances: Distances;
   taskFrom: Task;
   extremityFrom: DateExtremity;
@@ -37,8 +36,6 @@ type ArrowProps = {
 };
 
 const ArrowInner: React.FC<ArrowProps> = ({
-  colorStyles: { arrowColor, arrowWarningColor, arrowCriticalColor },
-
   distances: { arrowIndent, dependencyFixWidth, dependencyFixHeight, dependencyFixIndent },
 
   taskFrom,
@@ -61,6 +58,8 @@ const ArrowInner: React.FC<ArrowProps> = ({
   onArrowClick = undefined,
   handleFixDependency,
 }) => {
+  const { colors } = useGanttStyleContext();
+
   const indexFrom = useMemo(() => Math.floor(fromY / fullRowHeight), [fromY, fullRowHeight]);
   const indexTo = useMemo(() => Math.floor(toY / fullRowHeight), [toY, fullRowHeight]);
 
@@ -158,15 +157,21 @@ const ArrowInner: React.FC<ArrowProps> = ({
 
   const color = useMemo(() => {
     if (isCritical) {
-      return arrowCriticalColor;
+      return colors.arrowCriticalColor;
     }
 
     if (hasWarning) {
-      return arrowWarningColor;
+      return colors.arrowWarningColor;
     }
 
-    return arrowColor;
-  }, [hasWarning, isCritical, arrowColor, arrowCriticalColor, arrowWarningColor]);
+    return colors.arrowColor;
+  }, [
+    hasWarning,
+    isCritical,
+    colors.arrowColor,
+    colors.arrowCriticalColor,
+    colors.arrowWarningColor,
+  ]);
 
   return (
     <g className={fixPositionContainerClass} fill={color} stroke={color}>
