@@ -1,5 +1,5 @@
 export { Gantt } from './components/gantt/gantt';
-export { defaultRenderBottomHeader } from './components/calendar/default-render-bottom-header';
+export { defaultRenderBottomHeader } from './default-methods/calendar/default-render-bottom-header';
 
 export { AddColumn } from './components/task-list/columns/add-column';
 export { EditColumn } from './components/task-list/columns/edit-column';

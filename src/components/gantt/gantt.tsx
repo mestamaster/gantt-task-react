@@ -58,13 +58,13 @@ import { getDateByOffset } from '../../helpers/get-date-by-offset';
 import { getDatesDiff } from '../../helpers/get-dates-diff';
 import { useGetTaskCurrentState } from './use-get-task-current-state';
 import { useSelection } from './use-selection';
-import { defaultCheckIsHoliday } from './default-check-is-holiday';
-import { defaultRoundDate } from './default-round-date';
+import { defaultCheckIsHoliday } from '../../default-methods/dates/default-check-is-holiday';
+import { defaultRoundDate } from '../../default-methods/dates/default-round-date';
 
 import { useContextMenu } from './use-context-menu';
 import { ContextMenu } from '../context-menu';
 import { useHandleAction } from './use-handle-action';
-import { defaultGetCopiedTaskId } from './default-get-copied-task-id';
+import { defaultGetCopiedTaskId } from '../../default-methods/tasks/default-get-copied-task-id';
 
 import { copyTasks } from '../../helpers/copy-tasks';
 import { copyOption } from '../../context-menu-options/copy';

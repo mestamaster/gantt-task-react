@@ -4,8 +4,8 @@ import type { ReactNode } from 'react';
 import { DateSetup, ViewMode, RenderTopHeader, RenderBottomHeader } from '../../types/public-types';
 import { TopPartOfCalendar } from './top-part-of-calendar';
 import { getDaysInMonth } from '../../helpers/date-helper';
-import { defaultRenderBottomHeader } from './default-render-bottom-header';
-import { defaultRenderTopHeader } from './default-render-top-header';
+import { defaultRenderBottomHeader } from '../../default-methods/calendar/default-render-bottom-header';
+import { defaultRenderTopHeader } from '../../default-methods/calendar/default-render-top-header';
 import { useGanttStyleContext } from '../../contexts/use-style-context';
 import { useGanttDimensions } from '../../contexts/use-gantt-dimensions';
 
