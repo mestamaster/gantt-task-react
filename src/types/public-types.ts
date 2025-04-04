@@ -236,7 +236,7 @@ export type OnDateChange = (
   task: TaskOrEmpty,
   dependentTasks: readonly Task[],
   index: number,
-  parents: readonly Task[],
+  parents: readonly TaskOrEmpty[],
   suggestions: readonly OnDateChangeSuggestionType[]
 ) => void;
 
@@ -254,7 +254,7 @@ export type OnMoveTaskBeforeAfter = (
   dependentTasks: readonly Task[],
   taskIndex: number,
   taskForMoveIndex: number,
-  parents: readonly Task[],
+  parents: readonly TaskOrEmpty[],
   suggestions: readonly OnDateChangeSuggestionType[]
 ) => void;
 
@@ -264,7 +264,7 @@ export type OnMoveTaskInside = (
   dependentTasks: readonly Task[],
   parentIndex: number,
   childIndexes: readonly number[],
-  parents: readonly Task[],
+  parents: readonly TaskOrEmpty[],
   suggestions: readonly OnDateChangeSuggestionType[]
 ) => void;
 
@@ -407,7 +407,7 @@ export interface EventOption {
       task: TaskOrEmpty;
       index: number;
     }>,
-    parents: readonly Task[],
+    parents: readonly TaskOrEmpty[],
     suggestions: readonly OnDateChangeSuggestionType[]
   ) => void;
   /**
@@ -614,7 +614,7 @@ export interface TaskListTableProps {
   fullRowHeight: number;
   ganttFullHeight: number;
   getTaskCurrentState: (task: Task) => Task;
-  handleAddTask: (task: Task) => void;
+  handleAddTask: (task: TaskOrEmpty | null) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
   handleEditTask: (taskOrEmpty: TaskOrEmpty) => void;
   handleMoveTaskBefore: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
@@ -792,7 +792,7 @@ export type ColumnData = {
   depth: number;
   dependencies: Task[];
   distances: Distances;
-  handleAddTask: (task: Task) => void;
+  handleAddTask: (task: TaskOrEmpty | null) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
   handleEditTask: (taskOrEmpty: TaskOrEmpty) => void;
   hasChildren: boolean;
@@ -881,7 +881,7 @@ export type ChangeMetadata = [
   /**
    * array of parents of the task
    */
-  Task[],
+  TaskOrEmpty[],
   /**
    * array of suggesgions for change parent
    */

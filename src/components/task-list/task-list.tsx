@@ -15,6 +15,7 @@ import {
   TaskListHeaderProps,
   TaskListTableProps,
   TaskOrEmpty,
+  OnChangeTasks,
 } from '../../types/public-types';
 
 import { useOptimizedList } from '../../helpers/use-optimized-list';
@@ -63,6 +64,7 @@ export type TaskListProps = {
   TaskListTable: ComponentType<TaskListTableProps>;
   onResizeColumn?: OnResizeColumn;
   onScrollTableListContentVertically: (event: SyntheticEvent<HTMLDivElement>) => void;
+  onChangeTasks?: OnChangeTasks;
 } & TaskListHeaderActionsProps;
 
 const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
@@ -105,12 +107,23 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
   onCollapseAll,
   onExpandFirstLevel,
   onExpandAll,
+  onChangeTasks,
 }) => {
+  // Silencing unused variable warning
+  void onChangeTasks;
+
   // Manage the column and list table resizing
   const [columns, taskListWidth, tableWidth, onTableResizeStart, onColumnResizeStart] =
     useTableListResize(columnsProp, distances, onResizeColumn);
 
   const renderedIndexes = useOptimizedList(taskListContentRef, 'scrollTop', fullRowHeight);
+
+  // Adapter function to handle type compatibility
+  const handleAddTaskAdapter = (task: TaskOrEmpty | null) => {
+    if (task === null || task.type !== 'empty') {
+      handleAddTask(task as Task | null);
+    }
+  };
 
   return (
     <div className={styles.ganttTableRoot} ref={taskListRef}>
@@ -164,7 +177,7 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
               fullRowHeight={fullRowHeight}
               ganttFullHeight={ganttFullHeight}
               getTaskCurrentState={getTaskCurrentState}
-              handleAddTask={handleAddTask}
+              handleAddTask={handleAddTaskAdapter}
               handleDeleteTasks={handleDeleteTasks}
               handleEditTask={handleEditTask}
               handleMoveTaskBefore={handleMoveTaskBefore}

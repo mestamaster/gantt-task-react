@@ -132,11 +132,16 @@ export const getChangeTaskMetadata = ({
 };
 
 const getSuggestedStartEndChangesFromDirectChildren = (
-  parentTask: Task,
+  parentTask: TaskOrEmpty,
   changeAction: ChangeAction,
   tasksMap: TaskMapByLevel,
   mapTaskToGlobalIndex: TaskToGlobalIndexMap
 ): OnDateChangeSuggestionType => {
+  // Ensure parentTask is a Task type with start and end
+  if (parentTask.type === 'empty') {
+    throw new Error('Empty task received where Task expected');
+  }
+
   const { id, comparisonLevel = 1 } = parentTask;
   let start = parentTask.start;
   let end = parentTask.end;
