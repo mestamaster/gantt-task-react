@@ -1,7 +1,8 @@
-import React, { memo, useMemo } from "react";
-import { getDatesDiff } from "../../helpers/get-dates-diff";
+import React, { memo, useMemo } from 'react';
+import { getDatesDiff } from '../../helpers/get-dates-diff';
 
-import type { DateExtremity, ViewMode } from "../../types/public-types";
+import type { DateExtremity, ViewMode } from '../../types/public-types';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 export type GridBodyProps = {
   additionalLeftSpace: number;
@@ -9,8 +10,6 @@ export type GridBodyProps = {
   ganttFullHeight: number;
   isUnknownDates: boolean;
   startDate: Date;
-  todayColor: string;
-  holidayBackgroundColor: string;
   rtl: boolean;
   viewMode: ViewMode;
   startColumnIndex: number;
@@ -25,11 +24,11 @@ const GridBodyInner: React.FC<GridBodyProps> = ({
   columnWidth,
   ganttFullHeight,
   isUnknownDates,
-  todayColor,
   rtl,
   startDate,
   viewMode,
 }) => {
+  const { colors } = useGanttStyleContext();
   const today = useMemo(() => {
     if (isUnknownDates) {
       return null;
@@ -47,7 +46,7 @@ const GridBodyInner: React.FC<GridBodyProps> = ({
         y={0}
         width={columnWidth}
         height={ganttFullHeight}
-        fill={todayColor}
+        fill={colors.todayColor}
       />
     );
   }, [
@@ -57,7 +56,7 @@ const GridBodyInner: React.FC<GridBodyProps> = ({
     isUnknownDates,
     rtl,
     startDate,
-    todayColor,
+    colors.todayColor,
     viewMode,
   ]);
 

@@ -1,8 +1,8 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 
-import { ColumnProps, Icons, TaskOrEmpty } from "../../../types/public-types";
-
-import styles from "./title-column.module.css";
+import { ColumnProps, Icons, TaskOrEmpty } from '../../../types/public-types';
+import { useGanttStyleContext } from '../../../contexts/use-style-context';
+import styles from './title-column.module.css';
 
 const getExpanderSymbol = (
   task: TaskOrEmpty,
@@ -11,20 +11,19 @@ const getExpanderSymbol = (
   icons: Partial<Icons> | undefined
 ) => {
   if (!hasChildren) {
-    return icons?.renderNoChildrenIcon ? icons.renderNoChildrenIcon(task) : "";
+    return icons?.renderNoChildrenIcon ? icons.renderNoChildrenIcon(task) : '';
   }
 
   if (isClosed) {
-    return icons?.renderClosedIcon ? icons.renderClosedIcon(task) : "⊞";
+    return icons?.renderClosedIcon ? icons.renderClosedIcon(task) : '⊞';
   }
 
-  return icons?.renderOpenedIcon ? icons.renderOpenedIcon(task) : "⊟";
+  return icons?.renderOpenedIcon ? icons.renderOpenedIcon(task) : '⊟';
 };
 
-export const TitleColumn: React.FC<ColumnProps> = (props) => {
+export const TitleColumn: React.FC<ColumnProps> = props => {
   const {
     data: {
-      colors,
       distances: { expandIconWidth, nestedTaskNameOffset },
       icons,
       isShowTaskNumbers,
@@ -34,8 +33,11 @@ export const TitleColumn: React.FC<ColumnProps> = (props) => {
       indexStr,
       task,
       onExpanderClick,
-    }
+    },
   } = props;
+
+  const { colors } = useGanttStyleContext();
+
   const { name } = task;
 
   const expanderSymbol = getExpanderSymbol(task, hasChildren, isClosed, icons);
@@ -43,7 +45,7 @@ export const TitleColumn: React.FC<ColumnProps> = (props) => {
   const title = isShowTaskNumbers ? `${indexStr} ${name}` : name;
 
   const onClick = useCallback(() => {
-    if (task.type !== "empty") {
+    if (task.type !== 'empty') {
       onExpanderClick(task);
     }
   }, [onExpanderClick, task]);
@@ -58,9 +60,7 @@ export const TitleColumn: React.FC<ColumnProps> = (props) => {
       title={title}
     >
       <div
-        className={`${styles.taskListExpander} ${
-          !hasChildren ? styles.taskListEmptyExpander : ""
-        }`}
+        className={`${styles.taskListExpander} ${!hasChildren ? styles.taskListEmptyExpander : ''}`}
         onClick={onClick}
         style={{
           width: expandIconWidth,
@@ -68,12 +68,15 @@ export const TitleColumn: React.FC<ColumnProps> = (props) => {
       >
         {expanderSymbol}
       </div>
-      <div style={{
-        color: colors.barLabelColor
-      }} className={styles.taskName}>
+      <div
+        style={{
+          color: colors.barLabelColor,
+        }}
+        className={styles.taskName}
+      >
         {isShowTaskNumbers && <b>{indexStr} </b>}
 
-        {name}
+        <span className={(!name && styles.emptyTaskName) || ''}> {name || 'Empty'}</span>
       </div>
     </div>
   );

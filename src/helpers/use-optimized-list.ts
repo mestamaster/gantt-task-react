@@ -1,10 +1,5 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
-import type {
-  RefObject,
-} from 'react';
+import { useEffect, useState } from 'react';
+import type { RefObject } from 'react';
 
 export type OptimizedListParams = [
   /**
@@ -26,7 +21,7 @@ export type OptimizedListParams = [
   /**
    * client width/height of element
    */
-  number,
+  number
 ];
 
 const DELTA = 5;
@@ -34,19 +29,16 @@ const DELTA = 5;
 const getStartAndEnd = (
   containerEl: Element | null,
   property: 'scrollTop' | 'scrollLeft',
-  cellSize: number,
+  cellSize: number
 ): OptimizedListParams | null => {
   if (!containerEl) {
     return null;
   }
 
   const scrollValue = containerEl[property];
-  const maxScrollValue = property === 'scrollLeft'
-  ? containerEl.scrollWidth
-  : containerEl.scrollHeight;
-  const fullValue = property === 'scrollLeft'
-    ? containerEl.clientWidth
-    : containerEl.clientHeight;
+  const maxScrollValue =
+    property === 'scrollLeft' ? containerEl.scrollWidth : containerEl.scrollHeight;
+  const fullValue = property === 'scrollLeft' ? containerEl.clientWidth : containerEl.clientHeight;
 
   const firstIndex = Math.floor(scrollValue / cellSize);
   const lastIndex = Math.ceil((scrollValue + fullValue) / cellSize) - 1;
@@ -54,22 +46,16 @@ const getStartAndEnd = (
   const isStartOfScroll = scrollValue < DELTA;
   const isEndOfScroll = scrollValue + fullValue > maxScrollValue - DELTA;
 
-  return [
-    firstIndex,
-    lastIndex,
-    isStartOfScroll,
-    isEndOfScroll,
-    fullValue,
-  ];
+  return [firstIndex, lastIndex, isStartOfScroll, isEndOfScroll, fullValue];
 };
 
 export const useOptimizedList = (
   containerRef: RefObject<Element>,
   property: 'scrollTop' | 'scrollLeft',
-  cellSize: number,
+  cellSize: number
 ) => {
-  const [indexes, setIndexes] = useState(
-    () => getStartAndEnd(containerRef.current, property, cellSize),
+  const [indexes, setIndexes] = useState(() =>
+    getStartAndEnd(containerRef.current, property, cellSize)
   );
 
   useEffect(() => {
@@ -101,10 +87,7 @@ export const useOptimizedList = (
         cancelAnimationFrame(rafId);
       }
     };
-  }, [
-    containerRef,
-    cellSize,
-  ]);
+  }, [containerRef, cellSize]);
 
   return indexes;
 };

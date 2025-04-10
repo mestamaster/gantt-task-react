@@ -1,24 +1,17 @@
-import {
-  ChildByLevelMap,
-  RootMapByLevel,
-  TaskOrEmpty,
-} from "../types/public-types";
+import { ChildByLevelMap, RootMapByLevel, TaskOrEmpty } from '../types/public-types';
 
 /**
  * @param tasks List of tasks
  */
 export const getChildsAndRoots = (
   tasks: readonly TaskOrEmpty[],
-  checkIsRoot: ((task: TaskOrEmpty) => boolean) | null,
+  checkIsRoot: ((task: TaskOrEmpty) => boolean) | null
 ): [ChildByLevelMap, RootMapByLevel] => {
   const childRes = new Map<number, Map<string, TaskOrEmpty[]>>();
   const rootRes = new Map<number, TaskOrEmpty[]>();
 
-  tasks.forEach((task) => {
-    const {
-      parent,
-      comparisonLevel = 1,
-    } = task;
+  tasks.forEach(task => {
+    const { parent, comparisonLevel = 1 } = task;
 
     if (!parent || (checkIsRoot && checkIsRoot(task))) {
       const rootOnLevel = rootRes.get(comparisonLevel) || [];

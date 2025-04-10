@@ -1,8 +1,8 @@
-import React, { ReactNode, useMemo } from "react";
-import { GridBody, GridBodyProps } from "./grid-body";
-import { ViewMode } from "../../types/public-types";
-import { differenceInDays } from "date-fns";
-
+import React, { ReactNode, useMemo } from 'react';
+import { GridBody, GridBodyProps } from './grid-body';
+import { ViewMode } from '../../types/public-types';
+import { differenceInDays } from 'date-fns';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 export type GridProps = GridBodyProps;
 export const Grid: React.FC<GridProps> = props => {
   const {
@@ -14,9 +14,10 @@ export const Grid: React.FC<GridProps> = props => {
     columnWidth,
     getDate,
     checkIsHoliday,
-    holidayBackgroundColor,
     minTaskDate,
   } = props;
+
+  const { colors } = useGanttStyleContext();
 
   const viewModesForDetectHolidays = new Set([
     ViewMode.Day,
@@ -37,7 +38,7 @@ export const Grid: React.FC<GridProps> = props => {
       return rest === -1 || rest === -2;
     }
 
-    return checkIsHoliday(date, "startOfTask");
+    return checkIsHoliday(date, 'startOfTask');
   };
 
   const renderedHolidays = useMemo(() => {
@@ -53,7 +54,7 @@ export const Grid: React.FC<GridProps> = props => {
               width={columnWidth}
               x={additionalLeftSpace + i * columnWidth}
               y={0}
-              fill={holidayBackgroundColor}
+              fill={colors.holidayBackgroundColor}
               key={i}
             />
           );
@@ -70,7 +71,7 @@ export const Grid: React.FC<GridProps> = props => {
     startColumnIndex,
     endColumnIndex,
     getDate,
-    holidayBackgroundColor,
+    colors.holidayBackgroundColor,
   ]);
 
   return (

@@ -1,11 +1,11 @@
-import { DateExtremity } from "../types/public-types";
+import { DateExtremity } from '../types/public-types';
 
 export const countHolidays = (
   startDate: Date,
   endDate: Date,
   checkIsHoliday: (date: Date, dateExtremity: DateExtremity) => boolean
 ) => {
-  let holidayCount = checkIsHoliday(startDate, "startOfTask") ? 1 : 0;
+  let holidayCount = checkIsHoliday(startDate, 'startOfTask') ? 1 : 0;
 
   let currentStartDate = new Date(startDate);
   currentStartDate.setHours(0);
@@ -19,7 +19,7 @@ export const countHolidays = (
   currentEndDate.setSeconds(0);
 
   while (currentStartDate <= currentEndDate) {
-    if (checkIsHoliday(new Date(currentStartDate.getTime()), "endOfTask")) {
+    if (checkIsHoliday(new Date(currentStartDate.getTime()), 'endOfTask')) {
       holidayCount++;
     }
     // Move to the next day

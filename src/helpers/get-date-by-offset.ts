@@ -1,17 +1,13 @@
-import addDays from "date-fns/addDays";
-import addHours from "date-fns/addHours";
-import addMonths from "date-fns/addMonths";
-import addWeeks from "date-fns/addWeeks";
-import addYears from "date-fns/addYears";
-import addQuarters from "date-fns/addQuarters";
+import addDays from 'date-fns/addDays';
+import addHours from 'date-fns/addHours';
+import addMonths from 'date-fns/addMonths';
+import addWeeks from 'date-fns/addWeeks';
+import addYears from 'date-fns/addYears';
+import addQuarters from 'date-fns/addQuarters';
 
-import {ViewMode} from "../types/public-types";
+import { ViewMode } from '../types/public-types';
 
-export const getDateByOffset = (
-  startDate: Date,
-  offset: number,
-  viewMode: ViewMode
-) => {
+export const getDateByOffset = (startDate: Date, offset: number, viewMode: ViewMode) => {
   switch (viewMode) {
     case ViewMode.Day:
       return addDays(startDate, offset);
@@ -41,6 +37,6 @@ export const getDateByOffset = (
       return addYears(startDate, offset);
 
     default:
-      throw new Error("Unknown view mode");
+      throw new Error('Unknown view mode');
   }
 };

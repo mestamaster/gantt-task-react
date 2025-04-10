@@ -1,41 +1,34 @@
-import type { CSSProperties, MouseEvent } from "react";
-import React, { memo, useCallback, useMemo, useState } from "react";
+import type { CSSProperties, MouseEvent } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 
 import {
-  ColorStyles,
   Column,
   ColumnData,
   DateSetup,
   DependencyMap,
-  Distances,
   Icons,
   Task,
-  TaskOrEmpty
-} from "../../types/public-types";
+  TaskOrEmpty,
+} from '../../types/public-types';
 
-import styles from "./task-list-table-row.module.css";
-
+import styles from './task-list-table-row.module.css';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
+import { useGanttDimensions } from '../../contexts/use-gantt-dimensions';
 type TaskListTableRowProps = {
   canMoveTasks: boolean;
-  colors: ColorStyles;
   columns: readonly Column[];
   dateSetup: DateSetup;
   dependencyMap: DependencyMap;
   depth: number;
-  distances: Distances;
   fullRowHeight: number;
   getTaskCurrentState: (task: Task) => Task;
-  handleAddTask: (task: Task) => void;
+  handleAddTask: (task: TaskOrEmpty | null) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
   handleEditTask: (task: TaskOrEmpty) => void;
   handleMoveTaskBefore: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
   handleMoveTaskAfter: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
   handleMoveTasksInside: (parent: Task, childs: readonly TaskOrEmpty[]) => void;
-  handleOpenContextMenu: (
-    task: TaskOrEmpty,
-    clientX: number,
-    clientY: number
-  ) => void;
+  handleOpenContextMenu: (task: TaskOrEmpty, clientX: number, clientY: number) => void;
   hasChildren: boolean;
   icons?: Partial<Icons>;
   indexStr: string;
@@ -55,51 +48,49 @@ type TaskListTableRowProps = {
   setDraggedTask: React.Dispatch<any>;
 };
 
-const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
-  ({
-     canMoveTasks,
-     colors,
-     columns,
-     dateSetup,
-     dependencyMap,
-     depth,
-     distances,
-     fullRowHeight,
-     getTaskCurrentState,
-     handleAddTask,
-     handleDeleteTasks,
-     handleEditTask,
-     handleMoveTaskBefore,
-     handleMoveTaskAfter,
-     handleMoveTasksInside,
-     handleOpenContextMenu,
-     hasChildren,
-     icons = undefined,
-     indexStr,
-     isClosed,
-     isCut,
-     isEven,
-     isSelected,
-     isShowTaskNumbers,
-     onClick,
-     onExpanderClick,
-     scrollToTask,
-     selectTaskOnMouseDown,
-     style = undefined,
-     task,
-     tasks,
-     draggedTask,
-     setDraggedTask
-   }) => {
-    const { id, comparisonLevel = 1 } = task;
-
+const TaskListTableRowInner: React.FC<TaskListTableRowProps> = ({
+  canMoveTasks,
+  columns,
+  dateSetup,
+  dependencyMap,
+  depth,
+  fullRowHeight,
+  getTaskCurrentState,
+  handleAddTask,
+  handleDeleteTasks,
+  handleEditTask,
+  handleMoveTaskBefore,
+  handleMoveTaskAfter,
+  handleMoveTasksInside,
+  handleOpenContextMenu,
+  hasChildren,
+  icons = undefined,
+  indexStr,
+  isClosed,
+  isCut,
+  isEven,
+  isSelected,
+  isShowTaskNumbers,
+  onClick,
+  onExpanderClick,
+  scrollToTask,
+  selectTaskOnMouseDown,
+  style = undefined,
+  task,
+  tasks,
+  draggedTask,
+  setDraggedTask,
+}) => {
+  const { id, comparisonLevel = 1 } = task;
+  const { colors } = useGanttStyleContext();
+  const distances = useGanttDimensions();
   const onRootMouseDown = useCallback(
     (event: MouseEvent) => {
       if (event.button !== 0) {
         return;
       }
 
-      if (task.type !== "empty") {
+      if (task.type !== 'empty') {
         scrollToTask(task);
       }
 
@@ -162,7 +153,7 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
       isShowTaskNumbers,
       onExpanderClick,
       task, //: task.type === "empty" ? task : getTaskCurrentState(task),
-      colors
+      colors,
     }),
     [
       canMoveTasks,
@@ -181,11 +172,10 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
       isShowTaskNumbers,
       onExpanderClick,
       task,
-      colors
+      colors,
     ]
   );
-  const dropPreviewOffset =
-    distances.nestedTaskNameOffset * depth + distances.expandIconWidth;
+  const dropPreviewOffset = distances.nestedTaskNameOffset * depth + distances.expandIconWidth;
 
   const [hoveringState, setHoveringState] = useState({
     hoveringBefore: false,
@@ -196,8 +186,8 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
   let backgroundColor = isSelected
     ? colors.selectedTaskBackgroundColor
     : isEven && !hoveringState.hoveringInside
-      ? colors.evenTaskBackgroundColor
-      : colors.oddTaskBackgroundColor;
+    ? colors.evenTaskBackgroundColor
+    : colors.oddTaskBackgroundColor;
   if (
     hoveringState.hoveringInside &&
     !hoveringState.hoveringAfter &&
@@ -210,7 +200,7 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
     event: React.DragEvent<HTMLDivElement>
   ) => {
     setDraggedTask(task);
-    event.dataTransfer.setData("draggedTask", task?.id);
+    event.dataTransfer.setData('draggedTask', task?.id);
   };
 
   const handleDragOver: React.DragEventHandler<HTMLDivElement> = event => {
@@ -275,12 +265,11 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
 
   const canDropInside = (): boolean => {
     let canDropInside = false;
-    if (task.type !== "empty" && task.type !== "milestone") {
+    if (task.type !== 'empty' && task.type !== 'milestone') {
       if (draggedTask) {
         if (!isDraggedTaskAncestorOfDropTarget(draggedTask)) {
           canDropInside =
-            draggedTask.id !== id ||
-            (draggedTask.comparisonLevel || 1) !== comparisonLevel;
+            draggedTask.id !== id || (draggedTask.comparisonLevel || 1) !== comparisonLevel;
         }
       }
     }
@@ -288,24 +277,24 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
   };
 
   const dropInside: React.DragEventHandler<HTMLDivElement> = () => {
-    if (canDropInside() && task.type !== "empty") {
+    if (canDropInside() && task.type !== 'empty') {
       handleMoveTasksInside(task, [draggedTask]);
     }
     setHoveringState({
       hoveringBefore: false,
       hoveringInside: false,
-      hoveringAfter: false
+      hoveringAfter: false,
     });
   };
 
   return (
     <div
-      className={`${styles.taskListTableRow} ${isCut ? styles.cut : ""}`}
+      className={`${styles.taskListTableRow} ${isCut ? styles.cut : ''}`}
       onMouseDown={onRootMouseDown}
       style={{
         height: fullRowHeight,
         backgroundColor: backgroundColor,
-        ...style
+        ...style,
       }}
       onContextMenu={onContextMenu}
       draggable
@@ -314,7 +303,7 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
       onDragEnd={handleDragEnd}
     >
       {columns.map((column, index) => {
-        const { Cell, width }= column;
+        const { Cell, width } = column;
         // noinspection TypeScriptValidateTypes
         return (
           <div
@@ -341,9 +330,7 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
               }}
               onDragOver={event => {
                 event.preventDefault();
-                event.dataTransfer.dropEffect = canDropInside()
-                  ? "move"
-                  : "none";
+                event.dataTransfer.dropEffect = canDropInside() ? 'move' : 'none';
               }}
               onDrop={dropInside}
               style={{
@@ -352,7 +339,7 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
             >
               <div
                 style={{
-                  pointerEvents: hoveringState.hoveringInside ? "none" : "auto",
+                  pointerEvents: hoveringState.hoveringInside ? 'none' : 'auto',
                 }}
               >
                 <Cell data={columnData} />
@@ -365,16 +352,12 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
       <div
         data-testid={`table-row-drop-before-${task.name}`}
         className={`${styles.dropBefore} ${
-          hoveringState.hoveringBefore ? styles.dropBeforeLighten : ""
+          hoveringState.hoveringBefore ? styles.dropBeforeLighten : ''
         }`}
         style={{
           left: dropPreviewOffset,
-          backgroundColor: hoveringState.hoveringBefore
-            ? colors.taskDragColor
-            : undefined,
-          color: hoveringState.hoveringBefore
-            ? colors.taskDragColor
-            : undefined,
+          backgroundColor: hoveringState.hoveringBefore ? colors.taskDragColor : undefined,
+          color: hoveringState.hoveringBefore ? colors.taskDragColor : undefined,
         }}
         onDragEnter={event => {
           event.preventDefault();
@@ -391,20 +374,18 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
         }}
         onDragOver={event => {
           event.preventDefault();
-          event.dataTransfer.dropEffect = canDropBefore() ? "move" : "none";
+          event.dataTransfer.dropEffect = canDropBefore() ? 'move' : 'none';
         }}
         onDrop={dropBefore}
       />
       <div
         data-testid={`table-row-drop-after-${task.name}`}
         className={`${styles.dropAfter} ${
-          hoveringState.hoveringAfter ? styles.dropBeforeLighten : ""
+          hoveringState.hoveringAfter ? styles.dropBeforeLighten : ''
         }`}
         style={{
           left: dropPreviewOffset,
-          backgroundColor: hoveringState.hoveringAfter
-            ? colors.taskDragColor
-            : undefined,
+          backgroundColor: hoveringState.hoveringAfter ? colors.taskDragColor : undefined,
           color: hoveringState.hoveringAfter ? colors.taskDragColor : undefined,
         }}
         onDragEnter={() =>
@@ -421,7 +402,7 @@ const TaskListTableRowInner: React.FC<TaskListTableRowProps> =
         }
         onDragOver={event => {
           event.preventDefault();
-          event.dataTransfer.dropEffect = canDropAfter() ? "move" : "none";
+          event.dataTransfer.dropEffect = canDropAfter() ? 'move' : 'none';
         }}
         onDrop={dropAfter}
       />

@@ -1,90 +1,98 @@
-import React from "react";
-import { UnfoldLess, UnfoldMore, UnfoldMoreDouble } from "@mui/icons-material";
-import { createTheme, IconButton, Theme, ThemeOptions, ThemeProvider, Tooltip } from "@mui/material";
-import style from "./TaskListHeaderActions.module.css";
-import { ColorStyles } from "../../types/public-types";
+import React from 'react';
+import style from './TaskListHeaderActions.module.css';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
+
+// SVG Icon components
+const UnfoldLessIcon = ({ color }: { color: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M7 11l5-5 5 5M7 17l5-5 5 5" />
+  </svg>
+);
+
+const UnfoldMoreIcon = ({ color }: { color: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M7 6l5 5 5-5M7 18l5-5 5 5" />
+  </svg>
+);
+
+const UnfoldMoreDoubleIcon = ({ color }: { color: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M7 6l5 5 5-5M7 12l5 5 5-5M7 18l5-5 5 5" />
+  </svg>
+);
+
+// Custom button component
+const IconButton = ({
+  onClick,
+  children,
+  title,
+}: {
+  onClick: () => void;
+  children: React.ReactNode;
+  title?: string;
+}) => {
+  return (
+    <button className={style.iconButton} onClick={onClick} title={title}>
+      {children}
+    </button>
+  );
+};
 
 export type TaskListHeaderActionsProps = {
   onCollapseAll: () => void;
   onExpandFirstLevel: () => void;
   onExpandAll: () => void;
-  colors: Partial<ColorStyles>
 };
 
-export const TaskListHeaderActions: React.FC<TaskListHeaderActionsProps> =
-  ({
-     onCollapseAll,
-     onExpandFirstLevel,
-     onExpandAll,
-     colors
-   }) => {
+export const TaskListHeaderActions: React.FC<TaskListHeaderActionsProps> = ({
+  onCollapseAll,
+  onExpandFirstLevel,
+  onExpandAll,
+}) => {
+  const { colors } = useGanttStyleContext();
+  const iconColor = colors.barLabelColor || '#000000';
 
-    let themeOptions: ThemeOptions = {
-      palette: {
-        primary: {
-          main: colors.barLabelColor // Maps to a primary color (e.g., task bar background)
-        },
-        secondary: {
-          main: colors.barLabelColor // Maps to a secondary color (e.g., task progress)
-        },
-        background: {
-          default: colors.evenTaskBackgroundColor, // Background color for even tasks
-          paper: colors.oddTaskBackgroundColor // Background color for odd tasks or paper elements
-        },
-        text: {
-          primary: colors.barLabelColor, // Main text color (bar labels, etc.)
-          secondary: colors.barLabelColor // Context menu text color
-        },
-      },
-      components: {
-        MuiButton: {
-          styleOverrides: {
-            root: {
-              color: colors.barLabelColor // Use the bar label color for button text
-            }
-          }
-        },
-        MuiTooltip: {
-          styleOverrides: {
-            tooltip: {
-              backgroundColor: colors.contextMenuBgColor, // Tooltip background color
-              color: colors.contextMenuTextColor // Tooltip text color
-            }
-          }
-        },
-        MuiSvgIcon: {
-          styleOverrides: {
-            root: {
-              color: colors.barLabelColor, // Apply primary icon color to all icons
-              '&.MuiSvgIcon-colorSecondary': {
-                color:  colors.barLabelWhenOutsideColor, // Apply secondary color to icons
-              },
-            },
-          },
-        },
-      }
-    };
-    const materialLightTheme: Theme = createTheme(themeOptions);
-
-    return (
-      <ThemeProvider theme={materialLightTheme}>
-        <div className={style.taskListHeaderAction}>
-          <Tooltip title={"Collapse All"}>
-            <IconButton onClick={onCollapseAll}>
-              <UnfoldLess />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={"Expand First Level"}>
-            <IconButton onClick={onExpandFirstLevel}>
-              <UnfoldMore />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={"Expand All"}>
-            <IconButton onClick={onExpandAll}>
-              <UnfoldMoreDouble />
-            </IconButton>
-          </Tooltip>
-        </div>
-      </ThemeProvider>
-    );
-  };
+  return (
+    <div className={style.taskListHeaderAction}>
+      <IconButton onClick={onCollapseAll} title="Collapse All">
+        <UnfoldLessIcon color={iconColor} />
+      </IconButton>
+      <IconButton onClick={onExpandFirstLevel} title="Expand First Level">
+        <UnfoldMoreIcon color={iconColor} />
+      </IconButton>
+      <IconButton onClick={onExpandAll} title="Expand All">
+        <UnfoldMoreDoubleIcon color={iconColor} />
+      </IconButton>
+    </div>
+  );
+};

@@ -1,11 +1,12 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
-import stylesRelationHandle from "../bar/bar-relation-handle.module.css";
+import stylesRelationHandle from '../bar/bar-relation-handle.module.css';
 
-import type { TaskItemProps } from "../task-item";
+import type { TaskItemProps } from '../task-item';
 
-import styles from "./milestone.module.css";
-import { BarMoveAction } from "../../../types/public-types";
+import styles from './milestone.module.css';
+import { BarMoveAction } from '../../../types/public-types';
+import { useGanttDimensions } from '../../../contexts/use-gantt-dimensions';
 
 export const Milestone: React.FC<
   TaskItemProps & {
@@ -15,7 +16,6 @@ export const Milestone: React.FC<
   children: relationhandles,
   task,
   taskYOffset,
-  distances: { barCornerRadius },
   taskHeight,
   onTaskEventStart,
   isSelected,
@@ -24,6 +24,7 @@ export const Milestone: React.FC<
   x1,
 }) => {
   const rotatedHeight = taskHeight / 1.414;
+  const { barCornerRadius } = useGanttDimensions();
 
   const transform = `rotate(45 ${x1 + rotatedHeight * 0.356} 
     ${taskYOffset + rotatedHeight * 0.85})`;
@@ -61,13 +62,13 @@ export const Milestone: React.FC<
         transform={transform}
         className={styles.milestoneBackground}
         onMouseDown={e => {
-          onTaskEventStart("move", e.clientX);
+          onTaskEventStart('move', e.clientX);
         }}
         onTouchStart={e => {
           const firstTouch = e.touches[0];
 
           if (firstTouch) {
-            onTaskEventStart("move", firstTouch.clientX);
+            onTaskEventStart('move', firstTouch.clientX);
           }
         }}
       />

@@ -1,30 +1,15 @@
-import {
-  BarMoveAction,
-  DateExtremity,
-  GanttDateRounding,
-} from "../types/public-types";
-import { decrementDate, incrementDate } from "./round-task-dates";
+import { BarMoveAction, DateExtremity, GanttDateRounding } from '../types/public-types';
+import { decrementDate, incrementDate } from './round-task-dates';
 
 export const getNextWorkingDate = (
   date: Date,
   action: BarMoveAction,
-  roundDate: (
-    date: Date,
-    action: BarMoveAction,
-    dateExtremity: DateExtremity
-  ) => Date,
+  roundDate: (date: Date, action: BarMoveAction, dateExtremity: DateExtremity) => Date,
   dateExtremity: DateExtremity,
   checkIsHoliday: (date: Date, dateExtremity: DateExtremity) => boolean,
   dateMoveStep: GanttDateRounding
 ) => {
-  let currentDate = incrementDate(
-    date,
-    action,
-    roundDate,
-    dateExtremity,
-    dateMoveStep,
-    false
-  );
+  let currentDate = incrementDate(date, action, roundDate, dateExtremity, dateMoveStep, false);
 
   while (checkIsHoliday(currentDate, dateExtremity)) {
     const incrementedDate = incrementDate(
@@ -48,23 +33,12 @@ export const getNextWorkingDate = (
 export const getPreviousWorkingDate = (
   date: Date,
   action: BarMoveAction,
-  roundDate: (
-    date: Date,
-    action: BarMoveAction,
-    dateExtremity: DateExtremity
-  ) => Date,
+  roundDate: (date: Date, action: BarMoveAction, dateExtremity: DateExtremity) => Date,
   dateExtremity: DateExtremity,
   checkIsHoliday: (date: Date, dateExtremity: DateExtremity) => boolean,
   dateMoveStep: GanttDateRounding
 ) => {
-  let currentDate = decrementDate(
-    date,
-    action,
-    roundDate,
-    dateExtremity,
-    dateMoveStep,
-    false
-  );
+  let currentDate = decrementDate(date, action, roundDate, dateExtremity, dateMoveStep, false);
 
   while (checkIsHoliday(currentDate, dateExtremity)) {
     const decrementedDate = decrementDate(

@@ -1,22 +1,30 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 
-import { ColumnProps } from "../../../types/public-types";
+import { ColumnProps } from '../../../types/public-types';
+import { useGanttStyleContext } from '../../../contexts/use-style-context';
+import styles from './edit-column.module.css';
 
-import styles from "./edit-column.module.css";
-
-export const EditColumn: React.FC<ColumnProps> = (props) => {
+export const EditColumn: React.FC<ColumnProps> = props => {
   const {
-    data: { handleEditTask, icons, colors, task }
+    data: { handleEditTask, icons, task },
   } = props;
+
+  const { colors } = useGanttStyleContext();
+
   const onClick = useCallback(() => {
     handleEditTask(task);
   }, [task, handleEditTask]);
 
   return (
-    <button type="button" onClick={onClick} style={{
-      "color": colors.barLabelColor
-    }} className={styles.button}>
-      {icons?.renderEditIcon ? icons.renderEditIcon(task) : "✎"}
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        color: colors.barLabelColor,
+      }}
+      className={styles.button}
+    >
+      {icons?.renderEditIcon ? icons.renderEditIcon(task) : '✎'}
     </button>
   );
 };

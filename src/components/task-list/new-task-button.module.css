@@ -1,0 +1,30 @@
+.newTaskButtonWrapper {
+  position: sticky;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.newTaskButton {
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.newTaskButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

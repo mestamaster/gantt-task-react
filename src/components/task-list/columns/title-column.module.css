@@ -20,6 +20,11 @@
   cursor: default;
 }
 
+.emptyTaskName {
+  color: #a0a0a0;
+  font-style: italic;
+}
+
 .taskName {
   overflow: hidden;
   white-space: nowrap;

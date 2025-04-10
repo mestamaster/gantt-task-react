@@ -1,21 +1,21 @@
-import type { ComponentType, MouseEvent, ReactNode } from "react";
+import type { ComponentType, MouseEvent, ReactNode } from 'react';
 
-import type { Locale as DateLocale } from "date-fns";
+import type { Locale as DateLocale } from 'date-fns';
 
-import { OptimizedListParams } from "../helpers/use-optimized-list";
-import { TaskListHeaderActionsProps } from "../components/task-list/TaskListHeaderActions";
+import { OptimizedListParams } from '../helpers/use-optimized-list';
+import { TaskListHeaderActionsProps } from '../components/task-list/TaskListHeaderActions';
 
 export enum ViewMode {
-  Hour = "Hour",
-  QuarterDay = "Quarter Day",
-  HalfDay = "Half Day",
-  Day = "Day",
-  TwoDays = "Two Days",
+  Hour = 'Hour',
+  QuarterDay = 'Quarter Day',
+  HalfDay = 'Half Day',
+  Day = 'Day',
+  TwoDays = 'Two Days',
   /** ISO-8601 week */
-  Week = "Week",
-  Month = "Month",
-  QuarterYear = "QuarterYear",
-  Year = "Year",
+  Week = 'Week',
+  Month = 'Month',
+  QuarterYear = 'QuarterYear',
+  Year = 'Year',
 }
 
 export interface DateSetup {
@@ -26,11 +26,7 @@ export interface DateSetup {
   viewMode: ViewMode;
 }
 
-export type RenderTopHeader = (
-  date: Date,
-  viewMode: ViewMode,
-  dateSetup: DateSetup
-) => ReactNode;
+export type RenderTopHeader = (date: Date, viewMode: ViewMode, dateSetup: DateSetup) => ReactNode;
 
 export type RenderBottomHeader = (
   date: Date,
@@ -156,7 +152,7 @@ export interface Distances {
   titleCellWidth: number;
 }
 
-export type TaskType = "task" | "milestone" | "project";
+export type TaskType = 'task' | 'milestone' | 'project';
 
 export interface Task {
   id: string;
@@ -184,7 +180,7 @@ export interface Task {
 
 export interface EmptyTask {
   id: string;
-  type: "empty";
+  type: 'empty';
   name: string;
   parent?: string;
   comparisonLevel?: number;
@@ -240,18 +236,14 @@ export type OnDateChange = (
   task: TaskOrEmpty,
   dependentTasks: readonly Task[],
   index: number,
-  parents: readonly Task[],
+  parents: readonly TaskOrEmpty[],
   suggestions: readonly OnDateChangeSuggestionType[]
 ) => void;
 
-export type OnProgressChange = (
-  task: Task,
-  children: readonly Task[],
-  index: number
-) => void;
+export type OnProgressChange = (task: Task, children: readonly Task[], index: number) => void;
 
 export type OnEditTask = (
-  task: TaskOrEmpty,
+  taskOrEmpty: TaskOrEmpty,
   index: number,
   getMetadata: GetMetadata
 ) => void;
@@ -262,7 +254,7 @@ export type OnMoveTaskBeforeAfter = (
   dependentTasks: readonly Task[],
   taskIndex: number,
   taskForMoveIndex: number,
-  parents: readonly Task[],
+  parents: readonly TaskOrEmpty[],
   suggestions: readonly OnDateChangeSuggestionType[]
 ) => void;
 
@@ -272,11 +264,11 @@ export type OnMoveTaskInside = (
   dependentTasks: readonly Task[],
   parentIndex: number,
   childIndexes: readonly number[],
-  parents: readonly Task[],
+  parents: readonly TaskOrEmpty[],
   suggestions: readonly OnDateChangeSuggestionType[]
 ) => void;
 
-export type OnAddTask = (parentTask: Task, getMetadata: GetMetadata) => void;
+export type OnAddTask = (parentTask: TaskOrEmpty | null, getMetadata: GetMetadata) => void;
 
 export type FixPosition = (
   task: Task,
@@ -289,66 +281,62 @@ export type FixPosition = (
 
 export type OnChangeTasksAction =
   | {
-  type: "add_tasks";
-}
+      type: 'add_tasks';
+    }
   | {
-  type: "date_change";
-}
+      type: 'date_change';
+    }
   | {
-  type: "delete_relation";
-  payload: {
-    taskFrom: Task;
-    taskFromIndex: number;
-    taskTo: Task;
-    taskToIndex: number;
-  };
-}
+      type: 'delete_relation';
+      payload: {
+        taskFrom: Task;
+        taskFromIndex: number;
+        taskTo: Task;
+        taskToIndex: number;
+      };
+    }
   | {
-  type: "delete_task";
-  payload: {
-    tasks: readonly TaskOrEmpty[];
-    taskIndexes: readonly number[];
-  };
-}
+      type: 'delete_task';
+      payload: {
+        tasks: readonly TaskOrEmpty[];
+        taskIndexes: readonly number[];
+      };
+    }
   | {
-  type: "edit_task";
-}
+      type: 'edit_task';
+    }
   | {
-  type: "fix_dependency_position";
-}
+      type: 'fix_dependency_position';
+    }
   | {
-  type: "fix_end_position";
-}
+      type: 'fix_end_position';
+    }
   | {
-  type: "fix_start_position";
-}
+      type: 'fix_start_position';
+    }
   | {
-  type: "move_task_before";
-}
+      type: 'move_task_before';
+    }
   | {
-  type: "move_task_after";
-}
+      type: 'move_task_after';
+    }
   | {
-  type: "move_task_inside";
-}
+      type: 'move_task_inside';
+    }
   | {
-  type: "progress_change";
-}
+      type: 'progress_change';
+    }
   | {
-  type: "relation_change";
-}
+      type: 'relation_change';
+    }
   | {
-  type: "expandState_change";
-  payload: {
-    changedTask: Task;
-  };
-};
+      type: 'expandState_change';
+      payload: {
+        changedTask: Task;
+      };
+    };
 
-export type RelationKind =
-  | "startToStart"
-  | "startToEnd"
-  | "endToStart"
-  | "endToEnd";
+export type RelationKind = 'startToStart' | 'startToEnd' | 'endToStart' | 'endToEnd';
 
 export type OnChangeTasks = (
   nextTasks: readonly TaskOrEmpty[],
@@ -402,9 +390,9 @@ export interface EventOption {
    */
   onProgressChange?: OnProgressChange;
   /**
-   * Callback for getting data of the added task
+   * Callback for getting data of the added task. parentTask is the parent task of the added task.
    */
-  onAddTask?: (task: Task) => Promise<TaskOrEmpty | null>;
+  onAddTask?: (parentTask: TaskOrEmpty | null) => Promise<TaskOrEmpty | null>;
   /**
    * Invokes on edit button click
    */
@@ -419,13 +407,13 @@ export interface EventOption {
       task: TaskOrEmpty;
       index: number;
     }>,
-    parents: readonly Task[],
+    parents: readonly TaskOrEmpty[],
     suggestions: readonly OnDateChangeSuggestionType[]
   ) => void;
   /**
    * Callback for getting new data of the edited task
    */
-  onEditTask?: (task: TaskOrEmpty) => Promise<TaskOrEmpty | null>;
+  onEditTask?: (taskOrEmpty: TaskOrEmpty) => Promise<TaskOrEmpty | null>;
   /**
    * Invokes on edit button click
    */
@@ -504,7 +492,7 @@ export interface Icons {
   renderNoChildrenIcon: (task: TaskOrEmpty) => ReactNode;
 }
 
-export type BarMoveAction = "progress" | "end" | "start" | "move";
+export type BarMoveAction = 'progress' | 'end' | 'start' | 'move';
 
 export interface StylingOption {
   /**
@@ -522,8 +510,6 @@ export interface StylingOption {
   fontSize?: string;
   TooltipContent?: ComponentType<{
     task: Task;
-    fontSize: string;
-    fontFamily: string;
   }>;
   TaskListHeader?: ComponentType<TaskListHeaderProps>;
   TaskListTable?: ComponentType<TaskListTableProps>;
@@ -592,7 +578,7 @@ export interface TaskDependencyContextualPaletteProps {
   onClosePalette: () => void;
 }
 
-export type DateExtremity = "startOfTask" | "endOfTask";
+export type DateExtremity = 'startOfTask' | 'endOfTask';
 
 export interface GanttProps extends EventOption, DisplayOption, StylingOption {
   /**
@@ -615,28 +601,21 @@ export interface GanttProps extends EventOption, DisplayOption, StylingOption {
 export interface TaskListTableProps {
   canMoveTasks: boolean;
   childTasksMap: ChildByLevelMap;
-  colors: ColorStyles;
   columns: readonly Column[];
   cutIdsMirror: Readonly<Record<string, true>>;
   dateSetup: DateSetup;
   dependencyMap: DependencyMap;
   distances: Distances;
-  fontFamily: string;
-  fontSize: string;
   fullRowHeight: number;
   ganttFullHeight: number;
   getTaskCurrentState: (task: Task) => Task;
-  handleAddTask: (task: Task) => void;
+  handleAddTask: (task: TaskOrEmpty | null) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
-  handleEditTask: (task: TaskOrEmpty) => void;
+  handleEditTask: (taskOrEmpty: TaskOrEmpty) => void;
   handleMoveTaskBefore: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
   handleMoveTaskAfter: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
   handleMoveTasksInside: (parent: Task, childs: readonly TaskOrEmpty[]) => void;
-  handleOpenContextMenu: (
-    task: TaskOrEmpty,
-    clientX: number,
-    clientY: number
-  ) => void;
+  handleOpenContextMenu: (task: TaskOrEmpty, clientX: number, clientY: number) => void;
   icons?: Partial<Icons>;
   isShowTaskNumbers: boolean;
   mapTaskToNestedIndex: MapTaskToNestedIndex;
@@ -653,11 +632,8 @@ export interface TaskListTableProps {
 export interface TaskListHeaderProps extends TaskListHeaderActionsProps {
   headerHeight: number;
   columns: readonly Column[];
-  fontFamily: string;
-  fontSize: string;
   canResizeColumns: boolean;
   onColumnResizeStart: (columnIndex: number, clientX: number) => void;
-  colors: ColorStyles;
 }
 
 // comparison level -> task id -> index in array of tasks
@@ -707,8 +683,7 @@ export interface TaskOutOfParentWarnings {
  *   },
  * }
  */
-export type ChildOutOfParentWarnings = Map<number,
-  Map<string, TaskOutOfParentWarnings>>;
+export type ChildOutOfParentWarnings = Map<number, Map<string, TaskOutOfParentWarnings>>;
 
 // comparison level -> task id -> expanded dependencies
 export type DependencyMap = Map<number, Map<string, ExpandedDependency[]>>;
@@ -809,9 +784,9 @@ export type ColumnData = {
   depth: number;
   dependencies: Task[];
   distances: Distances;
-  handleAddTask: (task: Task) => void;
+  handleAddTask: (task: TaskOrEmpty | null) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
-  handleEditTask: (task: TaskOrEmpty) => void;
+  handleEditTask: (taskOrEmpty: TaskOrEmpty) => void;
   hasChildren: boolean;
   icons?: Partial<Icons>;
   indexStr: string;
@@ -819,7 +794,6 @@ export type ColumnData = {
   isShowTaskNumbers: boolean;
   onExpanderClick: (task: Task) => void;
   task: TaskOrEmpty;
-  colors: Partial<ColorStyles>;
 };
 
 export type ColumnProps = {
@@ -841,47 +815,47 @@ export type OnResizeColumn = (
 ) => void;
 export type ChangeAction =
   | {
-  type: "add-childs";
-  parent: Task;
-  // comparison level -> task id
-  addedIdsMap: Map<number, Set<string>>;
-  addedChildsByLevelMap: ChildByLevelMap;
-  addedRootsByLevelMap: RootMapByLevel;
-  descendants: readonly TaskOrEmpty[];
-}
+      type: 'add-childs';
+      parent: TaskOrEmpty;
+      // comparison level -> task id
+      addedIdsMap: Map<number, Set<string>>;
+      addedChildsByLevelMap: ChildByLevelMap;
+      addedRootsByLevelMap: RootMapByLevel;
+      descendants: readonly TaskOrEmpty[];
+    }
   | {
-  type: "change";
-  task: TaskOrEmpty;
-}
+      type: 'change';
+      task: TaskOrEmpty;
+    }
   | {
-  type: "change_start_and_end";
-  task: Task;
-  changedTask: Task;
-  originalTask: Task;
-}
+      type: 'change_start_and_end';
+      task: Task;
+      changedTask: Task;
+      originalTask: Task;
+    }
   | {
-  type: "delete";
-  tasks: readonly TaskOrEmpty[];
-  // comparison level -> task id
-  deletedIdsMap: Map<number, Set<string>>;
-}
+      type: 'delete';
+      tasks: readonly TaskOrEmpty[];
+      // comparison level -> task id
+      deletedIdsMap: Map<number, Set<string>>;
+    }
   | {
-  type: "move-before";
-  target: TaskOrEmpty;
-  taskForMove: TaskOrEmpty;
-}
+      type: 'move-before';
+      target: TaskOrEmpty;
+      taskForMove: TaskOrEmpty;
+    }
   | {
-  type: "move-after";
-  target: TaskOrEmpty;
-  taskForMove: TaskOrEmpty;
-}
+      type: 'move-after';
+      target: TaskOrEmpty;
+      taskForMove: TaskOrEmpty;
+    }
   | {
-  type: "move-inside";
-  parent: Task;
-  childs: readonly TaskOrEmpty[];
-  // comparison level -> task id
-  movedIdsMap: Map<number, Set<string>>;
-};
+      type: 'move-inside';
+      parent: Task;
+      childs: readonly TaskOrEmpty[];
+      // comparison level -> task id
+      movedIdsMap: Map<number, Set<string>>;
+    };
 
 export type ChangeMetadata = [
   /**
@@ -898,7 +872,7 @@ export type ChangeMetadata = [
   /**
    * array of parents of the task
    */
-  Task[],
+  TaskOrEmpty[],
   /**
    * array of suggesgions for change parent
    */
@@ -1029,10 +1003,7 @@ export type ContextMenuOptionType = {
   icon?: ReactNode;
 };
 
-export type CheckTaskIdExistsAtLevel = (
-  newId: string,
-  comparisonLevel?: number
-) => boolean;
+export type CheckTaskIdExistsAtLevel = (newId: string, comparisonLevel?: number) => boolean;
 
 export type GetCopiedTaskId = (
   task: TaskOrEmpty,
@@ -1043,9 +1014,5 @@ export type AdjustTaskToWorkingDatesParams = {
   action: BarMoveAction;
   changedTask: Task;
   originalTask: Task;
-  roundDate: (
-    date: Date,
-    action: BarMoveAction,
-    dateExtremity: DateExtremity
-  ) => Date;
+  roundDate: (date: Date, action: BarMoveAction, dateExtremity: DateExtremity) => Date;
 };

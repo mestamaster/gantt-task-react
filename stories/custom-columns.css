@@ -1,0 +1,27 @@
+.column-selector {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.column-selector label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.multi-select {
+  min-width: 200px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.multi-select option {
+  padding: 8px;
+}
+
+.multi-select option:checked {
+  background-color: #e0e0e0;
+} 

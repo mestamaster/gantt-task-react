@@ -1,23 +1,20 @@
-import React, { memo, useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import React, { memo, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
 
-import { checkHasChildren } from "../../helpers/check-has-children";
-import { Task, TaskListTableProps, TaskOrEmpty } from "../../types/public-types";
-import { TaskListTableRow } from "./task-list-table-row";
+import { checkHasChildren } from '../../helpers/check-has-children';
+import { Task, TaskListTableProps, TaskOrEmpty } from '../../types/public-types';
+import { TaskListTableRow } from './task-list-table-row';
 
-import styles from "./task-list-table.module.css";
+import styles from './task-list-table.module.css';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
   canMoveTasks,
   childTasksMap,
-  colors,
   columns,
   cutIdsMirror,
   dateSetup,
   dependencyMap,
-  distances,
-  fontFamily,
-  fontSize,
   fullRowHeight,
   getTaskCurrentState,
   handleAddTask,
@@ -38,13 +35,15 @@ const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
   selectedIdsMirror,
   tasks,
 }) => {
+  const {
+    fonts: { fontFamily, fontSize },
+  } = useGanttStyleContext();
 
   const renderedTasks = useMemo(
     /**
      * TO DO: maybe consider tasks on other levels?
      */
-    () =>
-      tasks.filter(task => !task.comparisonLevel || task.comparisonLevel === 1),
+    () => tasks.filter(task => !task.comparisonLevel || task.comparisonLevel === 1),
     [tasks]
   );
 
@@ -85,12 +84,10 @@ const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
       renderedList.push(
         <TaskListTableRow
           canMoveTasks={canMoveTasks}
-          colors={colors}
           columns={columns}
           dateSetup={dateSetup}
           dependencyMap={dependencyMap}
           depth={depth}
-          distances={distances}
           fullRowHeight={fullRowHeight}
           getTaskCurrentState={getTaskCurrentState}
           handleAddTask={handleAddTask}
@@ -133,7 +130,6 @@ const TaskListTableDefaultInner: React.FC<TaskListTableProps> = ({
       </>
     );
   }, [
-    colors,
     columns,
     cutIdsMirror,
     fullRowHeight,

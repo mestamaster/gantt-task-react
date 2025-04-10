@@ -1,6 +1,6 @@
-import format from "date-fns/format";
+import format from 'date-fns/format';
 
-import {DateSetup, ViewMode} from "../../types/public-types";
+import { DateSetup, ViewMode } from '../../types/public-types';
 
 const getDayText = (date: Date, dateSetup: DateSetup) => {
   try {
@@ -18,7 +18,7 @@ const getMonthText = (date: Date, dateSetup: DateSetup) => {
       locale: dateSetup.dateLocale,
     });
   } catch (e) {
-    return date.toLocaleString("default", { month: "long" });
+    return date.toLocaleString('default', { month: 'long' });
   }
 };
 
@@ -60,6 +60,6 @@ export const defaultRenderTopHeader = (
       return `${getDayText(date, dateSetup)} ${getMonthText(date, dateSetup)}`;
 
     default:
-      throw new Error("Unknown viewMode");
+      throw new Error('Unknown viewMode');
   }
 };

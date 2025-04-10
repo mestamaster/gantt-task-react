@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
-import type { RefObject } from "react";
+import { useCallback, useEffect, useState } from 'react';
+import type { RefObject } from 'react';
 
-import { checkIsDescendant } from "../../helpers/check-is-descendant";
-import { getRelationCircleByCoordinates } from "../../helpers/get-relation-circle-by-coordinates";
+import { checkIsDescendant } from '../../helpers/check-is-descendant';
+import { getRelationCircleByCoordinates } from '../../helpers/get-relation-circle-by-coordinates';
 import {
   getMapTaskToCoordinatesOnLevel,
   getTaskCoordinates,
-} from "../../helpers/get-task-coordinates";
-import { GanttRelationEvent } from "../../types/gantt-task-actions";
+} from '../../helpers/get-task-coordinates';
+import { GanttRelationEvent } from '../../types/gantt-task-actions';
 import {
   Distances,
   MapTaskToCoordinates,
@@ -17,7 +17,7 @@ import {
   TaskMapByLevel,
   TaskOrEmpty,
   DateExtremity,
-} from "../../types/public-types";
+} from '../../types/public-types';
 
 type UseCreateRelationParams = {
   distances: Distances;
@@ -46,8 +46,7 @@ export const useCreateRelation = ({
   GanttRelationEvent | null,
   (extremity: DateExtremity, task: Task) => void
 ] => {
-  const [ganttRelationEvent, setGanttRelationEvent] =
-    useState<GanttRelationEvent | null>(null);
+  const [ganttRelationEvent, setGanttRelationEvent] = useState<GanttRelationEvent | null>(null);
 
   /**
    * Method is Start point of start draw relation
@@ -56,9 +55,7 @@ export const useCreateRelation = ({
     (extremity: DateExtremity, task: Task) => {
       const coordinates = getTaskCoordinates(task, mapTaskToCoordinates);
       const startX =
-        (extremity === "startOfTask") !== rtl
-          ? coordinates.x1 - 10
-          : coordinates.x2 + 10;
+        (extremity === 'startOfTask') !== rtl ? coordinates.x1 - 10 : coordinates.x2 + 10;
       const startY = coordinates.y + taskHalfHeight;
 
       setGanttRelationEvent({
@@ -159,8 +156,7 @@ export const useCreateRelation = ({
       );
 
       if (endExtremityRelationCircle) {
-        const [endRelationTask, endRelationExtremity] =
-          endExtremityRelationCircle;
+        const [endRelationTask, endRelationExtremity] = endExtremityRelationCircle;
 
         const { comparisonLevel: startComparisonLevel = 1 } = startRelationTask;
 
@@ -170,25 +166,19 @@ export const useCreateRelation = ({
           const indexesOnLevel = mapTaskToGlobalIndex.get(startComparisonLevel);
 
           if (!indexesOnLevel) {
-            throw new Error(
-              `Indexes are not found for level ${startComparisonLevel}`
-            );
+            throw new Error(`Indexes are not found for level ${startComparisonLevel}`);
           }
 
           const startIndex = indexesOnLevel.get(startRelationTask.id);
 
-          if (typeof startIndex !== "number") {
-            throw new Error(
-              `Index is not found for task ${startRelationTask.id}`
-            );
+          if (typeof startIndex !== 'number') {
+            throw new Error(`Index is not found for task ${startRelationTask.id}`);
           }
 
           const endIndex = indexesOnLevel.get(endRelationTask.id);
 
-          if (typeof endIndex !== "number") {
-            throw new Error(
-              `Index is not found for task ${endRelationTask.id}`
-            );
+          if (typeof endIndex !== 'number') {
+            throw new Error(`Index is not found for task ${endRelationTask.id}`);
           }
 
           const isOneDescendant =
@@ -220,16 +210,16 @@ export const useCreateRelation = ({
       }
     };
 
-    svgNode.addEventListener("mousemove", handleMouseMove);
-    svgNode.addEventListener("touchmove", handleTouchMove);
-    svgNode.addEventListener("mouseup", handleMouseUp);
-    svgNode.addEventListener("touchend", handleTouchEnd);
+    svgNode.addEventListener('mousemove', handleMouseMove);
+    svgNode.addEventListener('touchmove', handleTouchMove);
+    svgNode.addEventListener('mouseup', handleMouseUp);
+    svgNode.addEventListener('touchend', handleTouchEnd);
 
     return () => {
-      svgNode.removeEventListener("mousemove", handleMouseMove);
-      svgNode.removeEventListener("touchmove", handleTouchMove);
-      svgNode.removeEventListener("mouseup", handleMouseUp);
-      svgNode.removeEventListener("touchend", handleTouchEnd);
+      svgNode.removeEventListener('mousemove', handleMouseMove);
+      svgNode.removeEventListener('touchmove', handleTouchMove);
+      svgNode.removeEventListener('mouseup', handleMouseUp);
+      svgNode.removeEventListener('touchend', handleTouchEnd);
     };
   }, [
     ganttSVGRef,

@@ -1,21 +1,21 @@
-import differenceInDays from "date-fns/differenceInDays";
-import differenceInHours from "date-fns/differenceInHours";
-import differenceInMinutes from "date-fns/differenceInMinutes";
-import differenceInMonths from "date-fns/differenceInMonths";
-import endOfDay from "date-fns/endOfDay";
-import endOfHour from "date-fns/endOfHour";
-import endOfMonth from "date-fns/endOfMonth";
-import endOfWeek from "date-fns/endOfISOWeek";
-import endOfQuarter from "date-fns/endOfQuarter";
-import endOfYear from "date-fns/endOfYear";
-import subDays from "date-fns/subDays";
-import subHours from "date-fns/subHours";
-import subMonths from "date-fns/subMonths";
-import subWeeks from "date-fns/subWeeks";
-import subYears from "date-fns/subYears";
-import subQuarters from "date-fns/subQuarters";
+import differenceInDays from 'date-fns/differenceInDays';
+import differenceInHours from 'date-fns/differenceInHours';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
+import differenceInMonths from 'date-fns/differenceInMonths';
+import endOfDay from 'date-fns/endOfDay';
+import endOfHour from 'date-fns/endOfHour';
+import endOfMonth from 'date-fns/endOfMonth';
+import endOfWeek from 'date-fns/endOfISOWeek';
+import endOfQuarter from 'date-fns/endOfQuarter';
+import endOfYear from 'date-fns/endOfYear';
+import subDays from 'date-fns/subDays';
+import subHours from 'date-fns/subHours';
+import subMonths from 'date-fns/subMonths';
+import subWeeks from 'date-fns/subWeeks';
+import subYears from 'date-fns/subYears';
+import subQuarters from 'date-fns/subQuarters';
 
-import { ViewMode } from "../../types/public-types";
+import { ViewMode } from '../../types/public-types';
 
 export const defaultRoundEndDate = (date: Date, viewMode: ViewMode) => {
   switch (viewMode) {
@@ -101,7 +101,7 @@ export const defaultRoundEndDate = (date: Date, viewMode: ViewMode) => {
       return subMonths(end, 1);
     }
 
-    case ViewMode.QuarterYear:{
+    case ViewMode.QuarterYear: {
       const end = endOfQuarter(date);
       const diff = differenceInMonths(end, date);
 

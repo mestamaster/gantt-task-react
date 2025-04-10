@@ -1,0 +1,91 @@
+import React from 'react';
+import { createContext, useContext, ReactNode } from 'react';
+import type { ColorStyles } from '../types/public-types';
+
+export interface FontStyles {
+  fontFamily: string;
+  fontSize: string;
+}
+
+export const defaultColors: ColorStyles = {
+  arrowColor: 'grey',
+  arrowCriticalColor: '#ff0000',
+  arrowWarningColor: '#ffbc00',
+  barLabelColor: '#000',
+  barLabelWhenOutsideColor: '#555',
+  barProgressColor: '#a3a3ff',
+  barProgressCriticalColor: '#ff1919',
+  barProgressSelectedColor: '#8282f5',
+  barProgressSelectedCriticalColor: '#ff0000',
+  barBackgroundColor: '#b8c2cc',
+  barBackgroundCriticalColor: '#ff6363',
+  barBackgroundSelectedColor: '#aeb8c2',
+  barBackgroundSelectedCriticalColor: '#ff8e8e',
+  groupProgressColor: '#2dbb2e',
+  groupProgressCriticalColor: '#2dbb2e',
+  groupProgressSelectedColor: '#28a329',
+  groupProgressSelectedCriticalColor: '#28a329',
+  groupBackgroundColor: '#006bc1',
+  groupBackgroundCriticalColor: '#006bc1',
+  groupBackgroundSelectedColor: '#407fbf',
+  groupBackgroundSelectedCriticalColor: '#407fbf',
+  projectProgressColor: '#7db59a',
+  projectProgressCriticalColor: '#7db59a',
+  projectProgressSelectedColor: '#59a985',
+  projectProgressSelectedCriticalColor: '#59a985',
+  projectBackgroundColor: '#fac465',
+  projectBackgroundCriticalColor: '#fac465',
+  projectBackgroundSelectedColor: '#f7bb53',
+  projectBackgroundSelectedCriticalColor: '#f7bb53',
+  milestoneBackgroundColor: '#f1c453',
+  milestoneBackgroundCriticalColor: '#ff8e8e',
+  milestoneBackgroundSelectedColor: '#f29e4c',
+  milestoneBackgroundSelectedCriticalColor: '#ff0000',
+  evenTaskBackgroundColor: '#f5f5f5',
+  oddTaskBackgroundColor: '#fff',
+  holidayBackgroundColor: 'rgba(233, 233, 233, 0.3)',
+  selectedTaskBackgroundColor: 'rgba(252, 248, 227, 0.5)',
+  taskDragColor: '#7474ff',
+  todayColor: 'rgba(252, 248, 227, 0.5)',
+  contextMenuBoxShadow: 'rgb(0 0 0 / 25%) 1px 1px 5px 1px',
+  contextMenuBgColor: '#fff',
+  contextMenuTextColor: 'inherit',
+};
+
+export const defaultFonts: FontStyles = {
+  fontFamily: 'Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue',
+  fontSize: '14px',
+};
+
+interface StyleContextType {
+  colors: ColorStyles;
+  fonts: FontStyles;
+}
+
+export const StyleContext = createContext<StyleContextType>({
+  colors: defaultColors,
+  fonts: defaultFonts,
+});
+
+interface StyleProviderProps {
+  children: ReactNode;
+  colors?: Partial<ColorStyles>;
+  fonts?: Partial<FontStyles>;
+}
+
+export const StyleProvider = ({ children, colors, fonts }: StyleProviderProps) => {
+  const styleContextValue: StyleContextType = {
+    colors: { ...defaultColors, ...colors },
+    fonts: { ...defaultFonts, ...fonts },
+  };
+
+  return <StyleContext.Provider value={styleContextValue}>{children}</StyleContext.Provider>;
+};
+
+export const useGanttStyleContext = () => {
+  const context = useContext(StyleContext);
+  if (!context) {
+    throw new Error('useGanttStyleContext must be used within a StyleProvider');
+  }
+  return context;
+};

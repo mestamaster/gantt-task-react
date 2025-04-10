@@ -1,8 +1,8 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { adjustTaskToWorkingDates as defaultAdjustTaskToWorkingDates } from "../../helpers/adjust-task-to-working-dates";
-import { getNextWorkingDate as defaultGetNextWorkingDate } from "../../helpers/get-previous-next-working-date";
-import { getPreviousWorkingDate as defaultGetPreviousWorkingDate } from "../../helpers/get-previous-next-working-date";
+import { adjustTaskToWorkingDates as defaultAdjustTaskToWorkingDates } from '../../helpers/adjust-task-to-working-dates';
+import { getNextWorkingDate as defaultGetNextWorkingDate } from '../../helpers/get-previous-next-working-date';
+import { getPreviousWorkingDate as defaultGetPreviousWorkingDate } from '../../helpers/get-previous-next-working-date';
 
 import {
   AdjustTaskToWorkingDatesParams,
@@ -10,8 +10,8 @@ import {
   DateExtremity,
   DateSetup,
   GanttDateRounding,
-} from "../../types/public-types";
-import { getStepTime } from "../../helpers/round-task-dates";
+} from '../../types/public-types';
+import { getStepTime } from '../../helpers/round-task-dates';
 
 type UseHolidaysParams = {
   checkIsHolidayProp: (
@@ -23,11 +23,7 @@ type UseHolidaysParams = {
   dateSetup: DateSetup;
   isAdjustToWorkingDates: boolean;
   minTaskDate: Date;
-  roundDate: (
-    date: Date,
-    action: BarMoveAction,
-    dateExtremity: DateExtremity
-  ) => Date;
+  roundDate: (date: Date, action: BarMoveAction, dateExtremity: DateExtremity) => Date;
   dateMoveStep: GanttDateRounding;
 };
 
@@ -45,19 +41,8 @@ export const useHolidays = ({
     [checkIsHolidayProp, dateSetup, minTaskDate]
   );
 
-  const getNextWorkingDate = (
-    date: Date,
-    action: BarMoveAction,
-    dateExtremity: DateExtremity
-  ) =>
-    defaultGetNextWorkingDate(
-      date,
-      action,
-      roundDate,
-      dateExtremity,
-      checkIsHoliday,
-      dateMoveStep
-    );
+  const getNextWorkingDate = (date: Date, action: BarMoveAction, dateExtremity: DateExtremity) =>
+    defaultGetNextWorkingDate(date, action, roundDate, dateExtremity, checkIsHoliday, dateMoveStep);
 
   const getPreviousWorkingDate = (
     date: Date,

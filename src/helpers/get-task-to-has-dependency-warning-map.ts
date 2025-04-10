@@ -1,7 +1,4 @@
-import type {
-  DependencyMargins,
-  TaskToHasDependencyWarningMap,
-} from "../types/public-types";
+import type { DependencyMargins, TaskToHasDependencyWarningMap } from '../types/public-types';
 
 const checkTaskHasWarning = (dependencyMarginsForTask: Map<string, number>) => {
   for (let value of dependencyMarginsForTask.values()) {
@@ -14,7 +11,7 @@ const checkTaskHasWarning = (dependencyMarginsForTask: Map<string, number>) => {
 };
 
 export const getTaskToHasDependencyWarningMap = (
-  dependencyMarginsMap: DependencyMargins,
+  dependencyMarginsMap: DependencyMargins
 ): TaskToHasDependencyWarningMap => {
   const res = new Map<number, Set<string>>();
 

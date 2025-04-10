@@ -1,9 +1,9 @@
 {
-  "name": "@wamra/gantt-task-react",
+  "name": "@mestamaster/pasgantti",
   "version": "0.6.17",
   "description": "Interactive Gantt Chart for React with TypeScript",
-  "author": "WAMRA <wamra@users.noreply.github.com>",
-  "homepage": "https://github.com/wamra/gantt-task-react/blob/main/README.md#gantt-task-react",
+  "author": "Mestamaster <mestamaster@users.noreply.github.com>",
+  "homepage": "https://github.com/mestmaster/pasgantti/blob/main/README.md#pasgantti",
   "license": "MIT",
   "contributors": [
     {
@@ -13,17 +13,21 @@
     {
       "name": "Janlaywss",
       "url": "https://github.com/Janlaywss"
+    },
+    {
+      "name": "wamra",
+      "url": "https://github.com/wamra"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wamra/gantt-task-react.git"
+    "url": "git@github.com:mestamaster/pasgantti.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "main": "./dist/gantt-task-react.umd.js",
-  "module": "./dist/gantt-task-react.es.js",
+  "main": "./dist/pasgantti.umd.js",
+  "module": "./dist/pasgantti.es.js",
   "types": "./dist/index.d.ts",
   "source": "src/index.tsx",
   "keywords": [
@@ -49,19 +53,20 @@
     "test:watch": "react-scripts test --env=jsdom",
     "predeploy": "yarn storybook build",
     "deploy-storybook": "gh-pages -d storybook-static",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss}\""
   },
   "dependencies": {
     "@floating-ui/dom": "1.1.1",
     "@floating-ui/react": "0.19.2",
+    "@uidotdev/usehooks": "^2.4.1",
     "date-fns": "2.29.3"
   },
   "overrides": {
     "typescript": "~5.1.6"
   },
   "peerDependencies": {
-    "@mui/icons-material": "^6.1.0",
-    "@mui/material": "^6.1.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
@@ -71,8 +76,6 @@
     "@emotion/react": "11.13.5",
     "@emotion/styled": "11.13.5",
     "@mdx-js/react": "~2.2.1",
-    "@mui/icons-material": "^6.1.9",
-    "@mui/material": "^6.1.9",
     "@rollup/plugin-image": "2.1.1",
     "@storybook/addon-controls": "~7.6.20",
     "@storybook/addon-docs": "~7.6.20",
@@ -90,12 +93,13 @@
     "@testing-library/user-event": "~14.2.6",
     "@types/jest": "~27.5.2",
     "@types/node": "~15.0.3",
-    "@types/react": "~18.3.12",
-    "@types/react-dom": "~18.3.1",
-    "@vitejs/plugin-react": "4.0.4",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "^4.0.4",
     "cross-env": "~7.0.3",
     "doctrine": "~3.0.0",
     "eslint": "^8.50.0",
+    "eslint-config-prettier": "^10.1.1",
     "eslint-config-react-app": "^7.0.1",
     "gh-pages": "~5.0.0",
     "identity-obj-proxy": "~3.0.0",
@@ -106,7 +110,7 @@
     "postcss-normalize": "~10.0.1",
     "postcss-preset-env": "~8.0.1",
     "prettier": "~2.8.8",
-    "react": "~18.3.1",
+    "react": "18.3.1",
     "react-dom": "~18.3.1",
     "react-scripts": "^5.0.1",
     "rollup-plugin-peer-deps-external": "2.2.4",
@@ -125,5 +129,6 @@
     "moduleNameMapper": {
       "/~.+\\.module\\.(css|sass|scss)$/": "identity-obj-proxy"
     }
-  }
+  },
+  "packageManager": "yarn@4.8.1"
 }

@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
-import { RefObject } from "react";
+import { useCallback, useEffect, useState } from 'react';
+import { RefObject } from 'react';
 
-import { SCROLL_STEP } from "../../constants";
+import { SCROLL_STEP } from '../../constants';
 
-import { handleTaskBySVGMouseEvent } from "../../helpers/bar-helper";
+import { handleTaskBySVGMouseEvent } from '../../helpers/bar-helper';
 
-import { getTaskCoordinates } from "../../helpers/get-task-coordinates";
-import { roundTaskDates } from "../../helpers/round-task-dates";
+import { getTaskCoordinates } from '../../helpers/get-task-coordinates';
+import { roundTaskDates } from '../../helpers/round-task-dates';
 
 import {
   ChangeInProgress,
@@ -20,7 +20,7 @@ import {
   DateExtremity,
   BarMoveAction,
   GanttDateRounding,
-} from "../../types/public-types";
+} from '../../types/public-types';
 
 const SCROLL_DELAY = 25;
 const SIDE_SCROLL_AREA_WIDTH = 70;
@@ -34,12 +34,11 @@ const getNextCoordinates = (
   const { action, additionalLeftSpace, initialCoordinates, startX } = prevValue;
 
   switch (action) {
-    case "end": {
+    case 'end': {
       const nextX2 = Math.max(nextX, initialCoordinates.x1);
       const x2Diff = nextX2 - initialCoordinates.x2;
 
-      const progressWidth =
-        (nextX2 - initialCoordinates.x1) * task.progress * 0.01;
+      const progressWidth = (nextX2 - initialCoordinates.x1) * task.progress * 0.01;
 
       if (rtl) {
         return [
@@ -67,12 +66,11 @@ const getNextCoordinates = (
       ];
     }
 
-    case "start": {
+    case 'start': {
       const nextX1 = Math.min(nextX, initialCoordinates.x2);
       const x1Diff = nextX1 - initialCoordinates.x1;
 
-      const progressWidth =
-        (initialCoordinates.x2 - nextX1) * task.progress * 0.01;
+      const progressWidth = (initialCoordinates.x2 - nextX1) * task.progress * 0.01;
 
       if (rtl) {
         return [
@@ -101,7 +99,7 @@ const getNextCoordinates = (
       ];
     }
 
-    case "progress": {
+    case 'progress': {
       const nextProgressEndX = Math.min(
         Math.max(nextX, initialCoordinates.x1),
         initialCoordinates.x2
@@ -127,7 +125,7 @@ const getNextCoordinates = (
       ];
     }
 
-    case "move": {
+    case 'move': {
       const diff = nextX - startX;
 
       const nextX1 = initialCoordinates.x1 + diff;
@@ -151,32 +149,28 @@ const getNextCoordinates = (
   }
 };
 
-const getNextTsDiff = (
-  changedTask: Task,
-  prevValue: ChangeInProgress,
-  rtl: boolean
-): number => {
+const getNextTsDiff = (changedTask: Task, prevValue: ChangeInProgress, rtl: boolean): number => {
   const { action, originalTask: task } = prevValue;
 
   switch (action) {
-    case "end":
+    case 'end':
       if (rtl) {
         return changedTask.start.getTime() - task.start.getTime();
       }
 
       return changedTask.end.getTime() - task.end.getTime();
 
-    case "start":
+    case 'start':
       if (rtl) {
         return changedTask.end.getTime() - task.end.getTime();
       }
 
       return changedTask.start.getTime() - task.start.getTime();
 
-    case "progress":
+    case 'progress':
       return 0;
 
-    case "move":
+    case 'move':
       return changedTask.start.getTime() - task.start.getTime();
 
     default:
@@ -190,17 +184,9 @@ type UseTaskDragParams = {
   ganttSVGRef: RefObject<SVGSVGElement>;
   mapTaskToCoordinates: MapTaskToCoordinates;
   mapTaskToGlobalIndex: TaskToGlobalIndexMap;
-  onDateChange: (
-    action: BarMoveAction,
-    changedTask: Task,
-    originalTask: Task
-  ) => void;
+  onDateChange: (action: BarMoveAction, changedTask: Task, originalTask: Task) => void;
   onProgressChange: (task: Task) => void;
-  roundDate: (
-    date: Date,
-    action: BarMoveAction,
-    dateExtremity: DateExtremity
-  ) => Date;
+  roundDate: (date: Date, action: BarMoveAction, dateExtremity: DateExtremity) => Date;
   dateMoveStep: GanttDateRounding;
   rtl: boolean;
   scrollToLeftStep: () => void;
@@ -236,15 +222,9 @@ export const useTaskDrag = ({
   xStep,
 }: UseTaskDragParams): [
   ChangeInProgress | null,
-  (
-    action: BarMoveAction,
-    task: Task,
-    clientX: number,
-    taskRootNode: Element
-  ) => void
+  (action: BarMoveAction, task: Task, clientX: number, taskRootNode: Element) => void
 ] => {
-  const [changeInProgress, setChangeInProgress] =
-    useState<ChangeInProgress | null>(null);
+  const [changeInProgress, setChangeInProgress] = useState<ChangeInProgress | null>(null);
 
   const changeInProgressTask = changeInProgress?.originalTask;
 
@@ -254,12 +234,7 @@ export const useTaskDrag = ({
    * Method is Start point of task change
    */
   const handleTaskDragStart = useCallback(
-    (
-      action: BarMoveAction,
-      task: Task,
-      clientX: number,
-      taskRootNode: Element
-    ) => {
+    (action: BarMoveAction, task: Task, clientX: number, taskRootNode: Element) => {
       if (changeInProgress) {
         return;
       }
@@ -309,8 +284,7 @@ export const useTaskDrag = ({
         return;
       }
 
-      const { originalTask: task, additionalLeftSpace } =
-        changeInProgressLatest;
+      const { originalTask: task, additionalLeftSpace } = changeInProgressLatest;
 
       setChangeInProgress(prevValue => {
         if (!prevValue) {
@@ -365,8 +339,8 @@ export const useTaskDrag = ({
 
       if (scrollX > lastClientX - SIDE_SCROLL_AREA_WIDTH) {
         switch (action) {
-          case "start":
-          case "move":
+          case 'start':
+          case 'move':
             if (scrollX > 0) {
               recountOnMove(lastClientX - SCROLL_STEP);
               scrollToLeftStep();
@@ -379,39 +353,36 @@ export const useTaskDrag = ({
                 const nextCoordinates: TaskCoordinates = {
                   ...prevValue.coordinates,
                   containerX: prevValue.coordinates.containerX - SCROLL_STEP,
-                  containerWidth:
-                    prevValue.coordinates.containerWidth + SCROLL_STEP,
+                  containerWidth: prevValue.coordinates.containerWidth + SCROLL_STEP,
                   innerX2:
-                    prevValue.action === "start"
+                    prevValue.action === 'start'
                       ? prevValue.coordinates.innerX2 + SCROLL_STEP
                       : prevValue.coordinates.innerX2,
                   progressX: prevValue.coordinates.progressX - SCROLL_STEP,
                   width:
-                    prevValue.action === "start"
+                    prevValue.action === 'start'
                       ? prevValue.coordinates.width + SCROLL_STEP
                       : prevValue.coordinates.width,
                   x1: prevValue.coordinates.x1 - SCROLL_STEP,
                   x2:
-                    prevValue.action === "move"
+                    prevValue.action === 'move'
                       ? prevValue.coordinates.x2 - SCROLL_STEP
                       : prevValue.coordinates.x2,
                 };
 
-                const { changedTask: newChangedTask } =
-                  handleTaskBySVGMouseEvent(
-                    prevValue.action,
-                    prevValue.originalTask,
-                    prevValue.initialCoordinates,
-                    nextCoordinates,
-                    xStep,
-                    timeStep,
-                    rtl
-                  );
+                const { changedTask: newChangedTask } = handleTaskBySVGMouseEvent(
+                  prevValue.action,
+                  prevValue.originalTask,
+                  prevValue.initialCoordinates,
+                  nextCoordinates,
+                  xStep,
+                  timeStep,
+                  rtl
+                );
 
                 return {
                   ...prevValue,
-                  additionalLeftSpace:
-                    prevValue.additionalLeftSpace + SCROLL_STEP,
+                  additionalLeftSpace: prevValue.additionalLeftSpace + SCROLL_STEP,
                   changedTask: newChangedTask,
                   coordinates: nextCoordinates,
                   coordinatesDiff: prevValue.coordinatesDiff - SCROLL_STEP,
@@ -421,7 +392,7 @@ export const useTaskDrag = ({
             }
             return;
 
-          case "end":
+          case 'end':
             if (scrollX > 0) {
               recountOnMove(lastClientX - SCROLL_STEP);
               scrollToLeftStep();
@@ -439,8 +410,8 @@ export const useTaskDrag = ({
 
       if (scrollX + svgClientWidth < lastClientX + SIDE_SCROLL_AREA_WIDTH) {
         switch (action) {
-          case "end":
-          case "move":
+          case 'end':
+          case 'move':
             if (svgWidth > scrollX + svgClientWidth) {
               recountOnMove(lastClientX + SCROLL_STEP);
               scrollToRightStep();
@@ -452,40 +423,37 @@ export const useTaskDrag = ({
 
                 const nextCoordinates: TaskCoordinates = {
                   ...prevValue.coordinates,
-                  containerWidth:
-                    prevValue.coordinates.containerWidth + SCROLL_STEP,
+                  containerWidth: prevValue.coordinates.containerWidth + SCROLL_STEP,
                   innerX1:
-                    prevValue.action === "move"
+                    prevValue.action === 'move'
                       ? prevValue.coordinates.innerX1 + SCROLL_STEP
                       : prevValue.coordinates.innerX1,
                   innerX2: prevValue.coordinates.innerX2 + SCROLL_STEP,
                   progressX: prevValue.coordinates.progressX + SCROLL_STEP,
                   width:
-                    prevValue.action === "end"
+                    prevValue.action === 'end'
                       ? prevValue.coordinates.width + SCROLL_STEP
                       : prevValue.coordinates.width,
                   x1:
-                    prevValue.action === "move"
+                    prevValue.action === 'move'
                       ? prevValue.coordinates.x1 + SCROLL_STEP
                       : prevValue.coordinates.x1,
                   x2: prevValue.coordinates.x2 + SCROLL_STEP,
                 };
 
-                const { changedTask: newChangedTask } =
-                  handleTaskBySVGMouseEvent(
-                    prevValue.action,
-                    prevValue.originalTask,
-                    prevValue.initialCoordinates,
-                    nextCoordinates,
-                    xStep,
-                    timeStep,
-                    rtl
-                  );
+                const { changedTask: newChangedTask } = handleTaskBySVGMouseEvent(
+                  prevValue.action,
+                  prevValue.originalTask,
+                  prevValue.initialCoordinates,
+                  nextCoordinates,
+                  xStep,
+                  timeStep,
+                  rtl
+                );
 
                 return {
                   ...prevValue,
-                  additionalRightSpace:
-                    prevValue.additionalRightSpace + SCROLL_STEP,
+                  additionalRightSpace: prevValue.additionalRightSpace + SCROLL_STEP,
                   changedTask: newChangedTask,
                   coordinates: nextCoordinates,
                   coordinatesDiff: prevValue.coordinatesDiff + SCROLL_STEP,
@@ -496,7 +464,7 @@ export const useTaskDrag = ({
             }
             return;
 
-          case "start":
+          case 'start':
             if (svgWidth > scrollX + svgClientWidth) {
               recountOnMove(lastClientX + SCROLL_STEP);
               scrollToRightStep();
@@ -529,12 +497,7 @@ export const useTaskDrag = ({
     if (additionalRightSpace) {
       setScrollXProgrammatically((scrollX || 0) + (svgClientWidth || 0));
     }
-  }, [
-    additionalRightSpace,
-    scrollX,
-    setScrollXProgrammatically,
-    svgClientWidth,
-  ]);
+  }, [additionalRightSpace, scrollX, setScrollXProgrammatically, svgClientWidth]);
 
   useEffect(() => {
     const svgNode = ganttSVGRef.current;
@@ -580,47 +543,41 @@ export const useTaskDrag = ({
 
       const { action, originalTask: task } = changeInProgressLatest;
 
-      const { isChanged, changedTask: newChangedTask } =
-        handleTaskBySVGMouseEvent(
-          action,
-          task,
-          changeInProgressLatest.initialCoordinates,
-          changeInProgressLatest.coordinates,
-          xStep,
-          timeStep,
-          rtl
-        );
+      const { isChanged, changedTask: newChangedTask } = handleTaskBySVGMouseEvent(
+        action,
+        task,
+        changeInProgressLatest.initialCoordinates,
+        changeInProgressLatest.coordinates,
+        xStep,
+        timeStep,
+        rtl
+      );
 
       setChangeInProgress(null);
       if (!isChanged) {
         return;
       }
 
-      if (action === "progress") {
+      if (action === 'progress') {
         onProgressChange(newChangedTask);
         return;
       }
 
-      const roundedChangedTask = roundTaskDates(
-        newChangedTask,
-        roundDate,
-        action,
-        dateMoveStep
-      );
+      const roundedChangedTask = roundTaskDates(newChangedTask, roundDate, action, dateMoveStep);
 
       onDateChange(action, roundedChangedTask, task);
     };
 
-    svgNode.addEventListener("mousemove", handleMouseMove);
-    svgNode.addEventListener("touchmove", handleTouchMove);
-    svgNode.addEventListener("mouseup", handleUp);
-    svgNode.addEventListener("touchend", handleUp);
+    svgNode.addEventListener('mousemove', handleMouseMove);
+    svgNode.addEventListener('touchmove', handleTouchMove);
+    svgNode.addEventListener('mouseup', handleUp);
+    svgNode.addEventListener('touchend', handleUp);
 
     return () => {
-      svgNode.removeEventListener("mousemove", handleMouseMove);
-      svgNode.removeEventListener("touchmove", handleTouchMove);
-      svgNode.removeEventListener("mouseup", handleUp);
-      svgNode.removeEventListener("touchend", handleUp);
+      svgNode.removeEventListener('mousemove', handleMouseMove);
+      svgNode.removeEventListener('touchmove', handleTouchMove);
+      svgNode.removeEventListener('mouseup', handleUp);
+      svgNode.removeEventListener('touchend', handleUp);
     };
   }, [
     changeInProgress,

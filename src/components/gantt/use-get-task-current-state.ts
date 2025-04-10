@@ -1,10 +1,10 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import addMilliseconds from "date-fns/addMilliseconds";
-import maxDate from "date-fns/max";
-import minDate from "date-fns/min";
+import addMilliseconds from 'date-fns/addMilliseconds';
+import maxDate from 'date-fns/max';
+import minDate from 'date-fns/min';
 
-import { checkIsDescendant } from "../../helpers/check-is-descendant";
+import { checkIsDescendant } from '../../helpers/check-is-descendant';
 
 import type {
   AdjustTaskToWorkingDatesParams,
@@ -15,8 +15,8 @@ import type {
   MapTaskToCoordinates,
   Task,
   TaskMapByLevel,
-} from "../../types/public-types";
-import { roundTaskDates } from "../../helpers/round-task-dates";
+} from '../../types/public-types';
+import { roundTaskDates } from '../../helpers/round-task-dates';
 
 type UseGetTaskCurrentStateParams = {
   adjustTaskToWorkingDates: (params: AdjustTaskToWorkingDatesParams) => Task;
@@ -25,11 +25,7 @@ type UseGetTaskCurrentStateParams = {
   isMoveChildsWithParent: boolean;
   isUpdateDisabledParentsOnChange: boolean;
   mapTaskToCoordinates: MapTaskToCoordinates;
-  roundDate: (
-    date: Date,
-    action: BarMoveAction,
-    dateExtremity: DateExtremity
-  ) => Date;
+  roundDate: (date: Date, action: BarMoveAction, dateExtremity: DateExtremity) => Date;
   tasksMap: TaskMapByLevel;
   dateMoveStep: GanttDateRounding;
 };
@@ -90,12 +86,8 @@ export const useGetTaskCurrentState = ({
         // the aim of this part is to update child of the being moved task
         if (
           isMoveChildsWithParent &&
-          changeInProgress.action === "move" &&
-          checkIsDescendant(
-            changeInProgress.originalTask,
-            currentOriginalTask,
-            tasksMap
-          )
+          changeInProgress.action === 'move' &&
+          checkIsDescendant(changeInProgress.originalTask, currentOriginalTask, tasksMap)
         ) {
           const { tsDiff } = changeInProgress;
 
@@ -132,20 +124,14 @@ export const useGetTaskCurrentState = ({
           isUpdateDisabledParentsOnChange &&
           currentOriginalTask.isDisabled &&
           currentOriginalTask.id == changeInProgress.originalTask.parent &&
-          checkIsDescendant(
-            currentOriginalTask,
-            changeInProgress.originalTask,
-            tasksMap
-          )
+          checkIsDescendant(currentOriginalTask, changeInProgress.originalTask, tasksMap)
         ) {
           // Get all the children of the current Task
           const childrenTasks = Array.from(
             tasksMap.get(currentOriginalTask.comparisonLevel || 1).values()
           )
             .filter(task => {
-              return (
-                task.parent == currentOriginalTask.id && task.type !== "empty"
-              );
+              return task.parent == currentOriginalTask.id && task.type !== 'empty';
             })
             .map(task => task as Task);
 

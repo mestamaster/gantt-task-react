@@ -1,6 +1,4 @@
-import type {
-  ContextMenuOptionType,
-} from '../types/public-types';
+import type { ContextMenuOptionType } from '../types/public-types';
 
 export const pasteOption: ContextMenuOptionType = {
   action: ({
@@ -36,11 +34,7 @@ export const pasteOption: ContextMenuOptionType = {
     }
   },
 
-  checkIsAvailable: ({
-    checkHasCopyTasks,
-    checkHasCutTasks,
-    task,
-  }) => {
+  checkIsAvailable: ({ checkHasCopyTasks, checkHasCutTasks, task }) => {
     if (task.type === 'empty' || task.type === 'milestone') {
       return false;
     }

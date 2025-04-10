@@ -1,17 +1,13 @@
-import differenceInDays from "date-fns/differenceInDays";
-import differenceInHours from "date-fns/differenceInHours";
-import differenceInMonths from "date-fns/differenceInMonths";
-import differenceInWeeks from "date-fns/differenceInWeeks";
-import differenceInYears from "date-fns/differenceInYears";
-import differenceInQuarters from "date-fns/differenceInQuarters";
+import differenceInDays from 'date-fns/differenceInDays';
+import differenceInHours from 'date-fns/differenceInHours';
+import differenceInMonths from 'date-fns/differenceInMonths';
+import differenceInWeeks from 'date-fns/differenceInWeeks';
+import differenceInYears from 'date-fns/differenceInYears';
+import differenceInQuarters from 'date-fns/differenceInQuarters';
 
-import {ViewMode} from "../types/public-types";
+import { ViewMode } from '../types/public-types';
 
-export const getDatesDiff = (
-  dateFrom: Date,
-  dateTo: Date,
-  viewMode: ViewMode
-) => {
+export const getDatesDiff = (dateFrom: Date, dateTo: Date, viewMode: ViewMode) => {
   switch (viewMode) {
     case ViewMode.Day:
       return differenceInDays(dateFrom, dateTo);
@@ -41,6 +37,6 @@ export const getDatesDiff = (
       return differenceInYears(dateFrom, dateTo);
 
     default:
-      throw new Error("Unknown view mode");
+      throw new Error('Unknown view mode');
   }
 };

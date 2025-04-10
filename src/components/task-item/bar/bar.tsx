@@ -1,25 +1,22 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 
-import { getProgressPoint } from "../../../helpers/bar-helper";
-import { BarDisplay } from "./bar-display";
-import { BarDateHandle } from "./bar-date-handle";
-import { BarProgressHandle } from "./bar-progress-handle";
-import type { TaskItemProps } from "../task-item";
+import { getProgressPoint } from '../../../helpers/bar-helper';
+import { BarDisplay } from './bar-display';
+import { BarDateHandle } from './bar-date-handle';
+import { BarProgressHandle } from './bar-progress-handle';
+import type { TaskItemProps } from '../task-item';
 
-import styles from "./bar.module.css";
-import stylesRelationHandle from "./bar-relation-handle.module.css";
-import { ProjectDisplay } from "../project/project-display";
-import { BarMoveAction } from "../../../types/public-types";
-
+import styles from './bar.module.css';
+import stylesRelationHandle from './bar-relation-handle.module.css';
+import { ProjectDisplay } from '../project/project-display';
+import { BarMoveAction } from '../../../types/public-types';
+import { useGanttDimensions } from '../../../contexts/use-gantt-dimensions';
 export const Bar: React.FC<
   TaskItemProps & {
     onTaskEventStart: (action: BarMoveAction, clientX: number) => void;
   }
 > = ({
   children: relationhandles,
-  colorStyles,
-
-  distances: { barCornerRadius, handleWidth },
   hasChildren,
   isCritical,
   isDateChangeable,
@@ -37,30 +34,31 @@ export const Bar: React.FC<
   x1,
   x2,
 }) => {
+  const { barCornerRadius, handleWidth } = useGanttDimensions();
   const startMoveFullTask = useCallback(
     (clientX: number) => {
-      onTaskEventStart("move", clientX);
+      onTaskEventStart('move', clientX);
     },
     [onTaskEventStart]
   );
 
   const startMoveStartOfTask = useCallback(
     (clientX: number) => {
-      onTaskEventStart("start", clientX);
+      onTaskEventStart('start', clientX);
     },
     [onTaskEventStart]
   );
 
   const startMoveEndOfTask = useCallback(
     (clientX: number) => {
-      onTaskEventStart("end", clientX);
+      onTaskEventStart('end', clientX);
     },
     [onTaskEventStart]
   );
 
   const startMoveProgress = useCallback(
     (clientX: number) => {
-      onTaskEventStart("progress", clientX);
+      onTaskEventStart('progress', clientX);
     },
     [onTaskEventStart]
   );
@@ -73,7 +71,7 @@ export const Bar: React.FC<
   const handleHeight = taskHeight - 2;
 
   let barDisplay = null;
-  if (task.type === "project") {
+  if (task.type === 'project') {
     barDisplay = (
       <ProjectDisplay
         taskName={task.name}
@@ -86,7 +84,6 @@ export const Bar: React.FC<
         progressX={progressX}
         progressWidth={progressWidth}
         barCornerRadius={barCornerRadius}
-        colorStyles={colorStyles}
         isSelected={isSelected}
         isCritical={isCritical}
         hasChildren={hasChildren}
@@ -104,7 +101,6 @@ export const Bar: React.FC<
         progressX={progressX}
         progressWidth={progressWidth}
         barCornerRadius={barCornerRadius}
-        styles={colorStyles}
         isSelected={isSelected}
         isCritical={isCritical}
         hasChildren={hasChildren}

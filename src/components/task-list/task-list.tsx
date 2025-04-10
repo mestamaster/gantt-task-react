@@ -1,56 +1,48 @@
-import type { ComponentType, MouseEvent, RefObject, SyntheticEvent } from "react";
-import React, { memo } from "react";
+import type { ComponentType, MouseEvent, RefObject, SyntheticEvent } from 'react';
+import React, { memo } from 'react';
 
 import {
   ChildByLevelMap,
-  ColorStyles,
   Column,
   DateSetup,
   DependencyMap,
-  Distances,
   Icons,
   MapTaskToNestedIndex,
   OnResizeColumn,
   Task,
   TaskListHeaderProps,
   TaskListTableProps,
-  TaskOrEmpty
-} from "../../types/public-types";
+  TaskOrEmpty,
+  OnChangeTasks,
+} from '../../types/public-types';
 
-import { useOptimizedList } from "../../helpers/use-optimized-list";
+import { useOptimizedList } from '../../helpers/use-optimized-list';
 
-import styles from "./task-list.module.css";
-import { useTableListResize } from "../gantt/use-tablelist-resize";
-import { TaskListHeaderActionsProps } from "./TaskListHeaderActions";
-
+import styles from './task-list.module.css';
+import { useTableListResize } from '../gantt/use-tablelist-resize';
+import { TaskListHeaderActionsProps } from './TaskListHeaderActions';
+import { NewTaskButton } from './new-task-button';
+import { useGanttDimensions } from '../../contexts/use-gantt-dimensions';
 // const SCROLL_DELAY = 25;
 
 export type TaskListProps = {
   canMoveTasks: boolean;
   canResizeColumns: boolean;
   childTasksMap: ChildByLevelMap;
-  colors: ColorStyles;
   columnsProp: readonly Column[];
   cutIdsMirror: Readonly<Record<string, true>>;
   dateSetup: DateSetup;
   dependencyMap: DependencyMap;
-  distances: Distances;
-  fontFamily: string;
-  fontSize: string;
   fullRowHeight: number;
   ganttFullHeight: number;
   getTaskCurrentState: (task: Task) => Task;
-  handleAddTask: (task: Task) => void;
+  handleAddTask: (parentTask: Task | null) => void;
   handleDeleteTasks: (task: TaskOrEmpty[]) => void;
-  handleEditTask: (task: TaskOrEmpty) => void;
+  handleEditTask: (taskOrEmpty: TaskOrEmpty) => void;
   handleMoveTaskBefore: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
   handleMoveTaskAfter: (target: TaskOrEmpty, taskForMove: TaskOrEmpty) => void;
   handleMoveTasksInside: (parent: Task, childs: readonly TaskOrEmpty[]) => void;
-  handleOpenContextMenu: (
-    task: TaskOrEmpty,
-    clientX: number,
-    clientY: number
-  ) => void;
+  handleOpenContextMenu: (task: TaskOrEmpty, clientX: number, clientY: number) => void;
   icons?: Partial<Icons>;
   isShowTaskNumbers: boolean;
   mapTaskToNestedIndex: MapTaskToNestedIndex;
@@ -65,88 +57,80 @@ export type TaskListProps = {
   TaskListHeader: ComponentType<TaskListHeaderProps>;
   TaskListTable: ComponentType<TaskListTableProps>;
   onResizeColumn?: OnResizeColumn;
-  onScrollTableListContentVertically: (
-    event: SyntheticEvent<HTMLDivElement>
-  ) => void;
+  onScrollTableListContentVertically: (event: SyntheticEvent<HTMLDivElement>) => void;
+  onChangeTasks?: OnChangeTasks;
 } & TaskListHeaderActionsProps;
 
-const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = (
-  {
-    canMoveTasks,
-    canResizeColumns,
-    childTasksMap,
-    colors,
-    columnsProp,
-    cutIdsMirror,
-    dateSetup,
-    dependencyMap,
-    distances,
-    fontFamily,
-    fontSize,
-    fullRowHeight,
-    ganttFullHeight,
-    getTaskCurrentState,
-    handleAddTask,
-    handleDeleteTasks,
-    handleEditTask,
-    handleMoveTaskBefore,
-    handleMoveTaskAfter,
-    handleMoveTasksInside,
-    handleOpenContextMenu,
-    icons = undefined,
-    isShowTaskNumbers,
-    mapTaskToNestedIndex,
-    onExpanderClick,
-    onClick,
-    scrollToTask,
-    selectTaskOnMouseDown,
-    selectedIdsMirror,
-    taskListContentRef,
-    taskListRef,
-    tasks,
-    TaskListHeader,
-    TaskListTable,
-    onResizeColumn,
-    onScrollTableListContentVertically,
-    onCollapseAll,
-    onExpandFirstLevel,
-    onExpandAll
-  }) => {
+const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = ({
+  canMoveTasks,
+  canResizeColumns,
+  childTasksMap,
+  columnsProp,
+  cutIdsMirror,
+  dateSetup,
+  dependencyMap,
+  fullRowHeight,
+  ganttFullHeight,
+  getTaskCurrentState,
+  handleAddTask,
+  handleDeleteTasks,
+  handleEditTask,
+  handleMoveTaskBefore,
+  handleMoveTaskAfter,
+  handleMoveTasksInside,
+  handleOpenContextMenu,
+  icons = undefined,
+  isShowTaskNumbers,
+  mapTaskToNestedIndex,
+  onExpanderClick,
+  onClick,
+  scrollToTask,
+  selectTaskOnMouseDown,
+  selectedIdsMirror,
+  taskListContentRef,
+  taskListRef,
+  tasks,
+  TaskListHeader,
+  TaskListTable,
+  onResizeColumn,
+  onScrollTableListContentVertically,
+  onCollapseAll,
+  onExpandFirstLevel,
+  onExpandAll,
+  onChangeTasks,
+}) => {
+  // Silencing unused variable warning
+  void onChangeTasks;
+  const distances = useGanttDimensions();
   // Manage the column and list table resizing
-  const [
-    columns,
-    taskListWidth,
-    tableWidth,
-    onTableResizeStart,
-    onColumnResizeStart
-  ] = useTableListResize(columnsProp, distances, onResizeColumn);
+  const [columns, taskListWidth, tableWidth, onTableResizeStart, onColumnResizeStart] =
+    useTableListResize(columnsProp, distances, onResizeColumn);
 
-  const renderedIndexes = useOptimizedList(
-    taskListContentRef,
-    "scrollTop",
-    fullRowHeight
-  );
+  const renderedIndexes = useOptimizedList(taskListContentRef, 'scrollTop', fullRowHeight);
 
+  // Adapter function to handle type compatibility
+  const handleAddTaskAdapter = (task: TaskOrEmpty | null) => {
+    if (task === null || task.type !== 'empty') {
+      handleAddTask(task as Task | null);
+    }
+  };
 
   return (
     <div className={styles.ganttTableRoot} ref={taskListRef}>
       <div
         className={styles.ganttTableWrapper}
         style={{
-          width: tableWidth
+          width: tableWidth,
         }}
       >
         <TaskListHeader
           headerHeight={distances.headerHeight}
-          fontFamily={fontFamily}
-          fontSize={fontSize}
           columns={columns}
           onColumnResizeStart={onColumnResizeStart}
           canResizeColumns={canResizeColumns}
           onCollapseAll={onCollapseAll}
           onExpandFirstLevel={onExpandFirstLevel}
           onExpandAll={onExpandAll}
-          colors={colors}
         />
 
         <div
@@ -162,25 +146,22 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = (
               ),
               backgroundSize: `100% ${fullRowHeight * 2}px`,
               backgroundImage: `linear-gradient(to bottom, transparent ${fullRowHeight}px, #f5f5f5 ${fullRowHeight}px)`,
-              overflow: "hidden"
+              overflow: 'hidden',
+              position: 'relative',
             }}
           >
-
             <TaskListTable
               canMoveTasks={canMoveTasks}
               childTasksMap={childTasksMap}
-              colors={colors}
               columns={columns}
               cutIdsMirror={cutIdsMirror}
               dateSetup={dateSetup}
               dependencyMap={dependencyMap}
               distances={distances}
-              fontFamily={fontFamily}
-              fontSize={fontSize}
               fullRowHeight={fullRowHeight}
               ganttFullHeight={ganttFullHeight}
               getTaskCurrentState={getTaskCurrentState}
-              handleAddTask={handleAddTask}
+              handleAddTask={handleAddTaskAdapter}
               handleDeleteTasks={handleDeleteTasks}
               handleEditTask={handleEditTask}
               handleMoveTaskBefore={handleMoveTaskBefore}
@@ -199,6 +180,9 @@ const TaskListInner: React.FC<TaskListProps & TaskListHeaderActionsProps> = (
               taskListWidth={taskListWidth}
               tasks={tasks}
             />
+          </div>
+          <div className={styles.newTaskButtonContainer}>
+            <NewTaskButton onAddNewTask={() => handleAddTask(null)} />
           </div>
         </div>
       </div>

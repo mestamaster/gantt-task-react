@@ -1,10 +1,8 @@
-import React from "react";
-import type {
-  ReactNode,
-} from "react";
+import React from 'react';
+import type { ReactNode } from 'react';
 
-import styles from "./calendar.module.css";
-import { ColorStyles } from "../../types/public-types";
+import styles from './calendar.module.css';
+import { useGanttStyleContext } from '../../contexts/use-style-context';
 
 type TopPartOfCalendarProps = {
   value: ReactNode | null;
@@ -13,7 +11,6 @@ type TopPartOfCalendarProps = {
   y2Line: number;
   xText: number;
   yText: number;
-  colors: Partial<ColorStyles>;
 };
 
 export const TopPartOfCalendar: React.FC<TopPartOfCalendarProps> = ({
@@ -23,17 +20,12 @@ export const TopPartOfCalendar: React.FC<TopPartOfCalendarProps> = ({
   y2Line,
   xText,
   yText,
-  colors
 }) => {
+  const { colors } = useGanttStyleContext();
+
   return (
     <g className="calendarTop">
-      <line
-        x1={x1Line}
-        y1={y1Line}
-        x2={x1Line}
-        y2={y2Line}
-        className={styles.calendarTopTick}
-      />
+      <line x1={x1Line} y1={y1Line} x2={x1Line} y2={y2Line} className={styles.calendarTopTick} />
 
       {value !== null && (
         <text

@@ -1,4 +1,4 @@
-import { Task, DateExtremity } from "./public-types";
+import { Task, DateExtremity } from './public-types';
 
 export type GanttRelationEvent = {
   extremity: DateExtremity;

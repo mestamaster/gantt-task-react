@@ -3,7 +3,7 @@ import type {
   RowIndexToTaskMap,
   TaskToRowIndexMap,
   TaskOrEmpty,
-} from "../types/public-types";
+} from '../types/public-types';
 
 /**
  * @param sortedTasks Sorted list of visible tasks
@@ -11,23 +11,16 @@ import type {
  */
 export const getMapTaskToRowIndex = (
   visibleTasks: readonly TaskOrEmpty[],
-  comparisonLevels: number,
-): [
-  TaskToRowIndexMap,
-  RowIndexToTaskMap,
-  GlobalRowIndexToTaskMap,
-] => {
+  comparisonLevels: number
+): [TaskToRowIndexMap, RowIndexToTaskMap, GlobalRowIndexToTaskMap] => {
   const taskToRowIndexRes = new Map<number, Map<string, number>>();
   const rowIndexToTaskRes = new Map<number, Map<number, TaskOrEmpty>>();
   const globalIndexToTaskRes = new Map<number, TaskOrEmpty>();
 
   const indexesByLevels: Record<string, number> = {};
 
-  visibleTasks.forEach((task) => {
-    const {
-      id,
-      comparisonLevel = 1,
-    } = task;
+  visibleTasks.forEach(task => {
+    const { id, comparisonLevel = 1 } = task;
 
     if (!indexesByLevels[comparisonLevel]) {
       indexesByLevels[comparisonLevel] = 0;
@@ -40,7 +33,8 @@ export const getMapTaskToRowIndex = (
     indexesMapByLevel.set(id, index);
     taskToRowIndexRes.set(comparisonLevel, indexesMapByLevel);
 
-    const rowIndexToTaskAtLevelMap = rowIndexToTaskRes.get(comparisonLevel) || new Map<number, TaskOrEmpty>();
+    const rowIndexToTaskAtLevelMap =
+      rowIndexToTaskRes.get(comparisonLevel) || new Map<number, TaskOrEmpty>();
     rowIndexToTaskAtLevelMap.set(index, task);
     rowIndexToTaskRes.set(comparisonLevel, rowIndexToTaskAtLevelMap);
 

@@ -1,7 +1,7 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { getParentTasks } from "../../selected-tasks/get-parent-tasks";
-import { getSelectedTasks } from "../../selected-tasks/get-selected-tasks";
+import { getParentTasks } from '../../selected-tasks/get-parent-tasks';
+import { getSelectedTasks } from '../../selected-tasks/get-selected-tasks';
 
 import type {
   ActionMetaType,
@@ -10,8 +10,8 @@ import type {
   Task,
   TaskMapByLevel,
   TaskOrEmpty,
-} from "../../types/public-types";
-import { getTasksWithDescendants } from "../../selected-tasks/get-tasks-with-descendants";
+} from '../../types/public-types';
+import { getTasksWithDescendants } from '../../selected-tasks/get-tasks-with-descendants';
 
 const createGetters = (
   mirror: Readonly<Record<string, true>>,
@@ -51,10 +51,7 @@ const createGetters = (
 
     const parentTasksRes = getParentTasksWithCache();
 
-    tasksWithDescendants = getTasksWithDescendants(
-      parentTasksRes,
-      childTasksMap
-    );
+    tasksWithDescendants = getTasksWithDescendants(parentTasksRes, childTasksMap);
 
     return tasksWithDescendants;
   };

@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
-import styles from "./project.module.css";
-import { ColorStyles } from "../../../types/public-types";
+import styles from './project.module.css';
+import { useGanttStyleContext } from '../../../contexts/use-style-context';
 
 type ProjectDisplayProps = {
   barCornerRadius: number;
@@ -16,7 +16,6 @@ type ProjectDisplayProps = {
   progressX: number;
   startMoveFullTask: (clientX: number) => void;
   taskName: string;
-  colorStyles: ColorStyles;
   width: number;
   x1: number;
   x2: number;
@@ -29,7 +28,6 @@ export const ProjectDisplay: React.FC<ProjectDisplayProps> = ({
   taskHeight,
   isSelected,
   isCritical,
-  colorStyles,
   progressWidth,
   progressX,
   taskYOffset,
@@ -38,37 +36,38 @@ export const ProjectDisplay: React.FC<ProjectDisplayProps> = ({
   x2,
   startMoveFullTask,
 }) => {
+  const { colors } = useGanttStyleContext();
   const barColor = useMemo(() => {
     if (isCritical) {
       if (isSelected) {
-        return colorStyles.projectBackgroundSelectedCriticalColor;
+        return colors.projectBackgroundSelectedCriticalColor;
       }
 
-      return colorStyles.projectBackgroundCriticalColor;
+      return colors.projectBackgroundCriticalColor;
     }
 
     if (isSelected) {
-      return colorStyles.projectBackgroundSelectedColor;
+      return colors.projectBackgroundSelectedColor;
     }
 
-    return colorStyles.projectBackgroundColor;
-  }, [isSelected, isCritical, colorStyles]);
+    return colors.projectBackgroundColor;
+  }, [isSelected, isCritical, colors]);
 
   const processColor = useMemo(() => {
     if (isCritical) {
       if (isSelected) {
-        return colorStyles.projectProgressSelectedCriticalColor;
+        return colors.projectProgressSelectedCriticalColor;
       }
 
-      return colorStyles.projectProgressCriticalColor;
+      return colors.projectProgressCriticalColor;
     }
 
     if (isSelected) {
-      return colorStyles.projectProgressSelectedColor;
+      return colors.projectProgressSelectedColor;
     }
 
-    return colorStyles.projectProgressColor;
-  }, [isSelected, isCritical, colorStyles]);
+    return colors.projectProgressColor;
+  }, [isSelected, isCritical, colors]);
 
   const projectLeftTriangle = [
     x1,
@@ -77,7 +76,7 @@ export const ProjectDisplay: React.FC<ProjectDisplayProps> = ({
     taskYOffset + taskHeight,
     x1 + 15,
     taskYOffset + taskHeight / 2 - 1,
-  ].join(",");
+  ].join(',');
   const projectRightTriangle = [
     x2,
     taskYOffset + taskHeight / 2 - 1,
@@ -85,7 +84,7 @@ export const ProjectDisplay: React.FC<ProjectDisplayProps> = ({
     taskYOffset + taskHeight,
     x2 - 15,
     taskYOffset + taskHeight / 2 - 1,
-  ].join(",");
+  ].join(',');
 
   return (
     <g
@@ -132,16 +131,8 @@ export const ProjectDisplay: React.FC<ProjectDisplayProps> = ({
         ry={barCornerRadius}
         className={styles.projectTop}
       />
-      <polygon
-        className={styles.projectTop}
-        points={projectLeftTriangle}
-        fill={barColor}
-      />
-      <polygon
-        className={styles.projectTop}
-        points={projectRightTriangle}
-        fill={barColor}
-      />
+      <polygon className={styles.projectTop} points={projectLeftTriangle} fill={barColor} />
+      <polygon className={styles.projectTop} points={projectRightTriangle} fill={barColor} />
     </g>
   );
 };

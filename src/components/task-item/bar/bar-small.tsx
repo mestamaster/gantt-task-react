@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import stylesRelationHandle from "./bar-relation-handle.module.css";
-import { BarDisplay } from "./bar-display";
-import type { TaskItemProps } from "../task-item";
-
-import styles from "./bar.module.css";
-import { BarDateHandle } from "./bar-date-handle";
-import { BarMoveAction } from "../../../types/public-types";
+import React, { useCallback } from 'react';
+import stylesRelationHandle from './bar-relation-handle.module.css';
+import { BarDisplay } from './bar-display';
+import type { TaskItemProps } from '../task-item';
+import styles from './bar.module.css';
+import { BarDateHandle } from './bar-date-handle';
+import { BarMoveAction } from '../../../types/public-types';
+import { useGanttDimensions } from '../../../contexts/use-gantt-dimensions';
 
 export const BarSmall: React.FC<
   TaskItemProps & {
@@ -13,8 +13,6 @@ export const BarSmall: React.FC<
   }
 > = ({
   children: relationhandles,
-  colorStyles,
-  distances: { barCornerRadius, handleWidth },
   hasChildren,
   isSelected,
   isCritical,
@@ -29,17 +27,18 @@ export const BarSmall: React.FC<
 }) => {
   const startMoveFullTask = useCallback(
     (clientX: number) => {
-      onTaskEventStart("move", clientX);
+      onTaskEventStart('move', clientX);
     },
     [onTaskEventStart]
   );
 
   const startMoveEndOfTask = useCallback(
     (clientX: number) => {
-      onTaskEventStart("end", clientX);
+      onTaskEventStart('end', clientX);
     },
     [onTaskEventStart]
   );
+  const { barCornerRadius, handleWidth } = useGanttDimensions();
 
   return (
     <g
@@ -56,7 +55,6 @@ export const BarSmall: React.FC<
         progressWidth={progressWidth}
         progressX={progressX}
         startMoveFullTask={startMoveFullTask}
-        styles={colorStyles}
         width={handleWidth * 2}
         x={x1}
         y={taskYOffset}
